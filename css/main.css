@@ -1,0 +1,50 @@
+body {
+    color:#222;
+}
+
+.blue {
+	color: #6E7B97;
+}
+
+.header {
+    margin-top:6rem;
+    text-align:center;
+}
+
+.social {
+	margin-top:1rem;
+	text-align: center;
+}
+
+.social img {
+	margin:10px;
+}
+
+.heading {
+	border-bottom:1px solid black;
+	margin:20px;
+}
+
+.paper-title {
+	font-size:18px;
+}
+
+.paper-links {
+	text-align: right;
+}
+
+.paper-viz {
+	text-align: center;
+}
+
+.paper-viz>img {
+	width:100%;
+	height:104px;
+	object-fit: cover;
+	margin-top:5px;
+}
+
+.separator {
+	margin:10px 0 20px 0;
+	border-bottom:1px solid black;
+}
