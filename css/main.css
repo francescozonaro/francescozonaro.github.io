@@ -48,3 +48,22 @@ body {
 	margin:10px 0 20px 0;
 	border-bottom:1px solid black;
 }
+
+.gw-links {
+	text-align: center;
+}
+
+.predictions {
+	display: flex;
+    justify-content: space-around;
+}
+
+table{
+    width:100%;
+}
+table td{
+    white-space: nowrap;  /** added **/
+}
+table td:last-child{
+    width:100%;
+}

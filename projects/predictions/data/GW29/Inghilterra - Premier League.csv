@@ -1,0 +1,11 @@
+week,date,home_team,away_team,result,home_proba,draw_proba,away_proba,538 Home,538 Draw,538 Away,brier_score,five38_brier_score
+29.0,2023-04-01,Arsenal,Leeds United,0,85.95,7.92,3.58,73.659,16.172,10.168,0,0
+29.0,2023-04-01,AFC Bournemouth,Fulham,0,24.87,22.65,52.4,37.696,25.8,36.505,0,0
+29.0,2023-04-01,Brighton and Hove Albion,Brentford,0,55.31,21.15,23.4,56.987,22.123,20.89,0,0
+29.0,2023-04-01,Chelsea,Aston Villa,0,43.43,26.88,29.69,51.069,25.467,23.464,0,0
+29.0,2023-04-01,Crystal Palace,Leicester City,0,28.7,26.09,45.2,37.881,27.982,34.137,0,0
+29.0,2023-04-01,Manchester City,Liverpool,0,47.23,23.0,29.71,61.237,19.489,19.274,0,0
+29.0,2023-04-01,Nottingham Forest,Wolverhampton,0,22.99,27.13,49.86,34.392,27.618,37.99,0,0
+29.0,2023-04-02,Newcastle,Manchester United,0,42.08,25.87,32.03,44.966,24.691,30.343,0,0
+29.0,2023-04-02,West Ham United,Southampton,0,38.09,27.87,34.03,51.614,25.978,22.408,0,0
+29.0,2023-04-03,Everton,Tottenham Hotspur,0,23.52,23.75,52.69,27.811,23.711,48.478,0,0
