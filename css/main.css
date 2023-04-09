@@ -49,10 +49,6 @@ body {
 	border-bottom:1px solid black;
 }
 
-.gw-links {
-	text-align: center;
-}
-
 .predictions {
 	display: flex;
     justify-content: space-around;
@@ -60,10 +56,18 @@ body {
 
 table{
     width:100%;
+	font-family: monospace;
+	font-size: 15px;
 }
 table td{
     white-space: nowrap;  /** added **/
+	text-align: center;
 }
+
 table td:last-child{
     width:100%;
+}
+
+table tr:last-child td:nth-last-child(-n + 2){
+    background-color: rgb(243, 214, 203);
 }
