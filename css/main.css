@@ -71,3 +71,7 @@ table td:last-child{
 table tr:last-child td:nth-last-child(-n + 2){
     background-color: rgb(243, 214, 203);
 }
+
+.legend-container {
+	width: 500px;
+}
