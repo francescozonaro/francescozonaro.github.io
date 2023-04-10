@@ -40,7 +40,6 @@
           <strong>Legend</strong>
           <div class="legend" style="margin-top: 10px;">
             <div>TBP: To Be Played</div>
-            <div>PP: Postponed</div>
           </div>
         </div>
 
@@ -62,7 +61,7 @@
   var gw = getParameterByName('gw');
   document.getElementById("displayGw").innerHTML = gw;
 
-  var dataurl = 'data/ENG-GW' + gw + '.csv'
+  var dataurl = 'publish/data/ENG-GW' + gw + '.csv'
 
   function arrayToTable(tableData) {
         var table = $('<table></table>');
