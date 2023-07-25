@@ -4,16 +4,17 @@ import App from './App';
 import ProjectBetting from './ProjectBetting'
 
 import {
-  createBrowserRouter,
+  // createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from "react-router-dom";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <App />,
   },{
-    path: "betting",
+    path: "/betting",
     element: <ProjectBetting/>
   }
 ]);

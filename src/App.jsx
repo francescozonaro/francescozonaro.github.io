@@ -1,6 +1,12 @@
 import './App.css';
+import ProjectBetting from './ProjectBetting';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+
 
 function App() {
+
+  const navigate = useNavigate();
+
   return (
     <div className="App">
       <div class="container">
@@ -20,7 +26,7 @@ function App() {
         <div class="project">
           <div class="projectName">
               StatsbombPlot - From raw statsbomb data to interactive plots
-              <span className='links'><a href="/"> [Work in progress] </a> </span>
+              <span className='links'><button class="buttonLink" onClick={() => navigate('/')}>[Work in progress]</button></span>
           </div>
           <div class="project-viz">
             <img src="img/statsbomb.png" style={{height:"100px", width:"100%", objectFit:"cover"}}></img>
@@ -30,7 +36,7 @@ function App() {
         <div class="project">
           <div class="projectName">
               Is there a profit to be made in the current betting market?
-              <span className='links'><a href="/" target="_blank"> [Website] </a> </span>
+              <span className='links'><button class="buttonLink" onClick={() => navigate('/betting')}>[Website]</button></span>
           </div>
           <div class="project-viz">
             <img src="img/fzbets.png" style={{height:"100px", width:"100%", objectFit:"cover"}}></img>
