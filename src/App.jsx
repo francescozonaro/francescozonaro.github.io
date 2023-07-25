@@ -30,7 +30,7 @@ function App() {
         <div class="project">
           <div class="projectName">
               Is there a profit to be made in the current betting market?
-              <span className='links'><a href="/betting" target="_blank"> [Website] </a> </span>
+              <span className='links'><a href="/" target="_blank"> [Website] </a> </span>
           </div>
           <div class="project-viz">
             <img src="img/fzbets.png" style={{height:"100px", width:"100%", objectFit:"cover"}}></img>

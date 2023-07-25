@@ -317,7 +317,7 @@ function ProjectBetting() {
 
           <div className="outro-links">
             <a
-              href="https://francescozonaro.github.io/"
+              href="/"
               target="_blank"
               style={{ display: "inline-block", width: "50%" }}
             >
