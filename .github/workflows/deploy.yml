@@ -30,9 +30,6 @@ jobs:
         with:
           name: production-files
           path: ./dist
-      
-      - name: Copy index to 404
-        run: cp ./dist/index.html ./dist/404.html
 
   deploy:
     name: Deploy
