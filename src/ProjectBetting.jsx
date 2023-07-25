@@ -1,4 +1,4 @@
-import "./App.css";
+import "./ProjectBetting.css";
 
 import axios from "axios";
 import React, { useEffect } from "react";
@@ -104,12 +104,14 @@ function ProjectBetting() {
   }
 
   return (
-    <div className="FZBets">
+    <div className="ProjectBetting">
       <div className="header">
         <div class="title">
           <strong>Is there a profit to be made</strong> in the current betting
           market?
         </div>
+        
+      </div>
 
         <div id="introduction-wrapper">
           <div className="intro-text">
@@ -333,7 +335,6 @@ function ProjectBetting() {
             </a>
           </div>
         </div>
-      </div>
     </div>
   );
 }
