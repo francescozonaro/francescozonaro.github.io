@@ -2,8 +2,12 @@ import "./ProjectBetting.css";
 
 import axios from "axios";
 import React, { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 function ProjectBetting() {
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios
       .get(
@@ -316,23 +320,14 @@ function ProjectBetting() {
           </div>
 
           <div className="outro-links">
-            <a
-              href="/"
-              target="_blank"
-              style={{ display: "inline-block", width: "50%" }}
-            >
-              [Portfolio]
-            </a>
-            <a
-              href="#"
-              style={{
-                display: "inline-block",
-                width: "50%",
-              }}
-              onClick={() => scrollToTop()}
-            >
-              [Back to the top]
-            </a>
+
+            <button class="buttonLink" onClick={() => navigate('/')}
+            
+            style={{ display: "inline-block", width: "50%" }}>[Portfolio]</button>
+
+            <button class="buttonLink" onClick={() => scrollToTop()}
+            
+            style={{ display: "inline-block", width: "50%" }}>[Back to the top]</button>
           </div>
         </div>
     </div>
