@@ -24,21 +24,21 @@ function App() {
 
         <div class="project">
           <div class="projectName">
-              StatsbombPlot - From raw statsbomb data to interactive plots
-              <span className='links'><button class="buttonLink" onClick={() => navigate('/')}>[Work in progress]</button></span>
-          </div>
-          <div class="project-viz">
-            <img src="img/statsbomb.png" style={{height:"100px", width:"100%", objectFit:"cover"}}></img>
-          </div>
-        </div>
-
-        <div class="project">
-          <div class="projectName">
               Is there a profit to be made in the current betting market?
               <span className='links'><button class="buttonLink" onClick={() => navigate('/betting')}>[Website]</button></span>
           </div>
           <div class="project-viz">
             <img src="img/fzbets.png" style={{height:"100px", width:"100%", objectFit:"cover"}}></img>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="projectName">
+              EURO2020 Final - Italy vs England
+              <span className='links'><button class="buttonLink" onClick={() => navigate('/italy-england-report')}>[Report]</button></span>
+          </div>
+          <div class="project-viz">
+            <img src="img/euro2020italy.jpg" style={{height:"100px", width:"100%", objectFit:"cover"}}></img>
           </div>
           <div class="separator"></div>
         </div>

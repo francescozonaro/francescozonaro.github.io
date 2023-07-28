@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import ProjectBetting from './ProjectBetting'
+import ReportEuroFinal from './ReportEuroFinal'
 
 import {
   // createBrowserRouter,
@@ -16,6 +17,9 @@ const router = createHashRouter([
   },{
     path: "/betting",
     element: <ProjectBetting/>
+  },{
+    path: "/italy-england-report",
+    element: <ReportEuroFinal/>
   }
 ]);
 

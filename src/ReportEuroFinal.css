@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Raleway:wght@300;400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600&display=swap");
 
-.ProjectBetting {
+.ReportEuroFinal {
   position: relative;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Raleway", sans-serif;
   margin: auto;
-  width: 70%;
+  width: 90%;
   text-align: center;
 }
 
@@ -46,22 +46,8 @@ button {
   box-sizing: border-box;
 }
 
-#table-wrapper table {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  margin-left: auto;
-  margin-right: auto;
-  min-width: 1200px;
-}
-
-table td {
-  white-space: nowrap;
-  text-align: center;
-}
-
 #introduction-wrapper {
   margin-top: 50px;
-  margin-bottom: 50px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -72,7 +58,6 @@ table td {
 }
 
 #outro-wrapper {
-  margin-top: 50px;
   margin-bottom: 50px;
 }
 
@@ -88,8 +73,4 @@ table td {
 #introduction-wrapper code {
   font-size: 15px;
   background-color: rgb(238, 232, 214);
-}
-
-a {
-  color: #1eaedb;
 }
