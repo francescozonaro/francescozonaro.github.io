@@ -26,7 +26,11 @@ function ReportEuroFinal() {
           </div>
         </div>
 
-        <img src="img/ReportEuroFinal/shotmap.png" alt="Shotmap Image" style={{width: "90%"}}></img>
+        <img src="img/ReportEuroFinal/shotmap.png" alt="Shotmap Image" style={{width: "45%"}}></img>
+        <img src="img/ReportEuroFinal/shotmap.png" alt="Shotmap Image" style={{width: "45%"}}></img>
+
+        <img src="img/ReportEuroFinal/pressuresItaly.png" alt="Shotmap Image" style={{width: "45%"}}></img>
+        <img src="img/ReportEuroFinal/pressuresEngland.png" alt="Shotmap Image" style={{width: "45%"}}></img>
 
         {/* <object type="image/svg+xml" data={goal_test} style={{ width: "100%" }} /> */}
 
