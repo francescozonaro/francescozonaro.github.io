@@ -1,6 +1,8 @@
 import "./ReportEuroFinal.css";
 import React from "react";
 import { useNavigate } from 'react-router-dom';
+import goal_test from './assets/goal_test.svg';
+
 
 function ReportEuroFinal() {
 
@@ -24,7 +26,9 @@ function ReportEuroFinal() {
           </div>
         </div>
 
-        <img src="./public/img/ReportEuroFinal/shotmap.png" alt="Shotmap Image" style={{width: "100%"}}></img>
+        <img src="img/ReportEuroFinal/shotmap.png" alt="Shotmap Image" style={{width: "90%"}}></img>
+
+        {/* <object type="image/svg+xml" data={goal_test} style={{ width: "100%" }} /> */}
 
         <div id="outro-wrapper">
           <div className="outro-text">
