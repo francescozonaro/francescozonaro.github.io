@@ -14,7 +14,8 @@ function ReportEuroFinal() {
     <div className="ReportEuroFinal">
       <div className="header">
         <div className="title">
-          <strong>StatsbombPlot Showcase:</strong> Italy vs England match report
+          <strong>Plotting Statsbomb Data:</strong> Italy vs England match
+          report
         </div>
       </div>
 

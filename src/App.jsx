@@ -55,7 +55,7 @@ function App() {
 
         <div class="project">
           <div class="projectName">
-            StatsbombPlot Showcase: Italy vs England (EURO2020 Final)
+            Plotting Statsbomb data: Italy vs England match report
             <span className="links">
               <button
                 class="buttonLink"
@@ -84,7 +84,7 @@ function App() {
               style={{ height: "100px", width: "100%", objectFit: "cover" }}
             ></img>
           </div>
-          <div class="separator"></div>
+          <div class="separator" style={{ marginTop: "30px" }}></div>
         </div>
       </div>
     </div>
