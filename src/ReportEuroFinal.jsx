@@ -20,19 +20,20 @@ function ReportEuroFinal() {
 
       <div id="intro-wrapper">
         <div className="intro-text">
-          The following list aims to illustrate all the different visuals I'm
-          able to produce using Statsbomb data. Every visual can be produced
-          taking into consideration one or more matches and one or more players,
-          depending on the available data. The following report takes into
-          consideration one match (the EURO2020 final between Italy and England)
-          and will be performed both at team and player level, depending from
-          the specific plot. Understanding a football team's dynamics is hardly
-          a standardized process since it involves considering various key
-          factors like players, manager, season form, tactics and so on. Any
-          visual in this list should be considered as a starting point for a
-          more in-depth analysis, offering flexibility to make all the necessary
-          adjustments (different pitch division, considering only a subset of
-          the main actions, player specific analysis, time based analysis etc.).
+          The following list aims to illustrate all the different visuals that
+          can be produced using{" "}
+          <a
+            href="https://github.com/francescozonaro/statsbombplot"
+            target="_blank"
+          >
+            StatsbombPlot
+          </a>{" "}
+          . Understanding a football team's dynamics is hardly a standardized
+          process since it involves considering various key factors like
+          players, manager, season form, tactics and so on. The code in this
+          repo should be considered a starting point for a more in-depth
+          analysis, for which, most likely, further customization will be
+          required.
         </div>
       </div>
 
