@@ -6,17 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 function ProjectBetting() {
   const navigate = useNavigate();
-  const itemsPerPage = 20;
-  let currentPage = 1;
-  let totalPages = 1;
-  const betsContainer = document.getElementById("bets-container-live");
 
   useEffect(() => {
-    axios
-      .get(
-        "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getLive2324Bets"
-      )
-      .then(function (res) {
+    function fetchDataAndGenerateTable(
+      apiUrl,
+      betsContainerId,
+      paginationContainerId,
+      isCompletedBets
+    ) {
+      axios.get(apiUrl).then(function (res) {
         const bets = res.data;
         const itemsPerPage = 20;
         const totalPages = Math.ceil(bets.length / itemsPerPage);
@@ -40,8 +38,12 @@ function ProjectBetting() {
               }
 
               if (key == "Result") {
-                if (bet[key] == "") {
-                  bet[key] = "⌛";
+                if (isCompletedBets) {
+                  bet[key] = bet[key] == true ? "✔️" : "❌";
+                } else {
+                  if (bet[key] == "") {
+                    bet[key] = "⌛";
+                  }
                 }
               }
 
@@ -54,22 +56,19 @@ function ProjectBetting() {
 
           if (rows != "") {
             var table =
-              "<table> <tr><th>Date</th><th>League</th><th>Home</th><th>Away</th><th>Type</th><th>Quote</th><th>Bet</th><th>Potential Return</th><th>xQuote</th><th>Value</th><th>Quote %</th><th>Result</th></tr>" +
+              "<table> <tr><th>Date</th><th>League</th><th>Home</th><th>Away</th><th>Type</th><th>Quote</th><th>Bet</th><th>Return</th><th>xQuote</th><th>Value</th><th>Quote %</th><th>Result</th></tr>" +
               rows +
               "</table>";
 
-            const betsContainer = document.getElementById(
-              "bets-container-live"
-            );
+            const betsContainer = document.getElementById(betsContainerId);
             betsContainer.innerHTML = table;
           }
         }
 
-        generateTable(1); // Display the first page
+        generateTable(1);
 
-        // Pagination controls
         const paginationContainer = document.getElementById(
-          "pagination-container"
+          paginationContainerId
         );
 
         while (paginationContainer.firstChild) {
@@ -88,87 +87,21 @@ function ProjectBetting() {
           paginationContainer.appendChild(button);
         }
       });
+    }
 
-    axios
-      .get(
-        "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getTestingBets"
-      )
-      .then(function (res) {
-        const bets = res.data;
-        const itemsPerPage = 20;
-        const totalPages = Math.ceil(bets.length / itemsPerPage);
+    fetchDataAndGenerateTable(
+      "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getLive2324Bets",
+      "bets-container-live",
+      "pagination-container",
+      false
+    );
 
-        function generateTable(page) {
-          var startIndex = (page - 1) * itemsPerPage;
-          var endIndex = startIndex + itemsPerPage;
-          var rows = "";
-
-          for (var i = startIndex; i < endIndex && i < bets.length; i++) {
-            var bet = bets[i];
-            var row = "<tr>";
-
-            for (var key in bet) {
-              if (key == "Date") {
-                bet[key] = bet[key].substring(0, 10);
-              }
-
-              if (key == "Bet") {
-                bet[key] = bet[key] + "€";
-              }
-
-              if (key == "Result") {
-                if (bet[key] == true) {
-                  bet[key] = "✔️";
-                } else {
-                  bet[key] = "❌";
-                }
-              }
-
-              row += "<td>" + bet[key] + "</td>";
-            }
-
-            row += "</tr>";
-            rows += row;
-          }
-
-          if (rows != "") {
-            var table =
-              "<table> <tr><th>Date</th><th>League</th><th>Home</th><th>Away</th><th>Type</th><th>Quote</th><th>Bet</th><th>Potential Return</th><th>xQuote</th><th>Value</th><th>Quote %</th><th>Result</th></tr>" +
-              rows +
-              "</table>";
-
-            const betsContainer = document.getElementById(
-              "bets-container-completed-testing"
-            );
-            betsContainer.innerHTML = table;
-          }
-        }
-
-        generateTable(1); // Display the first page
-
-        // Pagination controls
-        const paginationContainerTesting = document.getElementById(
-          "pagination-container-testing"
-        );
-
-        while (paginationContainerTesting.firstChild) {
-          paginationContainerTesting.removeChild(
-            paginationContainerTesting.firstChild
-          );
-        }
-
-        for (var page = 1; page <= totalPages; page++) {
-          var button = document.createElement("button");
-          button.textContent = page;
-          button.classList.add("pagination-button");
-
-          button.addEventListener("click", function () {
-            generateTable(parseInt(this.textContent));
-          });
-
-          paginationContainerTesting.appendChild(button);
-        }
-      });
+    fetchDataAndGenerateTable(
+      "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getTestingBets",
+      "bets-container-completed-testing",
+      "pagination-container-testing",
+      true
+    );
   }, []);
 
   function toggleTestingBets() {
