@@ -6,104 +6,191 @@ import { useNavigate } from "react-router-dom";
 
 function ProjectBetting() {
   const navigate = useNavigate();
+  const itemsPerPage = 20;
+  let currentPage = 1;
+  let totalPages = 1;
+  const betsContainer = document.getElementById("bets-container-live");
 
   useEffect(() => {
     axios
       .get(
-        "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getLiveBets"
+        "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getLive2324Bets"
       )
       .then(function (res) {
         const bets = res.data;
-        var rows = "";
+        const itemsPerPage = 20;
+        const totalPages = Math.ceil(bets.length / itemsPerPage);
 
-        bets.forEach((bet) => {
-          var row = "<tr>";
-          for (var key in bet) {
-            if (key == "Date") {
-              bet[key] = bet[key].substring(0, 10);
-            }
+        function generateTable(page) {
+          var startIndex = (page - 1) * itemsPerPage;
+          var endIndex = startIndex + itemsPerPage;
+          var rows = "";
 
-            if (key == "Result") {
-              if (bet[key] == "") {
-                bet[key] = "⌛";
+          for (var i = startIndex; i < endIndex && i < bets.length; i++) {
+            var bet = bets[i];
+            var row = "<tr>";
+
+            for (var key in bet) {
+              if (key == "Date") {
+                bet[key] = bet[key].substring(0, 10);
               }
+
+              if (key == "Bet") {
+                bet[key] = bet[key] + "€";
+              }
+
+              if (key == "Result") {
+                if (bet[key] == "") {
+                  bet[key] = "⌛";
+                }
+              }
+
+              row += "<td>" + bet[key] + "</td>";
             }
 
-            row += "<td>" + bet[key] + "</td>";
+            row += "</tr>";
+            rows += row;
           }
-          row += "</tr>";
-          rows += row;
-        });
 
-        if (rows != "") {
-          var table =
-            "<table> <tr><th>Date</th><th>League</th><th>Home</th><th>Away</th><th>Type</th><th>Quote</th><th>Bet</th><th>Potential Return</th><th>xQuote</th><th>Value</th><th>Quote %</th><th>Result</th></tr>" +
-            rows +
-            "</table>";
+          if (rows != "") {
+            var table =
+              "<table> <tr><th>Date</th><th>League</th><th>Home</th><th>Away</th><th>Type</th><th>Quote</th><th>Bet</th><th>Potential Return</th><th>xQuote</th><th>Value</th><th>Quote %</th><th>Result</th></tr>" +
+              rows +
+              "</table>";
 
-          const betsContainer = document.getElementById("bets-container-live");
-          betsContainer.innerHTML = table;
+            const betsContainer = document.getElementById(
+              "bets-container-live"
+            );
+            betsContainer.innerHTML = table;
+          }
+        }
+
+        generateTable(1); // Display the first page
+
+        // Pagination controls
+        const paginationContainer = document.getElementById(
+          "pagination-container"
+        );
+
+        while (paginationContainer.firstChild) {
+          paginationContainer.removeChild(paginationContainer.firstChild);
+        }
+
+        for (var page = 1; page <= totalPages; page++) {
+          var button = document.createElement("button");
+          button.textContent = page;
+          button.classList.add("pagination-button");
+
+          button.addEventListener("click", function () {
+            generateTable(parseInt(this.textContent));
+          });
+
+          paginationContainer.appendChild(button);
         }
       });
 
     axios
       .get(
-        "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getCompletedBets"
+        "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getTestingBets"
       )
       .then(function (res) {
         const bets = res.data;
-        var rows = "";
+        const itemsPerPage = 20;
+        const totalPages = Math.ceil(bets.length / itemsPerPage);
 
-        bets.forEach((bet) => {
-          var row = "<tr>";
-          for (var key in bet) {
-            if (key == "Date") {
-              bet[key] = bet[key].substring(0, 10);
-            }
+        function generateTable(page) {
+          var startIndex = (page - 1) * itemsPerPage;
+          var endIndex = startIndex + itemsPerPage;
+          var rows = "";
 
-            if (key == "Result") {
-              if (bet[key] == true) {
-                bet[key] = "✔️";
-              } else {
-                bet[key] = "❌";
+          for (var i = startIndex; i < endIndex && i < bets.length; i++) {
+            var bet = bets[i];
+            var row = "<tr>";
+
+            for (var key in bet) {
+              if (key == "Date") {
+                bet[key] = bet[key].substring(0, 10);
               }
+
+              if (key == "Bet") {
+                bet[key] = bet[key] + "€";
+              }
+
+              if (key == "Result") {
+                if (bet[key] == true) {
+                  bet[key] = "✔️";
+                } else {
+                  bet[key] = "❌";
+                }
+              }
+
+              row += "<td>" + bet[key] + "</td>";
             }
 
-            row += "<td>" + bet[key] + "</td>";
+            row += "</tr>";
+            rows += row;
           }
-          row += "</tr>";
-          rows += row;
-        });
 
-        if (rows != "") {
-          var table =
-            "<table> <tr><th>Date</th><th>League</th><th>Home</th><th>Away</th><th>Type</th><th>Quote</th><th>Bet</th><th>Potential Return</th><th>xQuote</th><th>Value</th><th>Quote %</th><th>Result</th></tr>" +
-            rows +
-            "</table>";
+          if (rows != "") {
+            var table =
+              "<table> <tr><th>Date</th><th>League</th><th>Home</th><th>Away</th><th>Type</th><th>Quote</th><th>Bet</th><th>Potential Return</th><th>xQuote</th><th>Value</th><th>Quote %</th><th>Result</th></tr>" +
+              rows +
+              "</table>";
 
-          const betsContainer = document.getElementById(
-            "bets-container-completed"
+            const betsContainer = document.getElementById(
+              "bets-container-completed-testing"
+            );
+            betsContainer.innerHTML = table;
+          }
+        }
+
+        generateTable(1); // Display the first page
+
+        // Pagination controls
+        const paginationContainerTesting = document.getElementById(
+          "pagination-container-testing"
+        );
+
+        while (paginationContainerTesting.firstChild) {
+          paginationContainerTesting.removeChild(
+            paginationContainerTesting.firstChild
           );
-          betsContainer.innerHTML = table;
+        }
+
+        for (var page = 1; page <= totalPages; page++) {
+          var button = document.createElement("button");
+          button.textContent = page;
+          button.classList.add("pagination-button");
+
+          button.addEventListener("click", function () {
+            generateTable(parseInt(this.textContent));
+          });
+
+          paginationContainerTesting.appendChild(button);
         }
       });
   }, []);
 
-  function toggleCompletedBets() {
-    var content = document.getElementById("bets-container-completed");
+  function toggleTestingBets() {
+    var content = document.getElementById("bets-container-completed-testing");
+    var pagination = document.getElementById("pagination-container-testing");
     if (content.style.display === "none") {
       content.style.display = "block";
+      pagination.style.display = "block";
     } else {
       content.style.display = "none";
+      pagination.style.display = "none";
     }
   }
 
   function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    var content = document.getElementById("bets-container-completed");
+    var content = document.getElementById("bets-container-completed-testing");
     if (!(content.style.display === "none")) {
-      toggleCompletedBets();
+      toggleTestingBets();
     }
+    setTimeout(function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 50);
   }
 
   return (
@@ -292,20 +379,22 @@ function ProjectBetting() {
 
         <br></br>
 
-        <div id="table-wrapper">
-          <div id="bets-container-live"></div>
-        </div>
-
         <button
           type="button"
           id="collapse-past-bets"
-          onClick={() => toggleCompletedBets()}
+          onClick={() => toggleTestingBets()}
         >
           Show 2022-23 bets
         </button>
-
+        <div
+          id="pagination-container-testing"
+          style={{ display: "none", marginTop: "40px" }}
+        ></div>
         <div id="table-wrapper">
-          <div id="bets-container-completed" style={{ display: "none" }}></div>
+          <div
+            id="bets-container-completed-testing"
+            style={{ display: "none" }}
+          ></div>
         </div>
         <br></br>
         <div className="intro-text">
@@ -315,6 +404,11 @@ function ProjectBetting() {
           <br></br>
           <h1>Chapter Four: 2023-24</h1>
           Waiting for the initial data to be generated..
+        </div>
+
+        <div id="pagination-container" style={{ marginTop: "40px" }}></div>
+        <div id="table-wrapper">
+          <div id="bets-container-live"></div>
         </div>
       </div>
 

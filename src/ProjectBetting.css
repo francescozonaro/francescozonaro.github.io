@@ -93,3 +93,12 @@ table td {
 a {
   color: #1eaedb;
 }
+
+.pagination-button {
+  width: 30px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px 2px;
+}
