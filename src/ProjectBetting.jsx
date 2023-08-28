@@ -176,32 +176,33 @@ function ProjectBetting() {
           means the algorithm cannot be used right away from the start of the
           season. This is done to avoid having too much bias based on historical
           results, which are not reliable enough when modelling the xG of a team
-          during a specific season: players come and go, and managers begin to
-          contemplate changes, maybe fortifying the defense that faltered so
-          much in the previous season, perhaps sacrificing a few arrows upfront
-          or viceversa. A great example of that, coming from the 2022-23 season,
-          are Fulham and Chelsea: the first scoring a fantastic 55 goals as a
-          newly promoted side while the second didn't even reach 40. Of course,
-          envisioning a complete inversion of the soccer pyramid and discarding
-          any previous data might be a tad too conservative, which is why
-          ClubELO data is taken into consideration. ClubELO is a valuable source
-          of information and allows to place each team in the "Top", "Mid" or
-          "Bottom" category. Note that this could be done simply using the
-          current table position during any given matchday, but particularly in
-          the first part of the season that may be too volatile. This
-          information is then used to adjust the predicted xG for the next
-          match, basing the adjustment on the historical quality of the teams
-          that were recently encountered. This is done to avoid punishing too
-          much a team after a run of difficult matches (against "Top" opponents)
-          and viceversa to avoid boosting too much a team that recently played
-          all the worst teams ("Bottom" opponents) in the league. There is one
-          more possible use for the ClubELO data: as much as current season data
-          remains key, is far more common for an historically good team to be
-          consistent and gain momentum during the season; meanwhile a newly
-          promoted or historically bad side may encounter more obstacles in
-          mantaining a constant level of performances. This could be modelized
-          giving slightly more importance to the most recent positive results
-          when considering a team with an high ELO.
+          during a specific season: players come and go and managers begin to
+          contemplate extravagant changes during the off-season, only to
+          discover in November that yeah you can't actually play 5 inverted
+          wingbacks in the same formation. A great example of that, coming from
+          the 2022-23 season, are Fulham and Chelsea: the first scoring a
+          fantastic 55 goals as a newly promoted side while the second didn't
+          even reach 40. Of course, envisioning a complete inversion of the
+          soccer pyramid and discarding any previous data might be a tad too
+          radical, which is why ClubELO data is taken into consideration.
+          ClubELO is a valuable source of information and allows to place each
+          team in the "Top", "Mid" or "Bottom" category. Note that this could be
+          done simply using the current table position during any given
+          matchday, but particularly in the first part of the season that may be
+          too volatile. This information is then used to adjust the predicted xG
+          for the next match, basing the adjustment on the historical quality of
+          the teams that were recently encountered. This is done to avoid
+          punishing too much a team after a run of difficult matches (against
+          "Top" opponents) and viceversa to avoid boosting too much a team that
+          recently played all the worst teams ("Bottom" opponents) in the
+          league. There is one more possible use for the ClubELO data: as much
+          as current season data remains key, is far more common for an
+          historically good team to be consistent and gain momentum during the
+          season; meanwhile a newly promoted or historically bad side may
+          encounter more obstacles in mantaining a constant level of
+          performances. This could be modelized giving slightly more importance
+          to the most recent positive results when considering a team with an
+          high ELO.
           <br></br>
           <br></br>
           <h1>Chapter Two: Off-season testing</h1>
@@ -210,7 +211,7 @@ function ProjectBetting() {
           consideration any specific bookie (answering to the question: can I
           reliably predict when a match will have more than 2.5 goals,
           regardless the fact that there is a valuable bet to place?) and a more
-          realistic testing phase using historical Bet365 odds from{" "}
+          hands-on testing phase using historical Bet365 odds from{" "}
           <a href="https://football-data.co.uk/" target="_blank">
             football-data.co.uk
           </a>
@@ -236,10 +237,10 @@ function ProjectBetting() {
           quote which is at least 0.1 higher than your (supposedly perfect for
           the sake of the math) predicted quote: you will still win 50% of your
           bets, but in this scenario the money earned will be 500*2.1$, meaning
-          that after investing 1000$ , you get back 1100$, with a 10% profit
-          (which of course is equal to <code>threshold*100</code>). Of course,
-          the higher the threshold value is, the lower will be the number of
-          placed bets.
+          that you invested 1000$ and got 1100$ back, with a 10% profit (which
+          of course is equal to <code>threshold*100</code>). Of course, the
+          higher the threshold value is, the lower will be the number of placed
+          bets.
         </div>
 
         <br></br>
