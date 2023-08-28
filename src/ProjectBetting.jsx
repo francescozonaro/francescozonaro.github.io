@@ -15,12 +15,12 @@ function ProjectBetting() {
       isCompletedBets
     ) {
       axios.get(apiUrl).then(function (res) {
-        const originalBets = res.data; // Store original bets data
+        const originalBets = res.data;
         const itemsPerPage = 20;
         const totalPages = Math.ceil(originalBets.length / itemsPerPage);
 
         function modifyBetData(bet) {
-          const modifiedBet = { ...bet }; // Create a shallow copy to modify
+          const modifiedBet = { ...bet };
           if (modifiedBet["Date"]) {
             modifiedBet["Date"] = modifiedBet["Date"].substring(0, 10);
           }
