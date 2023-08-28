@@ -15,39 +15,49 @@ function ProjectBetting() {
       isCompletedBets
     ) {
       axios.get(apiUrl).then(function (res) {
-        const bets = res.data;
+        const originalBets = res.data; // Store original bets data
         const itemsPerPage = 20;
-        const totalPages = Math.ceil(bets.length / itemsPerPage);
+        const totalPages = Math.ceil(originalBets.length / itemsPerPage);
+
+        function modifyBetData(bet) {
+          const modifiedBet = { ...bet }; // Create a shallow copy to modify
+          if (modifiedBet["Date"]) {
+            modifiedBet["Date"] = modifiedBet["Date"].substring(0, 10);
+          }
+
+          if (modifiedBet["Bet"] && !String(modifiedBet["Bet"]).includes("€")) {
+            modifiedBet["Bet"] = modifiedBet["Bet"] + "€";
+          }
+
+          if (modifiedBet["Result"] !== undefined) {
+            if (isCompletedBets) {
+              modifiedBet["Result"] = modifiedBet["Result"] ? "✔️" : "❌";
+            } else {
+              if (modifiedBet["Result"] === "") {
+                modifiedBet["Result"] = "⌛";
+              }
+            }
+          }
+
+          return modifiedBet;
+        }
 
         function generateTable(page) {
           var startIndex = (page - 1) * itemsPerPage;
           var endIndex = startIndex + itemsPerPage;
           var rows = "";
 
-          for (var i = startIndex; i < endIndex && i < bets.length; i++) {
-            var bet = bets[i];
+          for (
+            var i = startIndex;
+            i < endIndex && i < originalBets.length;
+            i++
+          ) {
+            var originalBet = originalBets[i];
+            var modifiedBet = modifyBetData(originalBet);
             var row = "<tr>";
 
-            for (var key in bet) {
-              if (key == "Date") {
-                bet[key] = bet[key].substring(0, 10);
-              }
-
-              if (key == "Bet") {
-                bet[key] = bet[key] + "€";
-              }
-
-              if (key == "Result") {
-                if (isCompletedBets) {
-                  bet[key] = bet[key] == true ? "✔️" : "❌";
-                } else {
-                  if (bet[key] == "") {
-                    bet[key] = "⌛";
-                  }
-                }
-              }
-
-              row += "<td>" + bet[key] + "</td>";
+            for (var key in modifiedBet) {
+              row += "<td>" + modifiedBet[key] + "</td>";
             }
 
             row += "</tr>";
