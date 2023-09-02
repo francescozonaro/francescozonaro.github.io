@@ -389,6 +389,7 @@ function ProjectBetting() {
           <br></br>
           <h1>Chapter Four: 2023-24</h1>
           <span>{loadingText}</span>
+          <h3 style={{ textAlign: "center" }}>Live Bets</h3>
         </div>
 
         <div id="pagination-container" style={{ marginTop: "10px" }}></div>
@@ -399,6 +400,7 @@ function ProjectBetting() {
           type="button"
           id="collapse-past-bets"
           onClick={() => toggleCompletedBets()}
+          style={{ marginTop: "20px" }}
         >
           Show completed 2023-24 bets
         </button>

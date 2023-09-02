@@ -48,11 +48,25 @@ button {
 
 #table-wrapper table {
   margin-top: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
   min-width: 1200px;
+  overflow-x: hidden; /* Hide the horizontal scrollbar by default */
+  white-space: nowrap; /* Prevent table content from wrapping */
 }
+
+#bets-container-completed {
+  display: inline-block; /* Make the container inline-block to prevent width expansion */
+}
+
+/* Media query for screens with a width less than or equal to "x" pixels */
+@media screen and (max-width: 1200px) {
+  #table-wrapper {
+    overflow-x: auto; /* Show the horizontal scrollbar when the screen width is <= "x" */
+  }
+}
+
 
 table td {
   white-space: nowrap;
