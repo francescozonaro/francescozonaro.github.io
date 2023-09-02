@@ -1,7 +1,7 @@
 import "./ProjectBetting.css";
 
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ProjectBetting() {
@@ -107,11 +107,34 @@ function ProjectBetting() {
     );
 
     fetchDataAndGenerateTable(
+      "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getCompleted2324Bets",
+      "bets-container-completed",
+      "pagination-container-completed",
+      true
+    );
+
+    fetchDataAndGenerateTable(
       "https://e3exeuwqd3fdztghs3u6x4wtsi0qyqen.lambda-url.us-east-1.on.aws/api/getTestingBets",
       "bets-container-completed-testing",
       "pagination-container-testing",
       true
     );
+  }, []);
+
+  const [loadingText, setLoadingText] = useState(
+    "Waiting for the initial GWs to be played"
+  );
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setLoadingText((prevText) =>
+        prevText.endsWith("...") ? prevText.slice(0, -3) : `${prevText}.`
+      );
+    }, 700);
+
+    return () => {
+      clearInterval(timer);
+    };
   }, []);
 
   function toggleTestingBets() {
@@ -126,10 +149,28 @@ function ProjectBetting() {
     }
   }
 
+  function toggleCompletedBets() {
+    var content = document.getElementById("bets-container-completed");
+    var pagination = document.getElementById("pagination-container-completed");
+    if (content.style.display === "none") {
+      content.style.display = "block";
+      pagination.style.display = "block";
+    } else {
+      content.style.display = "none";
+      pagination.style.display = "none";
+    }
+  }
+
   function scrollToTop() {
-    var content = document.getElementById("bets-container-completed-testing");
-    if (!(content.style.display === "none")) {
+    var content_testing = document.getElementById(
+      "bets-container-completed-testing"
+    );
+    var content_completed = document.getElementById("bets-container-completed");
+    if (!(content_testing.style.display === "none")) {
       toggleTestingBets();
+    }
+    if (!(content_completed.style.display === "none")) {
+      toggleCompletedBets();
     }
     setTimeout(function () {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -305,8 +346,8 @@ function ProjectBetting() {
           during the 22-23 season in the top 5 leagues, with the following
           result:
           <center style={{ marginTop: "15px", marginBottom: "15px" }}>
-            Money spent: 1352.0$ on 835 matches. Money won: 1999.27$.{" "}
-            <code>(47.875% ROI)</code>
+            Money spent: 1352.0$ on 835 matches. Money won: 1410.24$.{" "}
+            <code>(4.308% ROI)</code>
           </center>
           Value bets were calculated using Bet365 as the betting bookie. Even if
           historical data was used, only data that would have been available
@@ -317,7 +358,7 @@ function ProjectBetting() {
           as the Under 2.5 result, meaning ~50% of matches will actually end
           with 3 ore more goals; furthermore, the specific configuration used
           favoured chasing the profit rather than cutting the losses, therefore
-          the algorithm tends to bet (less money) even when the condition are
+          the algorithm tends to bet (less money) even when the conditions are
           not entirely favourable.
         </div>
 
@@ -332,7 +373,7 @@ function ProjectBetting() {
         </button>
         <div
           id="pagination-container-testing"
-          style={{ display: "none", marginTop: "40px" }}
+          style={{ display: "none", marginTop: "20px" }}
         ></div>
         <div id="table-wrapper">
           <div
@@ -347,12 +388,26 @@ function ProjectBetting() {
           <br></br>
           <br></br>
           <h1>Chapter Four: 2023-24</h1>
-          Waiting for the initial data to be generated..
+          <span>{loadingText}</span>
         </div>
 
-        <div id="pagination-container" style={{ marginTop: "40px" }}></div>
+        <div id="pagination-container" style={{ marginTop: "10px" }}></div>
         <div id="table-wrapper">
           <div id="bets-container-live"></div>
+        </div>
+        <button
+          type="button"
+          id="collapse-past-bets"
+          onClick={() => toggleCompletedBets()}
+        >
+          Show completed 2023-24 bets
+        </button>
+        <div
+          id="pagination-container-completed"
+          style={{ display: "none", marginTop: "30px" }}
+        ></div>
+        <div id="table-wrapper">
+          <div id="bets-container-completed" style={{ display: "none" }}></div>
         </div>
       </div>
 
