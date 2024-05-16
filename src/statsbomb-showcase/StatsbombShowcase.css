@@ -33,8 +33,25 @@
   text-align: justify;
 }
 
+.visual-wrapper .visual-table {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.visual-wrapper .visual-table table th,
+.visual-wrapper .visual-table table td {
+  text-align: left;
+  padding: 0 10px 2px 0px;
+}
+
 .visual-wrapper .visual-img {
   margin-top: 10px;
+}
+
+.visual-wrapper .visual-img object {
+  max-width: 100%;
+  height: auto;
 }
 
 #intro-wrapper {

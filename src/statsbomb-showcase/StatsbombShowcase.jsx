@@ -40,12 +40,10 @@ function StatsbombShowcase() {
       </div>
 
       <div className="visual-wrapper">
-        <div className="visual-title">
-          Generic event starting location scatterplot
-        </div>
+        <div className="visual-title">Generic events scatterplot</div>
         <div className="visual-text">
-          Mapping the initial location of certain events on the pitch can be
-          highly valuable in pinpointing specific zones where the team executes
+          Mapping the location of certain events on the pitch can be highly
+          valuable in pinpointing specific zones where the team executes
           particular actions, enabling strategic analysis and targeted
           performance optimization. It can be a single event type (eg. Pressure,
           Dribble, Shot, etc.) or a group of events (eg. Def. Action: Block,
@@ -72,7 +70,7 @@ function StatsbombShowcase() {
           team, helping to identify strengths and weaknesses. In this example,
           different shot types (Goal, On Target, Off Target) are identified with
           different markers and the size of the marker is directly proportional
-          to the amount of xG associated with the shot.
+          to the xG associated with the shot.
         </div>
         <div className="visual-img">
           <img
@@ -128,6 +126,121 @@ function StatsbombShowcase() {
             src="img/statsbomb-showcase/ItalyPassingNetwork.png"
             style={{ width: "90%" }}
           ></img>
+        </div>
+      </div>
+
+      <div className="visual-wrapper">
+        <div className="visual-title">Goal Breakdown</div>
+        <div className="visual-text">
+          A goal breakdown provides a clear understanding of which actions and
+          players were involved in the scoring of a goal. Instad of cluttering
+          the image with text, each actions (circle/line) has a text associated{" "}
+          <strong>that shows only on hover</strong>. Alongside the SVG, a table
+          containing each event information is generated too.
+        </div>
+        <div className="visual-table">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Time</th>
+                <th>Player</th>
+                <th>Action</th>
+                <th>Outcome</th>
+                <th>Team</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0</td>
+                <td>1m36s</td>
+                <td>Raheem Sterling</td>
+                <td>pass</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1m39s</td>
+                <td>Mason Mount</td>
+                <td>dribble</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>1m40s</td>
+                <td>Mason Mount</td>
+                <td>pass</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>1m41s</td>
+                <td>Luke Shaw</td>
+                <td>dribble</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>1m44s</td>
+                <td>Luke Shaw</td>
+                <td>pass</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>1m45s</td>
+                <td>Harry Kane</td>
+                <td>dribble</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>1m49s</td>
+                <td>Harry Kane</td>
+                <td>pass</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>1m52s</td>
+                <td>Kieran Trippier</td>
+                <td>dribble</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>1m55s</td>
+                <td>Kieran Trippier</td>
+                <td>cross</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+              <tr>
+                <td>9</td>
+                <td>1m57s</td>
+                <td>Luke Shaw</td>
+                <td>shot</td>
+                <td>success</td>
+                <td>England</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="visual-img">
+          <object
+            type="image/svg+xml"
+            data="img/statsbomb-showcase/shawGoal.svg"
+          >
+            Your browser does not support SVG.
+          </object>
         </div>
       </div>
 
