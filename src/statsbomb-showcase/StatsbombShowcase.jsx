@@ -1,8 +1,9 @@
-import "./ReportEuroFinal.css";
+import "./StatsbombShowcase.css";
+import "../App.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function ReportEuroFinal() {
+function StatsbombShowcase() {
   const navigate = useNavigate();
 
   function scrollToTop() {
@@ -10,7 +11,7 @@ function ReportEuroFinal() {
   }
 
   return (
-    <div className="ReportEuroFinal">
+    <div className="StatsbombShowcase">
       <div className="header">
         <div className="title">
           <strong>Plotting Statsbomb Data:</strong> Italy vs England match
@@ -20,20 +21,21 @@ function ReportEuroFinal() {
 
       <div id="intro-wrapper">
         <div className="intro-text">
-          The following list aims to illustrate all the different visuals that
-          can be produced using{" "}
+          Understanding a football team's dynamics is hardly a standardized
+          process since it involves considering various key factors like
+          players, manager, season form, tactics and so on. The following list
+          aims to illustrate some of the visuals that can be produced using
+          Statsbomb official data. The code I've put together for generating
+          these visuals can be found in the{" "}
           <a
             href="https://github.com/francescozonaro/statsbombplot"
             target="_blank"
           >
             StatsbombPlot
           </a>{" "}
-          . Understanding a football team's dynamics is hardly a standardized
-          process since it involves considering various key factors like
-          players, manager, season form, tactics and so on. The code in this
-          repo should be considered a starting point for a more in-depth
-          analysis, for which, most likely, further customization will be
-          required.
+          repository. It's meant to offer a glimpse into what can be done with
+          Statsbomb data, reflecting my own curiosity about its potential
+          applications.
         </div>
       </div>
 
@@ -51,11 +53,11 @@ function ReportEuroFinal() {
         </div>
         <div className="visual-img">
           <img
-            src="img/ReportEuroFinal/pressuresItaly.png"
+            src="img/statsbomb-showcase/pressuresItaly.png"
             style={{ width: "90%" }}
           ></img>
           <img
-            src="img/ReportEuroFinal/defActionItaly.png"
+            src="img/statsbomb-showcase/defActionItaly.png"
             style={{ width: "90%" }}
           ></img>
         </div>
@@ -74,7 +76,7 @@ function ReportEuroFinal() {
         </div>
         <div className="visual-img">
           <img
-            src="img/ReportEuroFinal/shotmap.png"
+            src="img/statsbomb-showcase/shotmap.png"
             alt="Shotmap Image"
             style={{ width: "90%" }}
           ></img>
@@ -103,11 +105,11 @@ function ReportEuroFinal() {
         </div>
         <div className="visual-img">
           <img
-            src="img/ReportEuroFinal/chiesaProgressiveAttempted.png"
+            src="img/statsbomb-showcase/chiesaProgressiveAttempted.png"
             style={{ width: "90%" }}
           ></img>
           <img
-            src="img/ReportEuroFinal/chiesaProgressive.png"
+            src="img/statsbomb-showcase/chiesaProgressive.png"
             style={{ width: "90%" }}
           ></img>
         </div>
@@ -123,7 +125,7 @@ function ReportEuroFinal() {
         </div>
         <div className="visual-img">
           <img
-            src="img/ReportEuroFinal/ItalyPassingNetwork.png"
+            src="img/statsbomb-showcase/ItalyPassingNetwork.png"
             style={{ width: "90%" }}
           ></img>
         </div>
@@ -154,4 +156,4 @@ function ReportEuroFinal() {
   );
 }
 
-export default ReportEuroFinal;
+export default StatsbombShowcase;

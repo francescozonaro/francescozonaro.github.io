@@ -60,7 +60,7 @@ function App() {
               <button
                 class="buttonLink"
                 style={{ marginRight: "10px" }}
-                onClick={() => navigate("/italy-england-report")}
+                onClick={() => navigate("/statsbomb-showcase")}
               >
                 [Report]
               </button>

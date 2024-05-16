@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Raleway:wght@300;400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Raleway:wght@300;400;600&display=swap");
 
-.ReportEuroFinal {
+.StatsbombShowcase {
   position: relative;
   font-family: "Montserrat", sans-serif;
   margin: auto;
@@ -15,32 +15,6 @@
   letter-spacing: -0.1rem;
 }
 
-.separator {
-  margin: 10px 0 20px 0;
-  border-bottom: 1px solid black;
-}
-
-.button,
-button {
-  display: inline-block;
-  height: 38px;
-  padding: 0 30px;
-  color: #555;
-  text-align: center;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 38px;
-  letter-spacing: 0.1rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  background-color: transparent;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-
 .visual-wrapper {
   margin-top: 25px;
 }
@@ -52,7 +26,6 @@ button {
   line-height: 1.2;
   letter-spacing: -0.1rem;
   font-weight: 900;
-
 }
 
 .visual-wrapper .visual-text {
