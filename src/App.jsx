@@ -33,7 +33,7 @@ function App() {
           </a>
         </div>
         <div class="title">
-          <h3>Projects</h3>
+          <h5>Projects</h5>
         </div>
 
         <div class="project">
