@@ -47,8 +47,13 @@ function App() {
           </div>
           <div class="project-viz">
             <img
-              src="img/fzbets.png"
-              style={{ height: "100px", width: "100%", objectFit: "cover" }}
+              src="img/fzbets.jpg"
+              style={{
+                height: "100px",
+                width: "100%",
+                objectFit: "cover",
+                filter: "saturate(0.8)",
+              }}
             ></img>
           </div>
         </div>
@@ -80,8 +85,13 @@ function App() {
           </div>
           <div class="project-viz">
             <img
-              src="img/euro2020italy.jpg"
-              style={{ height: "100px", width: "100%", objectFit: "cover" }}
+              src="img/statsbomb.png"
+              style={{
+                height: "100px",
+                width: "100%",
+                objectFit: "cover",
+                filter: "saturate(0.9)",
+              }}
             ></img>
           </div>
           <div class="separator" style={{ marginTop: "30px" }}></div>
