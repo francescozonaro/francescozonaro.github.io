@@ -38,10 +38,10 @@ function App() {
 
         <div class="project">
           <div class="projectName">
-            Is there a profit to be made in the current betting market?
+            Is there a profit to be made in the football betting industry?
             <span className="links">
               <button class="buttonLink" onClick={() => navigate("/betting")}>
-                [Website]
+                [Report]
               </button>
             </span>
           </div>
