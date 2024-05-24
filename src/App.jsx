@@ -29,7 +29,7 @@ function App() {
 
         <div class="project">
           <div class="projectName">
-          Agile design and development of web applications in resource-constrained scenarios: the case of Medicus Mundi in Mozambique
+          Agile development of web applications in resource-constrained scenarios: the case of Medicus Mundi in Mozambique
             <span className="links">
               <button class="buttonLink" onClick={() => navigate("/")}>
                 [Work in progress]
@@ -77,7 +77,7 @@ function App() {
             <span className="links">
               <button
                 class="buttonLink"
-                style={{ marginRight: "10px" }}
+                style={{ marginRight: "20px" }}
                 onClick={() => navigate("/statsbomb-showcase")}
               >
                 [Report]
