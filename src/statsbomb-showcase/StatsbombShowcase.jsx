@@ -24,19 +24,17 @@ function StatsbombShowcase() {
           Understanding a football team's dynamics is hardly a standardized
           process since it involves considering various key factors like
           players, manager, season form, tactics and so on. The following list
-          aims to illustrate some of the visuals that can be produced using
-          Statsbomb official data. The code I've put together for generating
-          these visuals, using the freedata provided by Statsbomb, can be found
-          in the{" "}
+          it's meant to offer a glimpse into what can be done with Statsbomb
+          official data, reflecting my own curiosity about its potential
+          applications. The code developed to generate these visuals, utilizing
+          the free data provided by Statsbomb, is available in the{" "}
           <a
             href="https://github.com/francescozonaro/statsbombplot"
             target="_blank"
           >
             StatsbombPlot
           </a>{" "}
-          repository. It's meant to offer a glimpse into what can be done with
-          Statsbomb data, reflecting my own curiosity about its potential
-          applications.
+          repository.
         </div>
       </div>
 
