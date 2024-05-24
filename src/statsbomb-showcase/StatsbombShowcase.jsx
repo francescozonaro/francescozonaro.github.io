@@ -26,7 +26,8 @@ function StatsbombShowcase() {
           players, manager, season form, tactics and so on. The following list
           aims to illustrate some of the visuals that can be produced using
           Statsbomb official data. The code I've put together for generating
-          these visuals can be found in the{" "}
+          these visuals, using the freedata provided by Statsbomb, can be found
+          in the{" "}
           <a
             href="https://github.com/francescozonaro/statsbombplot"
             target="_blank"
