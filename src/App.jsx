@@ -22,18 +22,31 @@ function App() {
           >
             <img src="img/github.png" />
           </a>
-          <br></br>
-          <a
-            class="button"
-            href=""
-            target="_blank"
-            style={{ marginTop: "3em" }}
-          >
-            Résumé
-          </a>
         </div>
         <div class="title">
           <h5>Projects</h5>
+        </div>
+
+        <div class="project">
+          <div class="projectName">
+          Agile design and development of web applications in resource-constrained scenarios: the case of Medicus Mundi in Mozambique
+            <span className="links">
+              <button class="buttonLink" onClick={() => navigate("/")}>
+                [Work in progress]
+              </button>
+            </span>
+          </div>
+          <div class="project-viz">
+            <img
+              src="img/medicusmundi.png"
+              style={{
+                height: "100px",
+                width: "100%",
+                objectFit: "cover",
+                filter: "saturate(0.9)",
+              }}
+            ></img>
+          </div>
         </div>
 
         <div class="project">
@@ -90,11 +103,10 @@ function App() {
                 height: "100px",
                 width: "100%",
                 objectFit: "cover",
-                filter: "saturate(0.9)",
+                filter: "saturate(0.95)",
               }}
             ></img>
           </div>
-          <div class="separator" style={{ marginTop: "30px" }}></div>
         </div>
       </div>
     </div>
