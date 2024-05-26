@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import ProjectBetting from "./project-betting/ProjectBetting";
 import StatsbombShowcase from "./statsbomb-showcase/StatsbombShowcase";
 
 import {
@@ -14,10 +13,6 @@ const router = createHashRouter([
   {
     path: "/",
     element: <App />,
-  },
-  {
-    path: "/betting",
-    element: <ProjectBetting />,
   },
   {
     path: "/statsbomb-showcase",

@@ -29,7 +29,8 @@ function App() {
 
         <div class="project">
           <div class="projectName">
-          Agile development of web applications in resource-constrained scenarios: the case of Medicus Mundi in Mozambique
+            Agile development of web applications in resource-constrained
+            scenarios: the case of Medicus Mundi in Mozambique
             <span className="links">
               <button class="buttonLink" onClick={() => navigate("/")}>
                 [Work in progress]
@@ -53,7 +54,10 @@ function App() {
           <div class="projectName">
             Is there a profit to be made in the football betting industry?
             <span className="links">
-              <button class="buttonLink" onClick={() => navigate("/betting")}>
+              <button
+                class="buttonLink"
+                onClick={() => window.open("pdf/projectBetting.pdf", "_blank")}
+              >
                 [Report]
               </button>
             </span>
@@ -77,10 +81,10 @@ function App() {
             <span className="links">
               <button
                 class="buttonLink"
-                style={{ marginRight: "20px" }}
+                style={{ marginRight: "10px" }}
                 onClick={() => navigate("/statsbomb-showcase")}
               >
-                [Report]
+                [showcase]
               </button>
 
               <button
@@ -92,7 +96,7 @@ function App() {
                   )
                 }
               >
-                [Github Repo]
+                [Github]
               </button>
             </span>
           </div>
