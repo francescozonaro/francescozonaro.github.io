@@ -7,7 +7,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className="grid grid-cols-2 gap-x-12 mt-12">
+      <div className="grid gap-x-12 mt-12 md:grid-cols-1 gap-y-4 lg:grid-cols-2 mb-12">
         <div className="flex flex-col justify-center align-middle">
           <div className="text-3xl">
             <strong>Francesco</strong> Zonaro
