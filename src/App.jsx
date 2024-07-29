@@ -70,6 +70,18 @@ function App() {
               </a>
             </div>
           </div>
+
+          <div class="project">
+            <div class="projectName">
+              Exploring a GPT based methodology for competence mapping: A Case
+              Study in Telecommunications
+            </div>
+            <div className="project-links">
+              <a href="pdf/report-aemfiber.pdf" target="_blank">
+                <img src="img/report.png" />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
