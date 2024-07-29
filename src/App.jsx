@@ -1,4 +1,5 @@
 import "./App.css";
+
 import { useNavigate } from "react-router-dom";
 
 function App() {
@@ -6,110 +7,68 @@ function App() {
 
   return (
     <div className="App">
-      <div class="container">
-        <div class="header">
-          <h1>
+      <div className="grid grid-cols-2 gap-x-12 mt-12">
+        <div className="flex flex-col justify-center align-middle">
+          <div className="text-3xl">
             <strong>Francesco</strong> Zonaro
-          </h1>
-
-          <a style={{ marginRight: "0.25em" }} href="" target="_blank">
-            <img src="img/linkedin.png" />
+          </div>
+        </div>
+        <div className="flex justify-center align-middle space-x-2">
+          <a href="https://github.com/francescozonaro" target="_blank">
+            <img src="img/github.png" className="w-10" />
           </a>
           <a
-            style={{ marginLeft: "0.25em" }}
-            href="https://github.com/francescozonaro"
+            href="https://www.linkedin.com/in/francesco-zonaro-211234248/"
             target="_blank"
           >
-            <img src="img/github.png" />
+            <img src="img/linkedin.png" className="w-10" />
           </a>
         </div>
-        <div class="title">
-          <h5>Projects</h5>
-        </div>
 
-        <div class="project">
-          <div class="projectName">
-            Agile development of web applications in resource-constrained
-            scenarios: the case of Medicus Mundi in Mozambique
-            <span className="links">
-              <button class="buttonLink" onClick={() => navigate("/")}>
-                [Work in progress]
-              </button>
-            </span>
-          </div>
-          <div class="project-viz">
-            <img
-              src="img/medicusmundi.png"
-              style={{
-                height: "100px",
-                width: "100%",
-                objectFit: "cover",
-                filter: "saturate(0.9)",
-              }}
-            ></img>
+        <div className="projects-container">
+          <h1 className="font-bold mt-4 text-center text-2xl">Projects</h1>
+
+          <div class="project">
+            <div class="projectName">
+              Plotting Statsbomb data: Italy vs England match report
+            </div>
+            <div className="project-links">
+              <a href="/#/statsbomb-showcase" target="_blank">
+                <img src="img/url.png" />
+              </a>
+              <a
+                href="https://github.com/francescozonaro/statsbombplot"
+                target="_blank"
+              >
+                <img src="img/code.png" />
+              </a>
+            </div>
           </div>
         </div>
+        <div className="projects-container">
+          <h1 className="font-bold mt-4 text-center text-2xl">Reports</h1>
 
-        <div class="project">
-          <div class="projectName">
-            Is there a profit to be made in the football betting industry?
-            <span className="links">
-              <button
-                class="buttonLink"
-                onClick={() => window.open("pdf/projectBetting.pdf", "_blank")}
-              >
-                [Report]
-              </button>
-            </span>
+          <div class="project">
+            <div class="projectName">
+              Agile development of web applications in resource-constrained
+              scenarios: the case of Medicus Mundi in Mozambique
+            </div>
+            <div className="project-links">
+              <a href="pdf/report-medicusmundi.pdf" target="_blank">
+                <img src="img/report.png" />
+              </a>
+            </div>
           </div>
-          <div class="project-viz">
-            <img
-              src="img/fzbets.jpg"
-              style={{
-                height: "100px",
-                width: "100%",
-                objectFit: "cover",
-                filter: "saturate(0.8)",
-              }}
-            ></img>
-          </div>
-        </div>
 
-        <div class="project">
-          <div class="projectName">
-            Plotting Statsbomb data: Italy vs England match report
-            <span className="links">
-              <button
-                class="buttonLink"
-                style={{ marginRight: "10px" }}
-                onClick={() => navigate("/statsbomb-showcase")}
-              >
-                [showcase]
-              </button>
-
-              <button
-                class="buttonLink"
-                onClick={() =>
-                  window.open(
-                    "https://github.com/francescozonaro/statsbombplot",
-                    "_blank"
-                  )
-                }
-              >
-                [Github]
-              </button>
-            </span>
-          </div>
-          <div class="project-viz">
-            <img
-              src="img/statsbomb.png"
-              style={{
-                height: "100px",
-                width: "100%",
-                objectFit: "cover",
-                filter: "saturate(0.95)",
-              }}
-            ></img>
+          <div class="project">
+            <div class="projectName">
+              Is there a profit to be made in the football betting industry?
+            </div>
+            <div className="project-links">
+              <a href="pdf/report-ammm.pdf" target="_blank">
+                <img src="img/report.png" />
+              </a>
+            </div>
           </div>
         </div>
       </div>

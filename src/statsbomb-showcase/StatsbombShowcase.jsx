@@ -38,7 +38,7 @@ function StatsbombShowcase() {
         </div>
       </div>
 
-      <div className="visual-wrapper">
+      <div className="section-wrapper">
         <div className="visual-title">Generic events scatterplot</div>
         <div className="visual-text">
           Mapping the location of certain events on the pitch can be highly
@@ -49,18 +49,12 @@ function StatsbombShowcase() {
           Clearance, Interception, Ball Recovery).
         </div>
         <div className="visual-img">
-          <img
-            src="img/statsbomb-showcase/pressuresItaly.png"
-            style={{ width: "90%" }}
-          ></img>
-          <img
-            src="img/statsbomb-showcase/defActionItaly.png"
-            style={{ width: "90%" }}
-          ></img>
+          <img src="img/statsbomb-showcase/pressuresItaly.png"></img>
+          <img src="img/statsbomb-showcase/defActionItaly.png"></img>
         </div>
       </div>
 
-      <div className="visual-wrapper">
+      <div className="section-wrapper">
         <div className="visual-title">Shotmap</div>
         <div className="visual-text">
           One of the most common visuals when analysing a football match. It can
@@ -75,12 +69,11 @@ function StatsbombShowcase() {
           <img
             src="img/statsbomb-showcase/shotmap.png"
             alt="Shotmap Image"
-            style={{ width: "90%" }}
           ></img>
         </div>
       </div>
 
-      <div className="visual-wrapper">
+      <div className="section-wrapper">
         <div className="visual-title">Progressive actions map</div>
         <div className="visual-text">
           Ball progression is a very valuable skill a player can have,
@@ -101,18 +94,12 @@ function StatsbombShowcase() {
           other possible implementations.
         </div>
         <div className="visual-img">
-          <img
-            src="img/statsbomb-showcase/chiesaProgressiveAttempted.png"
-            style={{ width: "90%" }}
-          ></img>
-          <img
-            src="img/statsbomb-showcase/chiesaProgressive.png"
-            style={{ width: "90%" }}
-          ></img>
+          <img src="img/statsbomb-showcase/chiesaProgressiveAttempted.png"></img>
+          <img src="img/statsbomb-showcase/chiesaProgressive.png"></img>
         </div>
       </div>
 
-      <div className="visual-wrapper">
+      <div className="section-wrapper">
         <div className="visual-title">Team Passing Network</div>
         <div className="visual-text">
           A passing network provides insights into team dynamics, player
@@ -121,14 +108,11 @@ function StatsbombShowcase() {
           possession is distributed and identify key playmakers.
         </div>
         <div className="visual-img">
-          <img
-            src="img/statsbomb-showcase/ItalyPassingNetwork.png"
-            style={{ width: "90%" }}
-          ></img>
+          <img src="img/statsbomb-showcase/ItalyPassingNetwork.png"></img>
         </div>
       </div>
 
-      <div className="visual-wrapper">
+      <div className="section-wrapper">
         <div className="visual-title">Goal Breakdown</div>
         <div className="visual-text">
           A goal breakdown provides a clear understanding of which actions and

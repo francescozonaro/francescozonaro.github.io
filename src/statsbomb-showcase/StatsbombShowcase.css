@@ -7,71 +7,51 @@
   width: 70%;
   text-align: center;
 }
-
 .title {
-  margin-top: 30px;
-  font-size: 3rem;
-  line-height: 1.2;
-  letter-spacing: -0.1rem;
+  @apply mt-8 text-3xl leading-tight tracking-tighter;
 }
 
-.visual-wrapper {
-  margin-top: 25px;
+.section-wrapper {
+  @apply mt-6;
 }
 
-.visual-wrapper .visual-title {
-  margin-bottom: 10px;
-  text-align: left;
-  font-size: 1.5em;
-  line-height: 1.2;
-  letter-spacing: -0.1rem;
-  font-weight: 900;
+.section-wrapper .visual-title {
+  @apply mb-2 text-left text-xl leading-tight tracking-tighter font-black;
 }
 
-.visual-wrapper .visual-text {
-  line-height: 25px;
-  text-align: justify;
+.section-wrapper .visual-text {
+  @apply leading-6 text-justify;
 }
 
-.visual-wrapper .visual-table {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
+.section-wrapper .visual-table {
+  @apply mt-8 flex justify-center;
 }
 
-.visual-wrapper .visual-table table th,
-.visual-wrapper .visual-table table td {
-  text-align: left;
-  padding: 0 10px 2px 0px;
+.section-wrapper .visual-table table th,
+.section-wrapper .visual-table table td {
+  @apply text-left px-2 pb-0 pr-0;
 }
 
-.visual-wrapper .visual-img {
-  margin-top: 10px;
-}
-
-.visual-wrapper .visual-img object {
-  max-width: 100%;
-  height: auto;
+.section-wrapper .visual-img {
+  @apply mt-2 w-[80%] m-auto;
 }
 
 #intro-wrapper {
-  margin-top: 50px;
+  @apply mt-12;
 }
 
 #intro-wrapper .intro-text {
-  line-height: 25px;
-  text-align: justify;
+  @apply leading-6 text-justify;
 }
 
 #outro-wrapper {
-  margin-bottom: 50px;
+  @apply mb-12;
 }
 
 #outro-wrapper .outro-text {
-  line-height: 25px;
-  text-align: justify;
+  @apply leading-6 text-justify;
 }
 
 #outro-wrapper .outro-links {
-  margin-top: 50px;
+  @apply mt-12;
 }
