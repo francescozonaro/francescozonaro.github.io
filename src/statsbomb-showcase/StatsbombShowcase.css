@@ -28,12 +28,12 @@
 }
 
 .section-wrapper .visual-table {
-  @apply mt-8 flex justify-center;
+  @apply mt-4 mb-4 flex justify-center;
 }
 
 .section-wrapper .visual-table table th,
 .section-wrapper .visual-table table td {
-  @apply text-left px-2 pb-0 pr-0;
+  @apply text-left px-4;
 }
 
 .section-wrapper .visual-img {

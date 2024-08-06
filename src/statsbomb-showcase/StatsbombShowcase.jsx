@@ -168,106 +168,8 @@ function StatsbombShowcase() {
         <div className="visual-title">Goal Breakdown</div>
         <div className="visual-text">
           A goal breakdown provides a clear understanding of which actions and
-          players were involved in the scoring of a goal. Instead of cluttering
-          the image with text, each action (circle/line) has a text associated{" "}
-          <strong>that shows only on hover</strong>. Alongside the SVG, a table
-          containing each event information is generated too.
-        </div>
-        <div className="visual-table">
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>Time</th>
-                <th>Player</th>
-                <th>Action</th>
-                <th>Outcome</th>
-                <th>Team</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>0</td>
-                <td>1m36s</td>
-                <td>Raheem Sterling</td>
-                <td>pass</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>1m39s</td>
-                <td>Mason Mount</td>
-                <td>dribble</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>1m40s</td>
-                <td>Mason Mount</td>
-                <td>pass</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>1m41s</td>
-                <td>Luke Shaw</td>
-                <td>dribble</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>1m44s</td>
-                <td>Luke Shaw</td>
-                <td>pass</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>1m45s</td>
-                <td>Harry Kane</td>
-                <td>dribble</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>6</td>
-                <td>1m49s</td>
-                <td>Harry Kane</td>
-                <td>pass</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>7</td>
-                <td>1m52s</td>
-                <td>Kieran Trippier</td>
-                <td>dribble</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>8</td>
-                <td>1m55s</td>
-                <td>Kieran Trippier</td>
-                <td>cross</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-              <tr>
-                <td>9</td>
-                <td>1m57s</td>
-                <td>Luke Shaw</td>
-                <td>shot</td>
-                <td>success</td>
-                <td>England</td>
-              </tr>
-            </tbody>
-          </table>
+          players were involved in the scoring of a goal. Alongside the PNG, a
+          table containing each event information is generated too.
         </div>
         <button
           className="toggle-button button"
@@ -277,6 +179,102 @@ function StatsbombShowcase() {
         </button>
 
         <div className={`visual-img ${isVisual5Visible ? "" : "hidden"}`}>
+          <div className="visual-table">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Time</th>
+                  <th>Player</th>
+                  <th>Action</th>
+                  <th>Outcome</th>
+                  <th>Team</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>0</td>
+                  <td>1m36s</td>
+                  <td>Raheem Sterling</td>
+                  <td>pass</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>1m39s</td>
+                  <td>Mason Mount</td>
+                  <td>dribble</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>1m40s</td>
+                  <td>Mason Mount</td>
+                  <td>pass</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>1m41s</td>
+                  <td>Luke Shaw</td>
+                  <td>dribble</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>1m44s</td>
+                  <td>Luke Shaw</td>
+                  <td>pass</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>1m45s</td>
+                  <td>Harry Kane</td>
+                  <td>dribble</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>1m49s</td>
+                  <td>Harry Kane</td>
+                  <td>pass</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>1m52s</td>
+                  <td>Kieran Trippier</td>
+                  <td>dribble</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>1m55s</td>
+                  <td>Kieran Trippier</td>
+                  <td>cross</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>1m57s</td>
+                  <td>Luke Shaw</td>
+                  <td>shot</td>
+                  <td>success</td>
+                  <td>England</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <img
             src="img/statsbomb-showcase/shawGoal.png"
             alt="Shaw Goal Breakdown"
