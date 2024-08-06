@@ -1,6 +1,7 @@
 import "./StatsbombShowcase.css";
 import "../App.css";
-import React from "react";
+
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function StatsbombShowcase() {
@@ -9,6 +10,14 @@ function StatsbombShowcase() {
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
+  // State variables for each image section
+  const [isVisual1Visible, setIsVisual1Visible] = useState(false);
+  const [isVisual2Visible, setIsVisual2Visible] = useState(false);
+  const [isVisual3Visible, setIsVisual3Visible] = useState(false);
+  const [isVisual4Visible, setIsVisual4Visible] = useState(false);
+  const [isVisual5Visible, setIsVisual5Visible] = useState(false);
+  const [isVisual6Visible, setIsVisual6Visible] = useState(false);
 
   return (
     <div className="StatsbombShowcase">
@@ -48,9 +57,22 @@ function StatsbombShowcase() {
           Dribble, Shot, etc.) or a group of events (eg. Def. Action: Block,
           Clearance, Interception, Ball Recovery).
         </div>
-        <div className="visual-img">
-          <img src="img/statsbomb-showcase/pressuresItaly.png"></img>
-          <img src="img/statsbomb-showcase/defActionItaly.png"></img>
+        <button
+          className="toggle-button button"
+          onClick={() => setIsVisual1Visible(!isVisual1Visible)}
+        >
+          Show image
+        </button>
+
+        <div className={`visual-img ${isVisual1Visible ? "" : "hidden"}`}>
+          <img
+            src="img/statsbomb-showcase/pressuresItaly.png"
+            alt="Pressures Italy"
+          ></img>
+          <img
+            src="img/statsbomb-showcase/defActionItaly.png"
+            alt="Defensive Actions Italy"
+          ></img>
         </div>
       </div>
 
@@ -65,7 +87,14 @@ function StatsbombShowcase() {
           different markers and the size of the marker is directly proportional
           to the xG associated with the shot.
         </div>
-        <div className="visual-img">
+        <button
+          className="toggle-button button"
+          onClick={() => setIsVisual2Visible(!isVisual2Visible)}
+        >
+          Show image
+        </button>
+
+        <div className={`visual-img ${isVisual2Visible ? "" : "hidden"}`}>
           <img
             src="img/statsbomb-showcase/shotmap.png"
             alt="Shotmap Image"
@@ -88,14 +117,27 @@ function StatsbombShowcase() {
             href="https://dataglossary.wyscout.com/progressive_pass/"
             target="_blank"
           >
-            wyscout definion of Progressive Action
+            wyscout definition of Progressive Action
           </a>{" "}
           has been used to determine eligible actions, but there are various
           other possible implementations.
         </div>
-        <div className="visual-img">
-          <img src="img/statsbomb-showcase/chiesaProgressiveAttempted.png"></img>
-          <img src="img/statsbomb-showcase/chiesaProgressive.png"></img>
+        <button
+          className="toggle-button button"
+          onClick={() => setIsVisual3Visible(!isVisual3Visible)}
+        >
+          Show image
+        </button>
+
+        <div className={`visual-img ${isVisual3Visible ? "" : "hidden"}`}>
+          <img
+            src="img/statsbomb-showcase/chiesaProgressiveAttempted.png"
+            alt="Chiesa Progressive Attempted"
+          ></img>
+          <img
+            src="img/statsbomb-showcase/chiesaProgressive.png"
+            alt="Chiesa Progressive"
+          ></img>
         </div>
       </div>
 
@@ -107,8 +149,18 @@ function StatsbombShowcase() {
           patterns between players during a match, helping to understand how
           possession is distributed and identify key playmakers.
         </div>
-        <div className="visual-img">
-          <img src="img/statsbomb-showcase/ItalyPassingNetwork.png"></img>
+        <button
+          className="toggle-button button"
+          onClick={() => setIsVisual4Visible(!isVisual4Visible)}
+        >
+          Show image
+        </button>
+
+        <div className={`visual-img ${isVisual4Visible ? "" : "hidden"}`}>
+          <img
+            src="img/statsbomb-showcase/ItalyPassingNetwork.png"
+            alt="Italy Passing Network"
+          ></img>
         </div>
       </div>
 
@@ -116,8 +168,8 @@ function StatsbombShowcase() {
         <div className="visual-title">Goal Breakdown</div>
         <div className="visual-text">
           A goal breakdown provides a clear understanding of which actions and
-          players were involved in the scoring of a goal. Instad of cluttering
-          the image with text, each actions (circle/line) has a text associated{" "}
+          players were involved in the scoring of a goal. Instead of cluttering
+          the image with text, each action (circle/line) has a text associated{" "}
           <strong>that shows only on hover</strong>. Alongside the SVG, a table
           containing each event information is generated too.
         </div>
@@ -217,34 +269,54 @@ function StatsbombShowcase() {
             </tbody>
           </table>
         </div>
-        <div className="visual-img">
-          <object
-            type="image/svg+xml"
-            data="img/statsbomb-showcase/shawGoal.svg"
-          >
-            Your browser does not support SVG.
-          </object>
+        <button
+          className="toggle-button button"
+          onClick={() => setIsVisual5Visible(!isVisual5Visible)}
+        >
+          Show image
+        </button>
+
+        <div className={`visual-img ${isVisual5Visible ? "" : "hidden"}`}>
+          <img src="img/statsbomb-showcase/shawGoal.png" alt="Shaw goal"></img>
+        </div>
+      </div>
+
+      <div className="section-wrapper">
+        <div className="visual-title">Shot Frame Freeze</div>
+        <div className="visual-text">
+          Statsbomb provides detailed data on player positions at the moment of
+          a shot, meaning we can evaluate player choices and positioning.
+          Although there were no clear-cut missed pass opportunities in the 2021
+          Euro final, the example of Luke Shaw's shot demonstrates a
+          decision-making moment. Shaw chose to take a low xG shot rather than
+          passing to Kalvin Phillips, who was positioned on his right with ample
+          space. A pass to Phillips could have led to a more promising scoring
+          chance, either through a direct shot or by creating a better
+          opportunity given his advantageous position.
+        </div>
+        <button
+          className="toggle-button button"
+          onClick={() => setIsVisual6Visible(!isVisual6Visible)}
+        >
+          Show image
+        </button>
+
+        <div className={`visual-img ${isVisual6Visible ? "" : "hidden"}`}>
+          <img
+            src="img/statsbomb-showcase/englandFrozenShot.png"
+            alt="Shot frame freeze"
+          ></img>
         </div>
       </div>
 
       <div id="outro-wrapper">
-        <div className="outro-text"></div>
-
         <div className="outro-links">
-          <button
-            className="buttonLink"
-            onClick={() => navigate("/")}
-            style={{ display: "inline-block", width: "50%" }}
-          >
-            [Portfolio]
+          <button className="button link-button" onClick={() => navigate("/")}>
+            Portfolio
           </button>
 
-          <button
-            className="buttonLink"
-            onClick={() => scrollToTop()}
-            style={{ display: "inline-block", width: "50%" }}
-          >
-            [Back to the top]
+          <button className="button link-button" onClick={() => scrollToTop()}>
+            Back to the top
           </button>
         </div>
       </div>
