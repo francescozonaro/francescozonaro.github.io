@@ -277,7 +277,10 @@ function StatsbombShowcase() {
         </button>
 
         <div className={`visual-img ${isVisual5Visible ? "" : "hidden"}`}>
-          <img src="img/statsbomb-showcase/shawGoal.png" alt="Shaw goal"></img>
+          <img
+            src="img/statsbomb-showcase/shawGoal.png"
+            alt="Shaw Goal Breakdown"
+          ></img>
         </div>
       </div>
 
