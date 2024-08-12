@@ -19,6 +19,14 @@
   @apply mt-8 border-[0.5px] rounded-xl p-6 border-gray-100 shadow-xl text-justify;
 }
 
+.projectTitle {
+  @apply font-bold;
+}
+
+.projectDescription {
+  @apply mt-2 text-sm;
+}
+
 .project-links {
   @apply flex justify-center space-x-6 mt-6;
 }

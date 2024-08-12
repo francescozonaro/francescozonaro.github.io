@@ -29,8 +29,11 @@ function App() {
           <h1 className="font-bold mt-4 text-center text-2xl">Projects</h1>
 
           <div class="project">
-            <div class="projectName">
-              Plotting Statsbomb data: Italy vs England match report
+            <div class="projectTitle">StatsbombPlot</div>
+            <div className="projectDescription">
+              Developing visualization techniques for Statsbomb event data
+              analysis, focusing on enhancing interpretability and actionable
+              insights.
             </div>
             <div className="project-links">
               <a href="/#/statsbomb-showcase" target="_blank">
@@ -49,9 +52,14 @@ function App() {
           <h1 className="font-bold mt-4 text-center text-2xl">Reports</h1>
 
           <div class="project">
-            <div class="projectName">
+            <div class="projectTitle">
               Agile development of web applications in resource-constrained
-              scenarios: the case of Medicus Mundi in Mozambique
+              scenarios: the case of Medicus Mundi
+            </div>
+            <div class="projectDescription">
+              Created a user-friendly web platform for efficient data entry and
+              management, improving data accuracy, disease tracking and
+              healthcare delivery in resource-limited settings.
             </div>
             <div className="project-links">
               <a href="pdf/report-medicusmundi.pdf" target="_blank">
@@ -61,20 +69,31 @@ function App() {
           </div>
 
           <div class="project">
-            <div class="projectName">
-              Is there a profit to be made in the football betting industry?
+            <div class="projectTitle">
+              Data-driven Sports Forecasting: analyzing the profitability of
+              machine learning in the football betting industry
+            </div>
+            <div className="projectDescription">
+              Evaluating the feasibility of both Recurrent Neural Networks and
+              XGBoost based models to achieve sustained profitability in
+              football betting markets.
             </div>
             <div className="project-links">
-              <a href="pdf/report-ammm.pdf" target="_blank">
+              <a href="pdf/report-ml2bet.pdf" target="_blank">
                 <img src="img/report.png" />
               </a>
             </div>
           </div>
 
           <div class="project">
-            <div class="projectName">
-              Exploring a GPT based methodology for competence mapping: A Case
-              Study in Telecommunications
+            <div class="projectTitle">
+              Exploring a GPT-based methodology for competence mapping: a case
+              study in telecommunications
+            </div>
+            <div class="projectDescription">
+              Conducted in partnership with an Italian telecommunications firm,
+              this academic project investigated the application of GPT-based
+              models for optimizing workforce competence mapping.
             </div>
             <div className="project-links">
               <a href="pdf/report-aemfiber.pdf" target="_blank">
