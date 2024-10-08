@@ -18,6 +18,8 @@ function StatsbombShowcase() {
   const [isVisual4Visible, setIsVisual4Visible] = useState(false);
   const [isVisual5Visible, setIsVisual5Visible] = useState(false);
   const [isVisual6Visible, setIsVisual6Visible] = useState(false);
+  const [isVisual7Visible, setIsVisual7Visible] = useState(false);
+  const [isVisual8Visible, setIsVisual8Visible] = useState(false);
 
   return (
     <div className="StatsbombShowcase">
@@ -306,6 +308,73 @@ function StatsbombShowcase() {
           <img
             src="img/statsbomb-showcase/englandFrozenShot.png"
             alt="Shot frame freeze"
+          ></img>
+        </div>
+      </div>
+
+      <div className="section-wrapper">
+        <div className="visual-title">Goalkeeper Distribution Plot</div>
+        <div className="visual-text">
+          Statsbomb's data enables the analysis of goalkeeper passing
+          distributions, highlighting the contrasting strategies employed by
+          England and Italy during the tournament. Gianluigi Donnarumma
+          consistently favored short passes to his center-backs, particularly
+          during the initial build-up from goal kicks. This approach reflects
+          Italy's commitment to maintaining possession and constructing attacks
+          from the back, illustrating their preference for controlled passing
+          and setting the tone for their overall strategy in the EURO 2020
+          final. In contrast, Jordan Pickford utilized more often medium-length
+          passes to facilitate quicker transitions, emphasizing a more direct
+          upward movement on the field. As could have been anticipated,
+          Donnarumma recorded only three long balls in the final, while Pickford
+          executed nearly 25. Only successful passes throughout the tournament
+          are included in the visuals below.
+        </div>
+        <button
+          className="toggle-button button"
+          onClick={() => setIsVisual7Visible(!isVisual7Visible)}
+        >
+          Show image
+        </button>
+
+        <div className={`visual-img ${isVisual7Visible ? "" : "hidden"}`}>
+          <img
+            src="img/statsbomb-showcase/donnarummaDistribution.png"
+            alt="Donnarumma successful passes distribution"
+          ></img>
+          <img
+            src="img/statsbomb-showcase/pickfordDistribution.png"
+            alt="Pickford successful passes distribution"
+          ></img>
+        </div>
+      </div>
+
+      <div className="section-wrapper">
+        <div className="visual-title">
+          Goals Worth Rewatching: Low xG, High Impact
+        </div>
+        <div className="visual-text">
+          In football, there are moments where analysis takes a back seat, and
+          the joy of rewatching beautiful goals becomes the primary focus. The
+          table below showcases a collection of goals scored in matches
+          involving Italy and England during their path to the final, sorted by
+          their expected goals (xG) values. I recommend you to revisit Lorenzo
+          Insigne's breathtaking strike against Belgium and Mikkel Damsgaard's
+          exceptional free-kick against England. Both goals exemplify how
+          football can surprise us and provide unforgettable memories,
+          regardless of the statistical analysis behind them.
+        </div>
+        <button
+          className="toggle-button button"
+          onClick={() => setIsVisual8Visible(!isVisual8Visible)}
+        >
+          Show image
+        </button>
+
+        <div className={`visual-img ${isVisual8Visible ? "" : "hidden"}`}>
+          <img
+            src="img/statsbomb-showcase/lowPercShots.png"
+            alt="Low xG goals scored"
           ></img>
         </div>
       </div>
