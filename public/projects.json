@@ -1,0 +1,60 @@
+{
+  "projects": [
+    {
+      "title": "Git-Board (Alpha)",
+      "description": "Developing a platform to unify and visualize your Git and project history across multiple repositories and platforms, integrating your contribution activity into a single interface.",
+      "links": [
+        {
+          "type": "link",
+          "url": "https://git-board-b6a6f.web.app/"
+        }
+      ]
+    },
+    {
+      "title": "StatsbombPlot",
+      "description": "Developing visualization techniques for Statsbomb event data analysis, focusing on enhancing interpretability and actionable insights.",
+      "links": [
+        {
+          "type": "link",
+          "url": "/#/statsbomb-showcase"
+        },
+        {
+          "type": "code",
+          "url": "https://github.com/francescozonaro/statsbombplot"
+        }
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "title": "Web applications in resource-constrained scenarios (Medicus Mundi)",
+      "description": "Created a user-friendly web platform for efficient data entry and management, improving data accuracy, disease tracking, and healthcare delivery in resource-limited settings.",
+      "links": [
+        {
+          "type": "pdf",
+          "url": "pdf/report-medicusmundi.pdf"
+        }
+      ]
+    },
+    {
+      "title": "Analyzing ML profitability in the football betting industry",
+      "description": "Evaluating the feasibility of both Recurrent Neural Networks and XGBoost-based models to achieve sustained profitability in football betting markets.",
+      "links": [
+        {
+          "type": "pdf",
+          "url": "pdf/report-ml2bet.pdf"
+        }
+      ]
+    },
+    {
+      "title": "Exploring a GPT-based methodology for competence mapping: a case study in telecommunications",
+      "description": "Conducted in partnership with an Italian telecommunications firm, this academic project investigated the application of GPT-based models for optimizing workforce competence mapping.",
+      "links": [
+        {
+          "type": "pdf",
+          "url": "pdf/report-aemfiber.pdf"
+        }
+      ]
+    }
+  ]
+}

@@ -1,3 +1,79 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* The design is dark first and the naming convention was made with this in mind.
+      For example you should use --color-white for text, since we are in dark mode.
+      Switching to light mode you should still keep --color-white for text. This is because
+      we mapped how each color should transform during a theme change, so you just need to
+      write your css once. */
+  .dark-theme {
+    --color-background: 22 22 22;
+    --color-background-light: 44 44 44;
+    --color-background-dark: 18 18 18;
+
+    --color-border: 25 25 27;
+    --color-border-light: 47 47 51;
+    --color-border-dark: 14 14 15;
+
+    --color-primary: 210 210 210;
+    --color-primary-light: 240 240 240;
+    --color-primary-dark: 200 200 200;
+
+    --color-secondary: 185 70 72;
+    --color-secondary-light: 200 85 87;
+    --color-secondary-dark: 170 55 67;
+  }
+
+  .light-theme {
+    --color-background: 245 245 245;
+    --color-background-light: 230 230 230;
+    --color-background-dark: 235 235 235;
+
+    --color-border: 215 215 215;
+    --color-border-light: 235 235 235;
+    --color-border-dark: 195 195 195;
+
+    --color-primary: 22 22 22;
+    --color-primary-light: 44 44 44;
+    --color-primary-shadow: 18 18 18;
+
+    --color-secondary: 185 70 72;
+    --color-secondary-light: 200 85 87;
+    --color-secondary-dark: 170 55 67;
+  }
+
+  #root {
+    overflow: hidden;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    box-sizing: border-box;
+  }
+}
+
+@layer utilities {
+  /* CSS variables cannot be referenced here */
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

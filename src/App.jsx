@@ -1,9 +1,55 @@
+import { useEffect, useState } from "react";
+import {
+  LinkIcon,
+  CodeBracketIcon,
+  DocumentIcon,
+} from "@heroicons/react/24/solid";
 import "./App.css";
 
-import { useNavigate } from "react-router-dom";
-
 function App() {
-  const navigate = useNavigate();
+  const [data, setData] = useState({ projects: [], reports: [] });
+
+  useEffect(() => {
+    fetch("/projects.json")
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) =>
+        console.error("Error fetching projects and reports:", error)
+      );
+  }, []);
+
+  const linkIcons = {
+    code: (url) => (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cardComponent smallEnlarge align-middle justify-center flex p-1"
+      >
+        <CodeBracketIcon className="h-5 w-5" />
+      </a>
+    ),
+    link: (url) => (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cardComponent smallEnlarge align-middle justify-center flex p-1"
+      >
+        <LinkIcon className="h-5 w-5" />
+      </a>
+    ),
+    pdf: (url) => (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cardComponent smallEnlarge align-middle justify-center flex p-1"
+      >
+        <DocumentIcon className="h-5 w-5" />
+      </a>
+    ),
+  };
 
   return (
     <div className="App">
@@ -14,93 +60,60 @@ function App() {
           </div>
         </div>
         <div className="flex justify-center align-middle space-x-2">
-          <a href="https://github.com/francescozonaro" target="_blank">
-            <img src="img/github.png" className="w-10" />
+          <a
+            href="https://github.com/francescozonaro"
+            target="_blank"
+            class="text-sm cardComponent smallEnlarge p-2"
+          >
+            Github
           </a>
           <a
             href="https://www.linkedin.com/in/francesco-zonaro-211234248/"
             target="_blank"
+            class="text-sm cardComponent smallEnlarge p-2"
           >
-            <img src="img/linkedin.png" className="w-10" />
+            Linkedin
           </a>
         </div>
 
-        <div className="projects-container">
+        <div className="mt-12 text-left">
           <h1 className="font-bold mt-4 text-center text-2xl">Projects</h1>
 
-          <div class="project">
-            <div class="projectTitle">StatsbombPlot</div>
-            <div className="projectDescription">
-              Developing visualization techniques for Statsbomb event data
-              analysis, focusing on enhancing interpretability and actionable
-              insights.
+          {data.projects.map((project, index) => (
+            <div
+              class="mt-8 border-[0.5px] rounded-xl p-6 border-background-light shadow-xl"
+              key={index}
+            >
+              <div class="font-bold">{project.title}</div>
+              <div class="mt-2 text-sm text-justify">{project.description}</div>
+              <div class="flex justify-center space-x-6 mt-6">
+                {(() =>
+                  project.links.map(
+                    (link, index) => linkIcons[link.type]?.(link.url) || null
+                  ))()}
+              </div>
             </div>
-            <div className="project-links">
-              <a href="/#/statsbomb-showcase" target="_blank">
-                <img src="img/url.png" />
-              </a>
-              <a
-                href="https://github.com/francescozonaro/statsbombplot"
-                target="_blank"
-              >
-                <img src="img/code.png" />
-              </a>
-            </div>
-          </div>
+          ))}
         </div>
-        <div className="projects-container">
+
+        <div className="mt-12 text-left">
           <h1 className="font-bold mt-4 text-center text-2xl">Reports</h1>
 
-          <div class="project">
-            <div class="projectTitle">
-              Agile development of web applications in resource-constrained
-              scenarios: the case of Medicus Mundi
+          {data.reports.map((report, index) => (
+            <div
+              class="mt-8 border-[0.5px] rounded-xl p-6 border-background-light shadow-xl"
+              key={index}
+            >
+              <div class="font-bold">{report.title}</div>
+              <div class="mt-2 text-sm text-justify">{report.description}</div>
+              <div class="flex justify-center space-x-6 mt-6">
+                {(() =>
+                  report.links.map(
+                    (link, index) => linkIcons[link.type]?.(link.url) || null
+                  ))()}
+              </div>
             </div>
-            <div class="projectDescription">
-              Created a user-friendly web platform for efficient data entry and
-              management, improving data accuracy, disease tracking and
-              healthcare delivery in resource-limited settings.
-            </div>
-            <div className="project-links">
-              <a href="pdf/report-medicusmundi.pdf" target="_blank">
-                <img src="img/report.png" />
-              </a>
-            </div>
-          </div>
-
-          <div class="project">
-            <div class="projectTitle">
-              Data-driven Sports Forecasting: analyzing the profitability of
-              machine learning in the football betting industry
-            </div>
-            <div className="projectDescription">
-              Evaluating the feasibility of both Recurrent Neural Networks and
-              XGBoost based models to achieve sustained profitability in
-              football betting markets.
-            </div>
-            <div className="project-links">
-              <a href="pdf/report-ml2bet.pdf" target="_blank">
-                <img src="img/report.png" />
-              </a>
-            </div>
-          </div>
-
-          <div class="project">
-            <div class="projectTitle">
-              Exploring a GPT-based methodology for competence mapping: a case
-              study in telecommunications
-            </div>
-            <div class="projectDescription">
-              Conducted in partnership with an Italian telecommunications firm,
-              this academic project investigated the application of GPT-based
-              models for optimizing workforce competence mapping.
-            </div>
-            <div className="project-links">
-              <a href="pdf/report-aemfiber.pdf" target="_blank">
-                <img src="img/report.png" />
-              </a>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

@@ -2,68 +2,40 @@
 
 .StatsbombShowcase {
   position: relative;
-  font-family: "Montserrat", sans-serif;
   margin: auto;
   width: 70%;
   text-align: center;
 }
-.title {
-  @apply mt-8 text-3xl leading-tight tracking-tighter;
-}
 
 .button {
-  @apply text-white bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2;
+  @apply cardComponent smallEnlarge text-sm p-2;
 }
 
 .section-wrapper {
-  @apply mt-6;
+  @apply mt-12;
 }
 
 .section-wrapper .visual-title {
   @apply mb-2 text-left text-xl leading-tight tracking-tighter font-black;
 }
 
-.section-wrapper .visual-text {
+.section-wrapper .visual-description {
   @apply leading-6 text-justify;
 }
 
 .section-wrapper .visual-table {
   @apply mt-4 mb-4 flex justify-center;
+
+  table th,
+  table td {
+    @apply text-left px-4;
+  }
 }
 
-.section-wrapper .visual-table table th,
-.section-wrapper .visual-table table td {
-  @apply text-left px-4;
+.section-wrapper .visual-previews {
+  @apply mt-2 flex flex-row justify-center gap-4;
 }
 
-.section-wrapper .visual-img {
-  @apply mt-2 w-[80%] m-auto;
-}
-
-.section-wrapper .toggle-button {
-  @apply mt-8;
-}
-
-#intro-wrapper {
-  @apply mt-12;
-}
-
-#intro-wrapper .intro-text {
-  @apply leading-6 text-justify;
-}
-
-#outro-wrapper {
-  @apply mb-12;
-}
-
-#outro-wrapper .outro-text {
-  @apply leading-6 text-justify;
-}
-
-#outro-wrapper .outro-links {
-  @apply flex justify-center space-x-8 mt-12;
-}
-
-#outro-wrapper .outro-links .link-button {
-  @apply w-[200px] text-gray-900 bg-white border border-gray-400 focus:outline-none hover:bg-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2;
+.section-wrapper .visual-previews img {
+  @apply mt-2 rounded-md w-[150px] smallEnlarge opacity-80 cardComponent;
 }
