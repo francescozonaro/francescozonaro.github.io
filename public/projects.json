@@ -1,16 +1,6 @@
 {
   "projects": [
     {
-      "title": "Git-Board (Alpha)",
-      "description": "Developing a platform to unify and visualize your Git and project history across multiple repositories and platforms, integrating your contribution activity into a single interface.",
-      "links": [
-        {
-          "type": "link",
-          "url": "https://git-board-b6a6f.web.app/"
-        }
-      ]
-    },
-    {
       "title": "StatsbombPlot",
       "description": "Developing visualization techniques for Statsbomb event data analysis, focusing on enhancing interpretability and actionable insights.",
       "links": [
