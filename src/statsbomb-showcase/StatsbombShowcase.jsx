@@ -386,15 +386,22 @@ function StatsbombShowcase() {
       <div className="section-wrapper">
         <div className="visual-title">Goalkeeper Distribution Plot</div>
         <div className="visual-description">
-          Statsbomb's data enables the analysis of goalkeeper passing
-          distributions, highlighting the contrasting strategies employed by
-          each team during Premier League 2015/16 season. The plot illustrates
-          the distribution of successful passes made by goalkeepers and the
-          zones of the pitch where these passes were directed. The intensity of
-          the color is proportional to the number of successful passes in each
-          zone. This plot reveals how different teams utilize their goalkeepers
-          in build-up play, with some favoring short passes to defenders while
-          others opt for longer distributions to quickly transition into attack.
+          The following plot details the spatial distribution of goalkeeper
+          passes in the 2015/16 Premier League season, separating frequency and
+          directional tendencies across teams. Each panel represents the
+          proportion of goalkeeper distributions landing in specific zones,
+          highlighting structural preferences rather than just volume or
+          accuracy. A structural split is visible between short-build teams and
+          more direct sides. Clubs such as Tottenham, Liverpool, Arsenal and
+          Manchester City show higher concentrations in the first and second
+          thirds, particularly in wide defensive zones. Their goalkeepers
+          distribute shorter, often toward full-backs, maintaining positional
+          structure and facilitating controlled build-up. In contrast,
+          Leicester, West Brom, Sunderland, Watford and Crystal Palace exhibit
+          heavier usage of advanced wide and central zones. This indicates a
+          preference for bypassing the first phase entirely. Distribution is
+          less about initiating possession sequences and more about contesting
+          territory higher up the pitch.
         </div>
 
         <div className="visual-previews">
@@ -406,6 +413,57 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/goalkeeperZonalDistribution.png"
               alt="Donnarumma successful passes distribution"
+            ></img>
+          </a>
+        </div>
+      </div>
+
+      <div className="section-wrapper">
+        <div className="visual-title">Goalkeeper Passes Scatterplot</div>
+        <div className="visual-description">
+          These scatterplots map goalkeeper distribution profiles in the 2015/16
+          Premier League season, focusing on three variables: Share of long
+          passes (x-axis), Completion rate (y-axis, first figure) and Long
+          passes completion rate (y-axis, second figure). As expected, a clear
+          negative relationship emerges in the first figure: as the share of
+          long passes increases, overall completion drops. Teams such as
+          Tottenham, Liverpool, Bournemouth, Everton and Swansea sit toward the
+          left side of the chart with relatively low shares of long distribution
+          and higher completion rates. On the right side are teams that relied
+          heavily on long balls from the goalkeeper. Leicester, West Brom,
+          Sunderland, Crystal Palace and Watford show high shares of long passes
+          and comparatively low completion rates. Leicester stand out most
+          clearly. They exhibit one of the highest long-pass shares in the
+          league and the lowest completion rate among the plotted teams. Yet
+          this inefficiency in raw completion did not hinder performance
+          outcomes, as Leicester won the league that season. Their approach
+          under Claudio Ranieri was not designed for sterile possession
+          retention. Long distribution often targeted Jamie Vardy or channels
+          behind the opposition, prioritising territory, second balls and
+          transition speed over pass completion. In this context, a low
+          completion percentage is not necessarily a flaw but a feature of a
+          risk-seeking vertical strategy.
+        </div>
+
+        <div className="visual-previews">
+          <a
+            href="img/statsbomb-showcase/scatterplotShareOfLong_a.png"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="img/statsbomb-showcase/scatterplotShareOfLong_a.png"
+              alt="Premier League 2015/16 Goalkeeper Distribution Scatterplot"
+            ></img>
+          </a>
+          <a
+            href="img/statsbomb-showcase/scatterplotShareOfLong_b.png"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="img/statsbomb-showcase/scatterplotShareOfLong_b.png"
+              alt="Premier League 2015/16 Goalkeeper Distribution Scatterplot"
             ></img>
           </a>
         </div>
