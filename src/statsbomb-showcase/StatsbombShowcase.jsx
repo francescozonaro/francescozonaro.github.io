@@ -22,13 +22,12 @@ function StatsbombShowcase() {
       <div className="mt-12">
         <div className="leading-6 text-justify">
           Understanding a football team's dynamics is hardly a standardized
-          process since it involves considering various key factors like
-          players' quality and depth, manager's philosophy, team chemistry,
-          tactical adaptability, current form and so on. The following visuals
-          are meant to offer a glimpse into what can be done with Statsbomb
-          official data, reflecting my own curiosity about its potential
-          applications. The code developed to generate these visuals, utilizing
-          the free data provided by Statsbomb, is available in the{" "}
+          process — it involves considering factors like player quality and
+          depth, managerial philosophy, team chemistry, current form and many
+          more. The following visuals explore what can be done with Statsbomb's
+          official data, reflecting my own curiosity about its potential. The
+          code developed to generate these visuals, referencing the free data
+          provided by Statsbomb, is available in the{" "}
           <a
             href="https://github.com/francescozonaro/statsbombplot"
             target="_blank"
@@ -42,15 +41,14 @@ function StatsbombShowcase() {
       <div className="section-wrapper">
         <div className="visual-title">Generic events scatterplot</div>
         <div className="visual-description">
-          Mapping the location of certain events on the pitch can be highly
-          valuable in pinpointing specific zones where the team executes
-          particular actions, enabling strategic analysis and targeted
-          performance optimization. It can be a single event type (eg. Pressure,
-          Dribble, Shot, etc.) or a group of events (eg. Def. Action: Block,
-          Clearance, Interception, Ball Recovery). The following examples
-          highlight Italy's pressures and defensive actions during the EURO 2020
-          Final against England, with a focus on the mean height of the events,
-          which is represented by the dotted red line.
+          Mapping the location of certain events on the pitch helps pinpoint
+          specific zones where the team executes particular actions, revealing
+          patterns that inform tactical decisions. It can cover a single event
+          type (e.g. Pressure, Dribble, Shot, etc.) or a group of events (e.g.
+          Defensive Actions: Block, Clearance, Interception, Ball Recovery). The
+          examples below highlight Italy's pressures and defensive actions
+          during the EURO 2020 Final against England. Note that the dotted red
+          line marks the average vertical position of each event cluster.
         </div>
 
         <div className="visual-previews">
@@ -80,18 +78,15 @@ function StatsbombShowcase() {
       <div className="section-wrapper">
         <div className="visual-title">Shotmap</div>
         <div className="visual-description">
-          One of the most common visuals when analysing a football match. It can
-          be helpful when trying to find shooting patterns and can offer
-          insights into the spatial distribution of the shots taken by a certain
-          team, helping to identify strengths and weaknesses. In this example,
-          different shot types (Goal, On Target, Off Target) are identified with
-          different markers. The size of the marker is directly proportional to
-          the xG associated with the shot. The following example illustrates the
-          shotmap of the Euro 2020 Final. The shot distribution reflects Italy's
-          need to get back into the game after Luke Shaw's early goal and their
-          willingness to take more risks, while England's shotmap suggests a
-          more cautious approach, relying on high-quality chances created within
-          the box.
+          A staple of football analytics, shot maps help identify shooting
+          patterns and the spatial distribution of attempts, highlighting teams
+          strengths and weaknesses in front of goal. Each shot type (Goal, On
+          Target, Off Target) is distinguished by marker shape, with deeper
+          color indicating higher xG. The example below shows the shotmap of the
+          Euro 2020 Final. Italy's distribution reflects their need to get back
+          into the game after Luke Shaw's early goal and their willingness to
+          take more risks, while England's suggests a more cautious approach,
+          relying on high-quality chances created within the box.
         </div>
 
         <div className="visual-previews">
@@ -111,26 +106,24 @@ function StatsbombShowcase() {
       <div className="section-wrapper">
         <div className="visual-title">Progressive actions map</div>
         <div className="visual-description">
-          Ball progression is a very valuable skill a player can have,
-          especially if performed in the opponent half. Even when the carry/pass
-          is not directly creating the opportunity for a shot, bringing the ball
-          forward is of course fundamental to reach favourable positions where
-          playmakers can find the final defence-splitting pass. Various
-          adjustments can be made in what can be considered a slightly more
-          refined yet still very simple plot. In this case the{" "}
+          Ball progression — especially in the opponent's half — is one of the
+          most valuable skills in modern football. Even when a carry or pass
+          doesn't directly create a shooting opportunity, bringing the ball
+          forward is fundamental to reach favourable positions where playmakers
+          can find that final defence-splitting pass. This plot applies the{" "}
           <a
             href="https://dataglossary.wyscout.com/progressive_pass/"
             target="_blank"
           >
             wyscout definition of Progressive Action
           </a>{" "}
-          has been used to determine eligible actions, but there are various
-          other possible implementations. The following example illustrates the
-          progressive actions attempted and completed by Federico Chiesa during
-          the Euro 2020 Final. One of the players with the most carried meters
-          in the final, Chiesa's progressive actions were crucial in Italy's
-          offensive play, as they often led to key attacking opportunities and
-          helped to break down England's defensive structure.
+          to determine eligible actions, though other definitions can be applied
+          just as easily. The example below shows both attempted and completed
+          progressive actions by Federico Chiesa during the Euro 2020 Final.
+          Among the players with the most carried meters in the final, Chiesa's
+          progressive actions were crucial in Italy's offensive play, as they
+          often led to key attacking opportunities, breaking down England's
+          defensive structure.
         </div>
 
         <div className="visual-previews">
@@ -164,16 +157,16 @@ function StatsbombShowcase() {
           interactions, and overall playing strategies. It visualizes passing
           patterns between players during a match, helping to understand how
           possession is distributed and identify key playmakers. The following
-          example illustrates the passing network of the Italian team during the
-          Euro 2020 Final, where the thickness of the edges is proportional to
-          the number of passes exchanged between players and the size of the
+          example illustrates the passing networks during the Euro 2020 Final
+          between Italy and England. The thickness of the edges is proportional
+          to the number of passes exchanged between players and the size of the
           nodes is proportional to the total number of passes attempted by each
-          player. The plot highlights the central role of Jorginho in Italy's
-          build-up play, as well as the significant involvement of players like
-          Verratti and Barella in maintaining possession and facilitating ball
-          circulation. Additionally, it reveals the strong usage of the
-          defensive line during build up, with players like Bonucci and
-          Chiellini frequently involved in the passing sequences.
+          player. Focusing on Italy's network, the plot highlights the central
+          role of Jorginho in the build-up play, as well as the significant
+          contributions of Verratti and Barella in maintaining possession.
+          Additionally, it reveals the heavy involvement of the defensive line
+          during build up, with players like Bonucci and Chiellini frequently
+          involved in passing sequences.
         </div>
 
         <div className="visual-previews">
@@ -185,6 +178,16 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/ItalyPassingNetwork.png"
               alt="Italy Passing Network"
+            ></img>
+          </a>
+          <a
+            href="img/statsbomb-showcase/EnglandPassingNetwork.png"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="img/statsbomb-showcase/EnglandPassingNetwork.png"
+              alt="England Passing Network"
             ></img>
           </a>
         </div>
