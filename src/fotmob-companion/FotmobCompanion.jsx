@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowPathIcon, SignalIcon } from "@heroicons/react/24/solid";
+import ThemeToggle from "../components/ThemeToggle";
 
 function FotmobCompanion() {
   const navigate = useNavigate();
@@ -94,13 +95,17 @@ function FotmobCompanion() {
             id: match.home ? match.home.id : null,
             name: match.home ? match.home.name : "Unknown",
             score:
-              match.home && match.home.score !== undefined ? match.home.score : 0,
+              match.home && match.home.score !== undefined
+                ? match.home.score
+                : 0,
           },
           away: {
             id: match.away ? match.away.id : null,
             name: match.away ? match.away.name : "Unknown",
             score:
-              match.away && match.away.score !== undefined ? match.away.score : 0,
+              match.away && match.away.score !== undefined
+                ? match.away.score
+                : 0,
           },
           minute: minute,
         };
@@ -149,18 +154,29 @@ function FotmobCompanion() {
 
   return (
     <div className="w-11/12 md:w-3/4 lg:w-2/3 mx-auto text-center font-sans py-8 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <button
+          className="cardComponent smallEnlarge text-xs text-secondary px-3 py-1.5 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
+          ← Portfolio
+        </button>
+        <ThemeToggle />
+      </div>
+
       {/* Header */}
-      <div className="mt-4 mb-8">
+      <div className="mt-2 mb-8">
         <div className="flex items-center justify-center space-x-2 text-3xl font-bold tracking-tight">
           <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-light opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
           </span>
           <span>FotMob Score Siphon</span>
         </div>
         <p className="mt-3 text-sm text-justify leading-relaxed max-w-2xl mx-auto">
-          A real-time live score tracker that directly siphons public API data from FotMob.
-          Filter between competitive fixtures and friendly matches, view live match timelines, and stay updated automatically.
+          A real-time live score tracker that directly siphons public API data
+          from FotMob. Filter between competitive fixtures and friendly matches,
+          view live match timelines, and stay updated automatically.
         </p>
       </div>
 
@@ -204,7 +220,7 @@ function FotmobCompanion() {
             onClick={() => setShowOnlyLive(!showOnlyLive)}
             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center space-x-1.5 ${
               showOnlyLive
-                ? "border border-red-500/50 bg-red-500/10 text-red-500"
+                ? "border border-secondary/50 bg-secondary/10 text-secondary"
                 : "cardComponent text-primary"
             }`}
           >
@@ -218,7 +234,9 @@ function FotmobCompanion() {
             className="cardComponent smallEnlarge px-3 py-1.5 text-xs font-semibold text-secondary flex items-center space-x-1.5"
             title="Refresh Live Scores"
           >
-            <ArrowPathIcon className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
+            <ArrowPathIcon
+              className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`}
+            />
             <span>Refresh</span>
           </button>
         </div>
@@ -265,9 +283,11 @@ function FotmobCompanion() {
             >
               {/* League Header */}
               <div className="px-4 py-3 border-b border-background-light/50 bg-background-dark/60 flex justify-between items-center">
-                <span className="font-bold text-sm tracking-wide">{group.name}</span>
+                <span className="font-bold text-sm tracking-wide">
+                  {group.name}
+                </span>
                 {group.isFriendly && (
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
                     Friendly
                   </span>
                 )}
@@ -290,7 +310,9 @@ function FotmobCompanion() {
                     >
                       {/* Home Team */}
                       <div className="flex-1 flex items-center justify-end space-x-3 text-right">
-                        <span className="font-semibold text-sm line-clamp-1">{m.home.name}</span>
+                        <span className="font-semibold text-sm line-clamp-1">
+                          {m.home.name}
+                        </span>
                         {homeLogo && (
                           <img
                             src={homeLogo}
@@ -311,7 +333,7 @@ function FotmobCompanion() {
                         <div
                           className={`text-[11px] font-semibold mt-0.5 px-2 py-0.5 rounded ${
                             m.isActive
-                              ? "bg-red-500/15 text-red-500 animate-pulse font-bold"
+                              ? "bg-secondary/15 text-secondary animate-pulse font-bold"
                               : "text-primary/60"
                           }`}
                         >
@@ -331,7 +353,9 @@ function FotmobCompanion() {
                             }}
                           />
                         )}
-                        <span className="font-semibold text-sm line-clamp-1">{m.away.name}</span>
+                        <span className="font-semibold text-sm line-clamp-1">
+                          {m.away.name}
+                        </span>
                       </div>
                     </div>
                   );

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   LinkIcon,
   CodeBracketIcon,
   DocumentIcon,
 } from "@heroicons/react/24/solid";
 import "./App.css";
+import ThemeToggle from "./components/ThemeToggle";
 
 function App() {
   const [data, setData] = useState({ projects: [], reports: [] });
@@ -14,7 +16,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) =>
-        console.error("Error fetching projects and reports:", error)
+        console.error("Error fetching projects and reports:", error),
       );
   }, []);
 
@@ -24,27 +26,41 @@ function App() {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        class="cardComponent smallEnlarge align-middle justify-center flex p-1"
+        className="cardComponent smallEnlarge align-middle justify-center flex p-1"
       >
         <CodeBracketIcon className="h-5 w-5" />
       </a>
     ),
-    link: (url) => (
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cardComponent smallEnlarge align-middle justify-center flex p-1"
-      >
-        <LinkIcon className="h-5 w-5" />
-      </a>
-    ),
+    link: (url) => {
+      const isInternal = url.startsWith("/#/") || url.startsWith("/");
+      if (isInternal) {
+        const path = url.replace(/^\/#/, "");
+        return (
+          <Link
+            to={path}
+            className="cardComponent smallEnlarge align-middle justify-center flex p-1 text-secondary"
+          >
+            <LinkIcon className="h-5 w-5" />
+          </Link>
+        );
+      }
+      return (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="cardComponent smallEnlarge align-middle justify-center flex p-1"
+        >
+          <LinkIcon className="h-5 w-5" />
+        </a>
+      );
+    },
     pdf: (url) => (
       <a
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        class="cardComponent smallEnlarge align-middle justify-center flex p-1"
+        className="cardComponent smallEnlarge align-middle justify-center flex p-1"
       >
         <DocumentIcon className="h-5 w-5" />
       </a>
@@ -59,21 +75,24 @@ function App() {
             <strong>Francesco</strong> Zonaro
           </div>
         </div>
-        <div className="flex justify-center align-middle space-x-2">
+        <div className="flex justify-center items-center space-x-2">
           <a
             href="https://github.com/francescozonaro"
             target="_blank"
-            class="text-sm cardComponent smallEnlarge p-2"
+            rel="noopener noreferrer"
+            className="text-sm cardComponent smallEnlarge p-2"
           >
             Github
           </a>
           <a
             href="https://www.linkedin.com/in/francesco-zonaro-211234248/"
             target="_blank"
-            class="text-sm cardComponent smallEnlarge p-2"
+            rel="noopener noreferrer"
+            className="text-sm cardComponent smallEnlarge p-2"
           >
             Linkedin
           </a>
+          <ThemeToggle />
         </div>
 
         <div className="mt-12 text-left">
@@ -81,16 +100,19 @@ function App() {
 
           {data.projects.map((project, index) => (
             <div
-              class="mt-8 border-[0.5px] rounded-xl p-6 border-background-light shadow-xl"
-              key={index}
+              className="mt-8 border-[0.5px] rounded-xl p-6 border-background-light shadow-xl"
+              key={project.title || index}
             >
-              <div class="font-bold">{project.title}</div>
-              <div class="mt-2 text-sm text-justify">{project.description}</div>
-              <div class="flex justify-center space-x-6 mt-6">
-                {(() =>
-                  project.links.map(
-                    (link, index) => linkIcons[link.type]?.(link.url) || null
-                  ))()}
+              <div className="font-bold">{project.title}</div>
+              <div className="mt-2 text-sm text-justify">
+                {project.description}
+              </div>
+              <div className="flex justify-center space-x-6 mt-6">
+                {project.links.map((link, lIdx) => (
+                  <span key={lIdx}>
+                    {linkIcons[link.type]?.(link.url) || null}
+                  </span>
+                ))}
               </div>
             </div>
           ))}
@@ -101,16 +123,19 @@ function App() {
 
           {data.reports.map((report, index) => (
             <div
-              class="mt-8 border-[0.5px] rounded-xl p-6 border-background-light shadow-xl"
-              key={index}
+              className="mt-8 border-[0.5px] rounded-xl p-6 border-background-light shadow-xl"
+              key={report.title || index}
             >
-              <div class="font-bold">{report.title}</div>
-              <div class="mt-2 text-sm text-justify">{report.description}</div>
-              <div class="flex justify-center space-x-6 mt-6">
-                {(() =>
-                  report.links.map(
-                    (link, index) => linkIcons[link.type]?.(link.url) || null
-                  ))()}
+              <div className="font-bold">{report.title}</div>
+              <div className="mt-2 text-sm text-justify">
+                {report.description}
+              </div>
+              <div className="flex justify-center space-x-6 mt-6">
+                {report.links.map((link, lIdx) => (
+                  <span key={lIdx}>
+                    {linkIcons[link.type]?.(link.url) || null}
+                  </span>
+                ))}
               </div>
             </div>
           ))}

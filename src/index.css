@@ -3,30 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-  /* The design is dark first and the naming convention was made with this in mind.
-      For example you should use --color-white for text, since we are in dark mode.
-      Switching to light mode you should still keep --color-white for text. This is because
-      we mapped how each color should transform during a theme change, so you just need to
-      write your css once. */
-  .dark-theme {
-    --color-background: 22 22 22;
-    --color-background-light: 44 44 44;
-    --color-background-dark: 18 18 18;
-
-    --color-border: 25 25 27;
-    --color-border-light: 47 47 51;
-    --color-border-dark: 14 14 15;
-
-    --color-primary: 210 210 210;
-    --color-primary-light: 240 240 240;
-    --color-primary-dark: 200 200 200;
-
-    --color-secondary: 185 70 72;
-    --color-secondary-light: 200 85 87;
-    --color-secondary-dark: 170 55 67;
+  :root {
+    color-scheme: dark light;
   }
 
+  :root,
   .light-theme {
+    color-scheme: light;
     --color-background: 245 245 245;
     --color-background-light: 230 230 230;
     --color-background-dark: 235 235 235;
@@ -44,11 +27,33 @@
     --color-secondary-dark: 170 55 67;
   }
 
+  .dark-theme {
+    color-scheme: dark;
+    --color-background: 18 17 16;
+    --color-background-light: 45 40 35;
+    --color-background-dark: 30 27 24;
+
+    --color-border: 42 38 33;
+    --color-border-light: 62 55 46;
+    --color-border-dark: 24 22 19;
+
+    --color-primary: 245 240 235;
+    --color-primary-light: 255 252 248;
+    --color-primary-dark: 205 198 188;
+
+    --color-secondary: 129 140 248;
+    --color-secondary-light: 165 180 252;
+    --color-secondary-dark: 99 102 241;
+  }
+
   #root {
     overflow: hidden;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-primary));
   }
 
   *,
@@ -60,14 +65,46 @@
     scroll-behavior: smooth;
   }
 
+  html,
   body {
     box-sizing: border-box;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-primary));
+    min-height: 100vh;
+  }
+
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease !important;
+  }
+
+  .dark-theme .shadow-xl {
+    box-shadow:
+      0 16px 36px -6px rgba(0, 0, 0, 0.75),
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .dark-theme .cardComponent {
+    box-shadow:
+      0 8px 24px -4px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .dark-theme .cardComponent:hover {
+    box-shadow:
+      0 12px 32px -4px rgba(0, 0, 0, 0.8),
+      0 0 20px -2px rgba(var(--color-secondary) / 0.25),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
   }
 }
 
 @layer utilities {
-  /* CSS variables cannot be referenced here */
-
   /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */

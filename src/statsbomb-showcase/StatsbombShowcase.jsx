@@ -1,8 +1,8 @@
 import "./StatsbombShowcase.css";
 import "../App.css";
 
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 
 function StatsbombShowcase() {
   const navigate = useNavigate();
@@ -13,10 +13,17 @@ function StatsbombShowcase() {
 
   return (
     <div className="StatsbombShowcase">
-      <div className="header">
-        <div className="mt-8 text-3xl leading-tight tracking-tighter">
+      <div className="header flex justify-between items-center mt-8">
+        <button
+          className="cardComponent smallEnlarge text-xs text-secondary px-3 py-1.5 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
+          ← Portfolio
+        </button>
+        <div className="text-3xl leading-tight tracking-tighter">
           <strong>Plotting Statsbomb Data</strong>
         </div>
+        <ThemeToggle />
       </div>
 
       <div className="mt-12">
@@ -31,6 +38,7 @@ function StatsbombShowcase() {
           <a
             href="https://github.com/francescozonaro/statsbombplot"
             target="_blank"
+            rel="noopener noreferrer"
           >
             StatsbombPlot
           </a>{" "}
@@ -114,6 +122,7 @@ function StatsbombShowcase() {
           <a
             href="https://dataglossary.wyscout.com/progressive_pass/"
             target="_blank"
+            rel="noopener noreferrer"
           >
             wyscout definition of Progressive Action
           </a>{" "}
