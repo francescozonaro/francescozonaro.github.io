@@ -13,6 +13,16 @@
           "url": "https://github.com/francescozonaro/statsbombplot"
         }
       ]
+    },
+    {
+      "title": "FotMob Companion",
+      "description": "A real-time live score tracker siphoning public FotMob API data, supporting filtering by friendly vs competitive matches with automatic live updates.",
+      "links": [
+        {
+          "type": "link",
+          "url": "/#/fotmob-companion"
+        }
+      ]
     }
   ],
   "reports": [

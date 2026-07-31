@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import StatsbombShowcase from "./statsbomb-showcase/StatsbombShowcase";
+import FotmobCompanion from "./fotmob-companion/FotmobCompanion";
 
 import {
   // createBrowserRouter,
@@ -18,6 +19,10 @@ const router = createHashRouter([
   {
     path: "/statsbomb-showcase",
     element: <StatsbombShowcase />,
+  },
+  {
+    path: "/fotmob-companion",
+    element: <FotmobCompanion />,
   },
 ]);
 
