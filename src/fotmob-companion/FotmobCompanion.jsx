@@ -15,6 +15,9 @@ const HARDCODED_FAVORITES_TEAMS = ["PSMS"];
 const HARDCODED_FAVORITES_LEAGUES = ["Liga II"];
 const HARDCODED_FAVORITES_PLAYERS = ["Romario Moise"];
 
+const DEFAULT_TEAM_LOGO =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E";
+
 function isFavoriteTeam(teamName) {
   if (!teamName) return false;
   return HARDCODED_FAVORITES_TEAMS.some(
@@ -680,7 +683,7 @@ function FotmobCompanion() {
 
   useEffect(() => {
     fetchLiveScores();
-    const timer = setInterval(fetchLiveScores, 120000);
+    const timer = setInterval(fetchLiveScores, 3600000); // 1 hour auto-refresh
     return () => clearInterval(timer);
   }, [fetchLiveScores]);
 
@@ -872,16 +875,15 @@ function FotmobCompanion() {
                           <span className="font-semibold text-sm line-clamp-1">
                             {m.home.name}
                           </span>
-                          {m.homeLogo && (
-                            <img
-                              src={m.homeLogo}
-                              alt=""
-                              className="w-6 h-6 object-contain flex-shrink-0"
-                              onError={(e) => {
-                                e.target.style.display = "none";
-                              }}
-                            />
-                          )}
+                          <img
+                            src={m.homeLogo || DEFAULT_TEAM_LOGO}
+                            alt=""
+                            className="w-6 h-6 object-contain flex-shrink-0"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = DEFAULT_TEAM_LOGO;
+                            }}
+                          />
                         </div>
 
                         {/* Score Badge (Centered) */}
@@ -893,16 +895,15 @@ function FotmobCompanion() {
 
                         {/* Away Team */}
                         <div className="flex-1 flex items-center justify-start space-x-2 text-left">
-                          {m.awayLogo && (
-                            <img
-                              src={m.awayLogo}
-                              alt=""
-                              className="w-6 h-6 object-contain flex-shrink-0"
-                              onError={(e) => {
-                                e.target.style.display = "none";
-                              }}
-                            />
-                          )}
+                          <img
+                            src={m.awayLogo || DEFAULT_TEAM_LOGO}
+                            alt=""
+                            className="w-6 h-6 object-contain flex-shrink-0"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = DEFAULT_TEAM_LOGO;
+                            }}
+                          />
                           <span className="font-semibold text-sm line-clamp-1">
                             {m.away.name}
                           </span>
@@ -988,16 +989,15 @@ function FotmobCompanion() {
                   {/* Teams & Score */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      {goal.scoringLogo && (
-                        <img
-                          src={goal.scoringLogo}
-                          alt=""
-                          className="w-5 h-5 object-contain"
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                          }}
-                        />
-                      )}
+                      <img
+                        src={goal.scoringLogo || DEFAULT_TEAM_LOGO}
+                        alt=""
+                        className="w-5 h-5 object-contain flex-shrink-0"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = DEFAULT_TEAM_LOGO;
+                        }}
+                      />
                       <span className="font-bold text-sm">
                         {goal.scoringTeam}
                       </span>
