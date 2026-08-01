@@ -242,20 +242,20 @@ function GoalBadge({ goal }) {
           href={searchUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-md transition-transform hover:scale-105 cursor-pointer no-underline"
+          className="px-2.5 py-0.5 rounded-full bg-secondary text-white hover:text-white font-extrabold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-md transition-transform hover:scale-105 cursor-pointer no-underline"
           title={searchTitle}
         >
-          <span>🚀 GREAT GOAL! ↗</span>
+          <span className="text-white hover:text-white">GREAT GOAL!</span>
         </a>
       ) : (
         <a
           href={searchUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="px-2.5 py-0.5 rounded-full bg-zinc-800/90 hover:bg-zinc-700 text-zinc-300 border border-zinc-700/60 font-bold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-sm transition-transform hover:scale-105 cursor-pointer no-underline"
+          className="px-2.5 py-0.5 rounded-full bg-black text-white hover:text-white border border-zinc-700/80 font-bold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-sm transition-transform hover:scale-105 cursor-pointer no-underline"
           title={searchTitle}
         >
-          <span>SEARCH ON X ↗</span>
+          <span className="text-white hover:text-white">SEARCH ON X</span>
         </a>
       )}
     </div>
@@ -849,7 +849,7 @@ function FotmobCompanion() {
                   key={goal.id}
                   className={`relative p-4 rounded-xl border transition-all duration-300 ${
                     goal.isGreatGoal
-                      ? "border-purple-500/50 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.15)]"
+                      ? "border-secondary/50 bg-secondary/10 shadow-[0_0_20px_rgba(var(--color-secondary)/0.15)]"
                       : "border-background-light bg-background-dark/40 shadow-sm"
                   }`}
                 >
