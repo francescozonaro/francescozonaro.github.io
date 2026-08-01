@@ -6,6 +6,8 @@ import {
   MagnifyingGlassIcon,
   BoltIcon,
   TrophyIcon,
+  SparklesIcon,
+  ChartBarIcon,
 } from "@heroicons/react/24/solid";
 import ThemeToggle from "../components/ThemeToggle";
 
@@ -803,10 +805,10 @@ function FotmobCompanion() {
         </div>
       </div>
 
-      {/* Split Dashboard: Matches (Left) vs Goal Event Stream (Right) */}
+      {/* Split Dashboard: Fixtures (5 Cols) vs Goal Stream (4 Cols) vs Widgets (3 Cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 text-left items-stretch flex-1 min-h-[350px] overflow-hidden pb-2">
-        {/* LEFT COLUMN: Matches List (7 Cols) */}
-        <div className="lg:col-span-7 flex flex-col min-h-0">
+        {/* LEFT COLUMN: Matches List (5 Cols) */}
+        <div className="lg:col-span-5 flex flex-col min-h-0">
           <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
             <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
               <TrophyIcon className="h-4 w-4 text-secondary" />
@@ -914,8 +916,8 @@ function FotmobCompanion() {
           </ScrollableFeed>
         </div>
 
-        {/* RIGHT COLUMN: Real-Time Goal Stream (5 Cols) */}
-        <div className="lg:col-span-5 flex flex-col min-h-0">
+        {/* MIDDLE COLUMN: Real-Time Goal Stream (4 Cols) */}
+        <div className="lg:col-span-4 flex flex-col min-h-0">
           <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
             <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
               <BoltIcon className="h-4 w-4 text-secondary animate-bounce" />
@@ -1029,6 +1031,51 @@ function FotmobCompanion() {
               ))
             )}
           </ScrollableFeed>
+        </div>
+
+        {/* RIGHT COLUMN: Custom Widgets / Content Blocks (3 Cols - 2 Blocks) */}
+        <div className="lg:col-span-3 flex flex-col space-y-4 min-h-0">
+          {/* Content Block 1 */}
+          <div className="flex-1 flex flex-col min-h-0">
+            <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
+                <SparklesIcon className="h-4 w-4 text-secondary" />
+                <span>Insight Block 1</span>
+              </h2>
+            </div>
+            <div className="flex-1 p-5 border-[0.5px] border-dashed border-background-light/70 rounded-xl bg-background-dark/20 flex flex-col items-center justify-center text-center">
+              <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
+                <SparklesIcon className="h-4 w-4" />
+              </div>
+              <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
+                Placeholder Content 1
+              </h3>
+              <p className="text-[11px] text-primary/50 max-w-[170px]">
+                Ready for upcoming telemetry, match analysis, or player stats.
+              </p>
+            </div>
+          </div>
+
+          {/* Content Block 2 */}
+          <div className="flex-1 flex flex-col min-h-0">
+            <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
+                <ChartBarIcon className="h-4 w-4 text-secondary" />
+                <span>Insight Block 2</span>
+              </h2>
+            </div>
+            <div className="flex-1 p-5 border-[0.5px] border-dashed border-background-light/70 rounded-xl bg-background-dark/20 flex flex-col items-center justify-center text-center">
+              <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
+                <ChartBarIcon className="h-4 w-4" />
+              </div>
+              <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
+                Placeholder Content 2
+              </h3>
+              <p className="text-[11px] text-primary/50 max-w-[170px]">
+                Ready for watchlist, standings, or custom quick-links.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
