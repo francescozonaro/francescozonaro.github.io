@@ -28,6 +28,8 @@ const DEFAULT_TEAM_LOGO =
 
 const SERVERLESS_WORKER_URL =
   "https://fotmob-details.turtleunderablanket.workers.dev";
+const SERVERLESS_FIXTURES_WORKER_URL =
+  "https://fotmob-fixtures.turtleunderablanket.workers.dev";
 
 // Pure Modular Helper Functions
 function isFavoriteTeam(teamName) {
@@ -565,40 +567,24 @@ function FotmobCompanion() {
     setLoading(true);
     try {
       const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-      const rawUrl = `https://www.fotmob.com/api/data/matches?date=${dateStr}&_t=${Date.now()}`;
+      const endpoint = `${SERVERLESS_FIXTURES_WORKER_URL.replace(/\/$/, "")}?date=${dateStr}&_t=${Date.now()}`;
 
-      const proxies = [
-        `https://corsproxy.io/?${encodeURIComponent(rawUrl)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(rawUrl)}`,
-        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rawUrl)}`,
-      ];
+      const res = await fetch(endpoint, { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.leagues) {
+          const parsed = processFotmobData(data);
+          setMatches(parsed.liveList);
+          setAllTodayMatches(parsed.allList);
+          processGoalEvents(parsed.allList);
 
-      let data = null;
-
-      for (const proxyUrl of proxies) {
-        try {
-          const res = await fetch(proxyUrl, { cache: "no-store" });
-          if (res.ok) {
-            data = await res.json();
-            if (data && data.leagues) break;
-          }
-        } catch {
-          // ignore & try next proxy
+          const nowStr = new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+          setLastUpdated(nowStr);
         }
-      }
-
-      if (data && data.leagues) {
-        const parsed = processFotmobData(data);
-        setMatches(parsed.liveList);
-        setAllTodayMatches(parsed.allList);
-        processGoalEvents(parsed.allList);
-
-        const nowStr = new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        });
-        setLastUpdated(nowStr);
       }
     } catch (err) {
       console.error("Fetch error:", err);
