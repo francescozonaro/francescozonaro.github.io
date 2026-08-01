@@ -11,24 +11,31 @@ import {
 } from "@heroicons/react/24/solid";
 import ThemeToggle from "../components/ThemeToggle";
 
-const HARDCODED_FAVORITES_TEAMS = ["PSMS"];
-const HARDCODED_FAVORITES_LEAGUES = ["Liga II"];
-const HARDCODED_FAVORITES_PLAYERS = ["Romario Moise"];
+// Config & Favorites Definitions
+const HARDCODED_FAVORITES_TEAMS = ["Philippines"];
+const HARDCODED_FAVORITES_LEAGUES = ["ASEAN Championship Grp. B"];
+const HARDCODED_FAVORITES_PLAYERS = ["John"];
 
 const DEFAULT_TEAM_LOGO =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E";
 
+const SERVERLESS_WORKER_URL =
+  "https://fotmob-details.turtleunderablanket.workers.dev";
+
+// Pure Modular Helper Functions
 function isFavoriteTeam(teamName) {
   if (!teamName) return false;
+  const target = teamName.trim().toLowerCase();
   return HARDCODED_FAVORITES_TEAMS.some(
-    (fav) => fav.toLowerCase() === teamName.toLowerCase(),
+    (fav) => fav.trim().toLowerCase() === target,
   );
 }
 
 function isFavoritePlayer(playerName) {
   if (!playerName) return false;
-  return HARDCODED_FAVORITES_PLAYERS.some((fav) =>
-    playerName.toLowerCase().includes(fav.toLowerCase()),
+  const target = playerName.trim().toLowerCase();
+  return HARDCODED_FAVORITES_PLAYERS.some(
+    (fav) => fav.trim().toLowerCase() === target,
   );
 }
 
@@ -40,18 +47,282 @@ function isMatchInFavoriteLeagues(leagueName) {
     return true;
   }
   if (!leagueName) return false;
-  return HARDCODED_FAVORITES_LEAGUES.some((favLeague) =>
-    leagueName.toLowerCase().includes(favLeague.toLowerCase()),
+  const target = leagueName.trim().toLowerCase();
+  return HARDCODED_FAVORITES_LEAGUES.some(
+    (favLeague) => favLeague.trim().toLowerCase() === target,
+  );
+}
+
+function sanitizeText(raw) {
+  if (!raw) return null;
+  const lower = raw.toLowerCase();
+  if (lower.includes("tbd") || lower.includes("<tbd>")) return null;
+  return raw;
+}
+
+function formatScorerName(rawName, type) {
+  let scorer = sanitizeText(rawName);
+  if (!scorer) return null;
+  if (type === "OwnGoal") scorer += " (OG)";
+  if (type === "GoalPen") scorer += " (P)";
+  return scorer;
+}
+
+function formatAssistName(rawAssist) {
+  const assist = sanitizeText(rawAssist);
+  if (!assist) return null;
+  return assist.toLowerCase().includes("assist") ? assist : `Assist: ${assist}`;
+}
+
+function evaluateShotTelemetry(matchingShot, eg) {
+  if (!matchingShot) {
+    return { xG: null, xGOT: null, shotDistance: null, isGreatGoal: false };
+  }
+
+  const xG =
+    typeof matchingShot.expectedGoals === "number"
+      ? matchingShot.expectedGoals
+      : typeof matchingShot.xG === "number"
+        ? matchingShot.xG
+        : null;
+
+  const xGOT =
+    typeof matchingShot.expectedGoalsOnTarget === "number"
+      ? matchingShot.expectedGoalsOnTarget
+      : typeof matchingShot.xGOT === "number"
+        ? matchingShot.xGOT
+        : null;
+
+  const situation = matchingShot.situation || matchingShot.shotType || null;
+
+  let isDistanceScreamer = false;
+  let shotDistanceMeters = null;
+
+  if (typeof matchingShot.distance === "number") {
+    shotDistanceMeters = Math.round(matchingShot.distance * 10) / 10;
+  }
+
+  if (
+    typeof matchingShot.x === "number" &&
+    typeof matchingShot.y === "number"
+  ) {
+    const sx = matchingShot.x;
+    const sy = matchingShot.y;
+
+    const px = sx > 1 ? (sx <= 100 ? (sx / 100) * 105 : sx) : sx * 105;
+    const py = sy > 1 ? (sy <= 100 ? (sy / 100) * 68 : sy) : sy * 68;
+
+    const dx = Math.max(0, 105 - px);
+    const dy = Math.abs(py - 34);
+
+    const directDist = Math.sqrt(dx * dx + dy * dy);
+    if (shotDistanceMeters === null) {
+      shotDistanceMeters = Math.round(directDist * 10) / 10;
+    }
+
+    const effectiveDist = directDist + dy * 0.75;
+    if (effectiveDist >= 22.0) {
+      isDistanceScreamer = true;
+    }
+  } else if (shotDistanceMeters !== null && shotDistanceMeters >= 22.0) {
+    isDistanceScreamer = true;
+  }
+
+  const isLowXg = xG !== null && xG > 0 && xG <= 0.09;
+  const isFreeKick = !!(
+    situation && situation.toLowerCase().includes("freekick")
+  );
+  const isGreatFinish =
+    xGOT !== null &&
+    xG !== null &&
+    (xGOT - xG >= 0.35 || (xGOT >= 0.8 && xG <= 0.25));
+
+  return {
+    xG: xG !== null ? Math.round(xG * 100) / 100 : null,
+    xGOT: xGOT !== null ? Math.round(xGOT * 100) / 100 : null,
+    shotDistance: shotDistanceMeters,
+    isGreatGoal: isLowXg || isFreeKick || isGreatFinish || isDistanceScreamer,
+  };
+}
+
+function parseMatchStatus(status = {}) {
+  if (status.finished) return "FT";
+  if (status.cancelled) return "Cancelled";
+  if (status.reason?.shortKey === "halftime_short") return "HT";
+  if (status.liveTime?.short) {
+    const cleaned = status.liveTime.short.replace(/[\u200E\u200F]/g, "").trim();
+    return /^\d+(\+\d+)?$/.test(cleaned)
+      ? `${cleaned}′`
+      : cleaned.replace(/’/g, "′");
+  }
+  if (status.startTimeStr) return status.startTimeStr;
+  if (status.reason?.short && status.reason.short !== "NS")
+    return status.reason.short;
+  return "TBD";
+}
+
+function transformFotmobMatch(match, league) {
+  const status = match.status || {};
+
+  // Strictly live: match is ongoing or has an active match clock/halftime, not finished/cancelled
+  const isActive =
+    !status.finished &&
+    !status.cancelled &&
+    (!!status.ongoing ||
+      !!status.liveTime?.short ||
+      status.reason?.shortKey === "halftime_short");
+
+  const isFriendly = league.name
+    ? league.name.toLowerCase().includes("friendly") ||
+      league.name.toLowerCase().includes("friendlies")
+    : false;
+
+  return {
+    id: match.id,
+    leagueName: league.name,
+    leagueId: league.id || league.primaryId,
+    ccode: league.ccode || "INT",
+    isFriendly,
+    isActive,
+    finished: !!status.finished,
+    home: {
+      id: match.home?.id || null,
+      name: match.home?.name || "Unknown",
+      score: match.home?.score !== undefined ? match.home.score : 0,
+    },
+    away: {
+      id: match.away?.id || null,
+      name: match.away?.name || "Unknown",
+      score: match.away?.score !== undefined ? match.away.score : 0,
+    },
+    homeLogo: match.home?.id
+      ? `https://images.fotmob.com/image_resources/logo/teamlogo/${match.home.id}.png`
+      : null,
+    awayLogo: match.away?.id
+      ? `https://images.fotmob.com/image_resources/logo/teamlogo/${match.away.id}.png`
+      : null,
+    minute: parseMatchStatus(status),
+    timeTS:
+      match.timeTS ||
+      (status.utcTime ? new Date(status.utcTime).getTime() : null),
+  };
+}
+
+// Modular Sub-Components
+function TeamLogo({ src, className = "w-6 h-6 object-contain flex-shrink-0" }) {
+  return (
+    <img
+      src={src || DEFAULT_TEAM_LOGO}
+      alt=""
+      className={className}
+      onError={(e) => {
+        e.target.onerror = null;
+        e.target.src = DEFAULT_TEAM_LOGO;
+      }}
+    />
+  );
+}
+
+function GoalBadge({ goal }) {
+  const getScorerSearchUrl = (scorerName) => {
+    if (!scorerName) return "https://x.com/search?q=great%20goal";
+    const cleanScorer = scorerName.replace(/\s*\((OG|P)\)/gi, "").trim();
+    return `https://x.com/search?q=${encodeURIComponent(cleanScorer + " goal")}`;
+  };
+
+  return (
+    <div className="absolute -top-2.5 right-4 flex items-center space-x-2">
+      {goal.isGreatGoal && (
+        <a
+          href={getScorerSearchUrl(goal.scorerName)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-md transition-transform hover:scale-105 cursor-pointer no-underline"
+          title={`Click to search for ${goal.scorerName || "this goal"} on X (Twitter)`}
+        >
+          <span>🚀 GREAT GOAL! ↗</span>
+        </a>
+      )}
+
+      {goal.isFavorite && (
+        <a
+          href="https://www.goalstube.online/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-2.5 py-0.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-md transition-transform hover:scale-105 cursor-pointer no-underline"
+          title="Click to search / watch goal on GoalsTube"
+        >
+          <span>
+            {goal.isFavoriteTeam && goal.isFavoritePlayer
+              ? "FAVORITE TEAM & PLAYER GOAL!"
+              : goal.isFavoriteTeam
+                ? "FAVORITE TEAM GOAL!"
+                : "FAVORITE PLAYER GOAL!"}
+          </span>
+        </a>
+      )}
+    </div>
   );
 }
 
 function ScrollableFeed({ children }) {
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1 pb-2 no-scrollbar scroll-smooth">
+    <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1 pt-3 pb-2 no-scrollbar scroll-smooth">
       {children}
     </div>
   );
 }
+
+function PlaceholderWidget({
+  icon: Icon,
+  title,
+  placeholderTitle,
+  description,
+}) {
+  return (
+    <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
+          <Icon className="h-4 w-4 text-secondary" />
+          <span>{title}</span>
+        </h2>
+      </div>
+      <div className="flex-1 p-5 border-[0.5px] border-dashed border-background-light/70 rounded-xl bg-background-dark/20 flex flex-col items-center justify-center text-center">
+        <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
+          <Icon className="h-4 w-4" />
+        </div>
+        <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
+          {placeholderTitle}
+        </h3>
+        <p className="text-[11px] text-primary/50 max-w-[170px]">
+          {description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+const getTodayCacheKey = () => {
+  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  return `fotmob_details_cache_${dateStr}`;
+};
+
+const loadDetailsCache = () => {
+  try {
+    const raw = sessionStorage.getItem(getTodayCacheKey());
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+};
+
+const saveDetailsCache = (cacheObj) => {
+  try {
+    sessionStorage.setItem(getTodayCacheKey(), JSON.stringify(cacheObj));
+  } catch {
+    // ignore
+  }
+};
 
 function FotmobCompanion() {
   const navigate = useNavigate();
@@ -61,15 +332,87 @@ function FotmobCompanion() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
-  const [error, setError] = useState(null);
-
-  // Goal Stream State
   const [goalFeed, setGoalFeed] = useState([]);
   const previousScoresRef = useRef({});
+  const fetchedMatchDetailsCacheRef = useRef(loadDetailsCache());
 
-  const SERVERLESS_WORKER_URL =
-    "https://fotmob-details.turtleunderablanket.workers.dev";
+  // Helper to map and update Goal Feed state from match details array
+  const updateGoalFeedFromDetails = (m, details) => {
+    if (!details || details.length === 0) return;
 
+    const fullGoalCards = details.map((g) => {
+      const scoringTeam = g.isHome ? m.home.name : m.away.name;
+      const opponentTeam = g.isHome ? m.away.name : m.home.name;
+      const scoringLogo = g.isHome ? m.homeLogo : m.awayLogo;
+
+      const favTeam =
+        isFavoriteTeam(scoringTeam) || isFavoriteTeam(opponentTeam);
+      const favPlayer =
+        isFavoritePlayer(g.scorer) || isFavoritePlayer(g.assist);
+
+      const scoreText = g.scoreDisplay || `${m.home.score} - ${m.away.score}`;
+      const goalId = `${m.id}_${g.isHome ? "H" : "A"}_${scoreText}`;
+
+      return {
+        id: goalId,
+        matchId: m.id,
+        leagueName: m.leagueName,
+        scoringTeam,
+        opponentTeam,
+        scoringLogo,
+        scoreDisplay: scoreText,
+        minute: g.time || m.minute || "Live",
+        minuteRaw: g.minuteRaw,
+        timestampRaw: Date.now(),
+        isFavorite: favTeam || favPlayer,
+        isFavoriteTeam: favTeam,
+        isFavoritePlayer: favPlayer,
+        isGreatGoal: !!g.isGreatGoal,
+        xG: g.xG !== undefined ? g.xG : null,
+        xGOT: g.xGOT !== undefined ? g.xGOT : null,
+        isLiveGoal: m.isActive,
+        scorerName: g.scorer,
+        assistName: g.assist,
+      };
+    });
+
+    setGoalFeed((prevFeed) => {
+      const map = new Map();
+      prevFeed.forEach((item) => map.set(item.id, item));
+      fullGoalCards.forEach((newItem) => {
+        const existing = map.get(newItem.id);
+        if (existing) {
+          const updatedScorer = newItem.scorerName || existing.scorerName;
+          const updatedAssist = newItem.assistName || existing.assistName;
+          const updatedFavPlayer =
+            isFavoritePlayer(updatedScorer) || isFavoritePlayer(updatedAssist);
+          const updatedFavTeam =
+            newItem.isFavoriteTeam || existing.isFavoriteTeam;
+
+          map.set(newItem.id, {
+            ...existing,
+            ...newItem,
+            timestampRaw: existing.timestampRaw,
+            scorerName: updatedScorer,
+            assistName: updatedAssist,
+            isFavoriteTeam: updatedFavTeam,
+            isFavoritePlayer: updatedFavPlayer,
+            isFavorite: updatedFavTeam || updatedFavPlayer,
+            isGreatGoal: newItem.isGreatGoal || existing.isGreatGoal,
+            xG: newItem.xG !== null ? newItem.xG : existing.xG,
+            xGOT: newItem.xGOT !== null ? newItem.xGOT : existing.xGOT,
+          });
+        } else {
+          map.set(newItem.id, newItem);
+        }
+      });
+      return Array.from(map.values()).sort(
+        (a, b) => b.minuteRaw - a.minuteRaw || b.timestampRaw - a.timestampRaw,
+      );
+    });
+  };
+
+  // Fetch detailed telemetry (events & shotmap xG) for a live match
   const fetchMatchDetails = async (matchId) => {
     if (!SERVERLESS_WORKER_URL) return null;
 
@@ -81,121 +424,54 @@ function FotmobCompanion() {
       const data = await res.json();
       const extractedGoals = [];
 
-      const cleanScorer = (rawName) => {
-        if (!rawName) return null;
-        if (
-          rawName.toLowerCase().includes("tbd") ||
-          rawName.toLowerCase().includes("<tbd>")
-        ) {
-          return null;
-        }
-        return rawName;
-      };
-
-      const cleanAssist = (rawAssist) => {
-        if (!rawAssist) return null;
-        if (
-          rawAssist.toLowerCase().includes("tbd") ||
-          rawAssist.toLowerCase().includes("<tbd>")
-        ) {
-          return null;
-        }
-        if (!rawAssist.toLowerCase().includes("assist")) {
-          return `Assist: ${rawAssist}`;
-        }
-        return rawAssist;
-      };
-
-      // Extract goals from header.events (homeTeamGoals & awayTeamGoals)
+      const rawEvents = [];
       const homeGoalsObj = data?.header?.events?.homeTeamGoals || {};
       const awayGoalsObj = data?.header?.events?.awayTeamGoals || {};
 
       [...Object.values(homeGoalsObj), ...Object.values(awayGoalsObj)].forEach(
-        (goalArray) => {
-          if (Array.isArray(goalArray)) {
-            goalArray.forEach((g) => {
-              let scorer = cleanScorer(
-                g.player?.name || g.fullName || g.nameStr,
-              );
-              if (scorer && g.type === "OwnGoal") scorer += " (OG)";
-              if (scorer && g.type === "GoalPen") scorer += " (P)";
-
-              let assist = cleanAssist(g.assistInput || g.assistStr);
-
-              const rawMin =
-                typeof g.time === "number"
-                  ? g.time
-                  : parseInt(g.timeStr, 10) || 0;
-
-              extractedGoals.push({
-                scorer: scorer,
-                assist: assist,
-                time: g.timeStr
-                  ? `${g.timeStr}′`
-                  : g.time
-                    ? `${g.time}′`
-                    : null,
-                minuteRaw: rawMin,
-                isHome: !!g.isHome,
-                scoreDisplay: g.newScore
-                  ? `${g.newScore[0]} - ${g.newScore[1]}`
-                  : null,
-              });
-            });
-          }
+        (arr) => {
+          if (Array.isArray(arr)) rawEvents.push(...arr);
         },
       );
 
-      // Fallback to matchFacts events array if header goals are empty
-      if (extractedGoals.length === 0) {
-        const events =
+      if (rawEvents.length === 0) {
+        const factsEvents =
           data?.content?.matchFacts?.events?.events ||
           data?.content?.matchFacts?.events ||
           [];
-
-        if (Array.isArray(events)) {
-          events
-            .filter(
-              (e) =>
-                e.type === "Goal" ||
-                e.type === "GoalPen" ||
-                e.type === "OwnGoal",
-            )
-            .forEach((g) => {
-              let scorer = cleanScorer(
-                g.player?.name || g.name || g.playerName || g.fullName,
-              );
-              if (scorer && g.type === "OwnGoal") scorer += " (OG)";
-              if (scorer && g.type === "GoalPen") scorer += " (P)";
-
-              let assist = cleanAssist(
-                g.assistInput || g.assistStr || g.assistPlayer?.name,
-              );
-
-              const rawMin =
-                typeof g.time === "number"
-                  ? g.time
-                  : parseInt(g.timeStr, 10) || 0;
-
-              extractedGoals.push({
-                scorer: scorer,
-                assist: assist,
-                time: g.timeStr
-                  ? `${g.timeStr}′`
-                  : g.time
-                    ? `${g.time}′`
-                    : null,
-                minuteRaw: rawMin,
-                isHome: !!g.isHome,
-                scoreDisplay: g.newScore
-                  ? `${g.newScore[0]} - ${g.newScore[1]}`
-                  : null,
-              });
-            });
+        if (Array.isArray(factsEvents)) {
+          rawEvents.push(
+            ...factsEvents.filter((e) =>
+              ["Goal", "GoalPen", "OwnGoal"].includes(e.type),
+            ),
+          );
         }
       }
 
-      // Enrich extracted goals with shotmap xG telemetry if available
+      rawEvents.forEach((g) => {
+        const scorer = formatScorerName(
+          g.player?.name || g.fullName || g.nameStr || g.name || g.playerName,
+          g.type,
+        );
+        const assist = formatAssistName(
+          g.assistInput || g.assistStr || g.assistPlayer?.name,
+        );
+        const rawMin =
+          typeof g.time === "number" ? g.time : parseInt(g.timeStr, 10) || 0;
+
+        extractedGoals.push({
+          scorer,
+          assist,
+          time: g.timeStr ? `${g.timeStr}′` : g.time ? `${g.time}′` : null,
+          minuteRaw: rawMin,
+          isHome: !!g.isHome,
+          scoreDisplay: g.newScore
+            ? `${g.newScore[0]} - ${g.newScore[1]}`
+            : null,
+        });
+      });
+
+      // Enrich goals with shotmap xG telemetry
       const shotmapShots = data?.content?.shotmap?.shots || [];
       extractedGoals.forEach((eg) => {
         const matchingShot = shotmapShots.find((s) => {
@@ -211,82 +487,8 @@ function FotmobCompanion() {
           return minMatch || nameMatch;
         });
 
-        if (matchingShot) {
-          const xG =
-            typeof matchingShot.expectedGoals === "number"
-              ? matchingShot.expectedGoals
-              : typeof matchingShot.xG === "number"
-                ? matchingShot.xG
-                : null;
-          const xGOT =
-            typeof matchingShot.expectedGoalsOnTarget === "number"
-              ? matchingShot.expectedGoalsOnTarget
-              : typeof matchingShot.xGOT === "number"
-                ? matchingShot.xGOT
-                : null;
-          const situation =
-            matchingShot.situation || matchingShot.shotType || null;
-
-          // Distance & Angle Geometry calculation
-          let isDistanceScreamer = false;
-          let shotDistanceMeters = null;
-
-          if (typeof matchingShot.distance === "number") {
-            shotDistanceMeters = Math.round(matchingShot.distance * 10) / 10;
-          }
-
-          if (
-            typeof matchingShot.x === "number" &&
-            typeof matchingShot.y === "number"
-          ) {
-            const sx = matchingShot.x;
-            const sy = matchingShot.y;
-
-            // Normalize scale to 105x68 pitch
-            const px = sx > 1 ? (sx <= 100 ? (sx / 100) * 105 : sx) : sx * 105;
-            const py = sy > 1 ? (sy <= 100 ? (sy / 100) * 68 : sy) : sy * 68;
-
-            const dx = Math.max(0, 105 - px); // meters to goal line
-            const dy = Math.abs(py - 34); // meters off-center from goal middle
-
-            const directDist = Math.sqrt(dx * dx + dy * dy);
-            if (shotDistanceMeters === null) {
-              shotDistanceMeters = Math.round(directDist * 10) / 10;
-            }
-
-            // Angle weighting: The stranger/sharper the side angle (larger dy),
-            // the smaller the required distance for a "Great Goal"!
-            const effectiveDist = directDist + dy * 0.75;
-
-            if (effectiveDist >= 22.0) {
-              isDistanceScreamer = true;
-            }
-          } else if (
-            shotDistanceMeters !== null &&
-            shotDistanceMeters >= 22.0
-          ) {
-            isDistanceScreamer = true;
-          }
-
-          const isLowXg = xG !== null && xG > 0 && xG <= 0.09;
-          const isFreeKick =
-            situation && situation.toLowerCase().includes("freekick");
-          const isGreatFinish =
-            xGOT !== null &&
-            xG !== null &&
-            (xGOT - xG >= 0.35 || (xGOT >= 0.8 && xG <= 0.25));
-
-          eg.xG = xG !== null ? Math.round(xG * 100) / 100 : null;
-          eg.xGOT = xGOT !== null ? Math.round(xGOT * 100) / 100 : null;
-          eg.shotDistance = shotDistanceMeters;
-          eg.isGreatGoal =
-            isLowXg || isFreeKick || isGreatFinish || isDistanceScreamer;
-        } else {
-          eg.xG = null;
-          eg.xGOT = null;
-          eg.shotDistance = null;
-          eg.isGreatGoal = false;
-        }
+        const telemetry = evaluateShotTelemetry(matchingShot, eg);
+        Object.assign(eg, telemetry);
       });
 
       return extractedGoals.sort((a, b) => a.minuteRaw - b.minuteRaw);
@@ -295,9 +497,9 @@ function FotmobCompanion() {
     }
   };
 
+  // Main Live Score Polling
   const fetchLiveScores = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
       const rawUrl = `https://www.fotmob.com/api/data/matches?date=${dateStr}&_t=${Date.now()}`;
@@ -309,7 +511,6 @@ function FotmobCompanion() {
       ];
 
       let data = null;
-      let lastErr = null;
 
       for (const proxyUrl of proxies) {
         try {
@@ -318,362 +519,100 @@ function FotmobCompanion() {
             data = await res.json();
             if (data && data.leagues) break;
           }
-        } catch (e) {
-          lastErr = e;
+        } catch {
+          // ignore & try next proxy
         }
       }
 
-      if (!data || !data.leagues) {
-        throw lastErr || new Error("Failed to connect to score server");
+      if (data && data.leagues) {
+        const parsed = processFotmobData(data);
+        setMatches(parsed.liveList);
+        setAllTodayMatches(parsed.allList);
+        processGoalEvents(parsed.allList);
+
+        const nowStr = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+        setLastUpdated(nowStr);
       }
-
-      const parsedData = processFotmobData(data);
-      setMatches(parsedData.liveList);
-      setAllTodayMatches(parsedData.allList);
-
-      // Track score updates & generate live goal events
-      processGoalEvents(parsedData.allList);
-
-      const nowStr = new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
-      setLastUpdated(nowStr);
     } catch (err) {
       console.error("Fetch error:", err);
-      setError(err.message || "Failed to fetch live scores");
     } finally {
       setLoading(false);
     }
   }, []);
 
   function processGoalEvents(allMatchesList) {
-    const newGoals = [];
     const prevScores = previousScoresRef.current;
-    const isFirstLoad = Object.keys(prevScores).length === 0;
+    const detailsCache = fetchedMatchDetailsCacheRef.current;
 
     allMatchesList.forEach((m) => {
-      const prev = prevScores[m.id];
-      const currentHomeScore = m.home.score;
-      const currentAwayScore = m.away.score;
-      const totalGoals = currentHomeScore + currentAwayScore;
+      const totalGoals = m.home.score + m.away.score;
+      if (totalGoals === 0 || !SERVERLESS_WORKER_URL) {
+        prevScores[m.id] = totalGoals;
+        return;
+      }
 
-      if (m.isActive && totalGoals > 0) {
-        if (SERVERLESS_WORKER_URL) {
+      // Only fetch details for matches in favorite leagues or favorite teams
+      const isRelevantMatch =
+        isMatchInFavoriteLeagues(m.leagueName) ||
+        isFavoriteTeam(m.home.name) ||
+        isFavoriteTeam(m.away.name);
+
+      if (!isRelevantMatch) {
+        prevScores[m.id] = totalGoals;
+        return;
+      }
+
+      const prevTotal = prevScores[m.id];
+      const isInitialCheck = prevTotal === undefined;
+      const scoreChanged = !isInitialCheck && totalGoals !== prevTotal;
+      const isFinished = m.finished || m.minute === "FT";
+
+      // Optimization: If details are already cached in memory or sessionStorage
+      if (detailsCache[m.id]) {
+        updateGoalFeedFromDetails(m, detailsCache[m.id]);
+
+        // Re-fetch only if a live match scored a NEW goal
+        if (scoreChanged && !isFinished) {
           fetchMatchDetails(m.id).then((details) => {
             if (details && details.length > 0) {
-              const fullGoalCards = details.map((g) => {
-                const scoringTeam = g.isHome ? m.home.name : m.away.name;
-                const opponentTeam = g.isHome ? m.away.name : m.home.name;
-                const scoringLogo = g.isHome ? m.homeLogo : m.awayLogo;
-
-                const favTeam =
-                  isFavoriteTeam(scoringTeam) || isFavoriteTeam(opponentTeam);
-                const favPlayer =
-                  isFavoritePlayer(g.scorer) || isFavoritePlayer(g.assist);
-
-                const scoreText =
-                  g.scoreDisplay || `${currentHomeScore} - ${currentAwayScore}`;
-                const goalId = `${m.id}_${g.isHome ? "H" : "A"}_${scoreText}`;
-
-                return {
-                  id: goalId,
-                  matchId: m.id,
-                  leagueName: m.leagueName,
-                  scoringTeam: scoringTeam,
-                  opponentTeam: opponentTeam,
-                  scoringLogo: scoringLogo,
-                  scoreDisplay: scoreText,
-                  minute: g.time || m.minute || "Live",
-                  minuteRaw: g.minuteRaw,
-                  timestampRaw: Date.now(),
-                  isFavorite: favTeam || favPlayer,
-                  isFavoriteTeam: favTeam,
-                  isFavoritePlayer: favPlayer,
-                  isGreatGoal: !!g.isGreatGoal,
-                  xG: g.xG !== undefined ? g.xG : null,
-                  xGOT: g.xGOT !== undefined ? g.xGOT : null,
-                  isLiveGoal: m.isActive,
-                  scorerName: g.scorer,
-                  assistName: g.assist,
-                };
-              });
-
-              setGoalFeed((prevFeed) => {
-                const map = new Map();
-                prevFeed.forEach((item) => map.set(item.id, item));
-                fullGoalCards.forEach((newItem) => {
-                  const existing = map.get(newItem.id);
-                  if (existing) {
-                    const updatedScorer =
-                      newItem.scorerName || existing.scorerName;
-                    const updatedAssist =
-                      newItem.assistName || existing.assistName;
-                    const updatedFavPlayer =
-                      isFavoritePlayer(updatedScorer) ||
-                      isFavoritePlayer(updatedAssist);
-                    const updatedFavTeam =
-                      newItem.isFavoriteTeam || existing.isFavoriteTeam;
-
-                    map.set(newItem.id, {
-                      ...existing,
-                      ...newItem,
-                      timestampRaw: existing.timestampRaw,
-                      scorerName: updatedScorer,
-                      assistName: updatedAssist,
-                      isFavoriteTeam: updatedFavTeam,
-                      isFavoritePlayer: updatedFavPlayer,
-                      isFavorite: updatedFavTeam || updatedFavPlayer,
-                      isGreatGoal: newItem.isGreatGoal || existing.isGreatGoal,
-                      xG: newItem.xG !== null ? newItem.xG : existing.xG,
-                      xGOT:
-                        newItem.xGOT !== null ? newItem.xGOT : existing.xGOT,
-                    });
-                  } else {
-                    map.set(newItem.id, newItem);
-                  }
-                });
-                return Array.from(map.values()).sort(
-                  (a, b) =>
-                    b.minuteRaw - a.minuteRaw ||
-                    b.timestampRaw - a.timestampRaw,
-                );
-              });
+              detailsCache[m.id] = details;
+              saveDetailsCache(detailsCache);
+              updateGoalFeedFromDetails(m, details);
             }
           });
-        } else {
-          if (!prev && isFirstLoad) {
-            if (currentHomeScore > 0)
-              newGoals.push(
-                createGoalEvent(
-                  m,
-                  m.home.name,
-                  m.away.name,
-                  currentHomeScore,
-                  currentAwayScore,
-                  true,
-                ),
-              );
-            if (currentAwayScore > 0)
-              newGoals.push(
-                createGoalEvent(
-                  m,
-                  m.away.name,
-                  m.home.name,
-                  currentHomeScore,
-                  currentAwayScore,
-                  false,
-                ),
-              );
-          } else if (prev) {
-            if (currentHomeScore > prev.home)
-              newGoals.push(
-                createGoalEvent(
-                  m,
-                  m.home.name,
-                  m.away.name,
-                  currentHomeScore,
-                  currentAwayScore,
-                  true,
-                ),
-              );
-            if (currentAwayScore > prev.away)
-              newGoals.push(
-                createGoalEvent(
-                  m,
-                  m.away.name,
-                  m.home.name,
-                  currentHomeScore,
-                  currentAwayScore,
-                  false,
-                ),
-              );
-          }
         }
+        prevScores[m.id] = totalGoals;
+        return;
       }
 
-      // Record score state
-      prevScores[m.id] = { home: currentHomeScore, away: currentAwayScore };
-    });
-
-    if (newGoals.length > 0) {
-      setGoalFeed((prevFeed) => {
-        const map = new Map();
-        prevFeed.forEach((item) => map.set(item.id, item));
-        newGoals.forEach((newItem) => {
-          const existing = map.get(newItem.id);
-          if (existing) {
-            const updatedScorer = newItem.scorerName || existing.scorerName;
-            const updatedAssist = newItem.assistName || existing.assistName;
-            const updatedFavPlayer =
-              isFavoritePlayer(updatedScorer) ||
-              isFavoritePlayer(updatedAssist);
-            const updatedFavTeam =
-              newItem.isFavoriteTeam || existing.isFavoriteTeam;
-
-            map.set(newItem.id, {
-              ...existing,
-              ...newItem,
-              timestampRaw: existing.timestampRaw,
-              scorerName: updatedScorer,
-              assistName: updatedAssist,
-              isFavoriteTeam: updatedFavTeam,
-              isFavoritePlayer: updatedFavPlayer,
-              isFavorite: updatedFavTeam || updatedFavPlayer,
-            });
-          } else {
-            map.set(newItem.id, newItem);
-          }
-        });
-        return Array.from(map.values());
+      // If NOT cached yet, fetch once and store in session cache
+      fetchMatchDetails(m.id).then((details) => {
+        if (details && details.length > 0) {
+          detailsCache[m.id] = details;
+          saveDetailsCache(detailsCache);
+          updateGoalFeedFromDetails(m, details);
+        }
       });
-    }
-  }
 
-  function createGoalEvent(
-    match,
-    scoringTeam,
-    opponentTeam,
-    homeScore,
-    awayScore,
-    isHome,
-  ) {
-    const favTeam = isFavoriteTeam(scoringTeam) || isFavoriteTeam(opponentTeam);
-    const scoringLogo = isHome ? match.homeLogo : match.awayLogo;
-    const eventId = `${match.id}_${isHome ? "H" : "A"}_${homeScore} - ${awayScore}`;
-
-    const newGoalObj = {
-      id: eventId,
-      matchId: match.id,
-      leagueName: match.leagueName,
-      scoringTeam: scoringTeam,
-      opponentTeam: opponentTeam,
-      scoringLogo: scoringLogo,
-      scoreDisplay: `${homeScore} - ${awayScore}`,
-      minute: match.minute || "Live",
-      timestampRaw: Date.now(),
-      isFavorite: favTeam,
-      isFavoriteTeam: favTeam,
-      isFavoritePlayer: false,
-      isLiveGoal: match.isActive,
-      scorerName: null,
-      assistName: null,
-    };
-
-    fetchMatchDetails(match.id).then((details) => {
-      if (details && details.length > 0) {
-        const goalDetail =
-          details.find((d) => (isHome ? d.isHome : !d.isHome)) || details[0];
-        if (goalDetail) {
-          setGoalFeed((prev) =>
-            prev.map((item) => {
-              if (item.id !== eventId) return item;
-              const scorer = goalDetail.scorer || item.scorerName;
-              const assist = goalDetail.assist || item.assistName;
-              const favPlayer =
-                isFavoritePlayer(scorer) || isFavoritePlayer(assist);
-              return {
-                ...item,
-                minute: goalDetail.time || item.minute,
-                scorerName: scorer,
-                assistName: assist,
-                isFavoritePlayer: favPlayer,
-                isFavorite: item.isFavoriteTeam || favPlayer,
-              };
-            }),
-          );
-        }
-      }
+      prevScores[m.id] = totalGoals;
     });
-
-    return newGoalObj;
   }
 
   function processFotmobData(data) {
-    if (!data || !data.leagues) return { liveList: [], allList: [] };
+    if (!data?.leagues) return { liveList: [], allList: [] };
 
     const liveList = [];
     const allList = [];
 
     data.leagues.forEach((league) => {
       if (!league.matches) return;
-
-      const isFriendly = league.name
-        ? league.name.toLowerCase().includes("friendly") ||
-          league.name.toLowerCase().includes("friendlies")
-        : false;
-
       league.matches.forEach((match) => {
-        const status = match.status || {};
-        const isActive =
-          (status.ongoing || (status.started && !status.finished)) &&
-          !status.cancelled;
-
-        let minute = "Live";
-        if (status.finished) {
-          minute = "FT";
-        } else if (status.cancelled) {
-          minute = "Cancelled";
-        } else if (status.liveTime && status.liveTime.short) {
-          const cleaned = status.liveTime.short
-            .replace(/[\u200E\u200F]/g, "")
-            .trim();
-          minute = /^\d+(\+\d+)?$/.test(cleaned)
-            ? cleaned + "′"
-            : cleaned.replace(/’/g, "′");
-        } else if (
-          status.reason &&
-          status.reason.shortKey === "halftime_short"
-        ) {
-          minute = "HT";
-        } else if (status.reason && status.reason.short) {
-          minute = status.reason.short;
-        } else if (status.startTimeStr) {
-          minute = status.startTimeStr;
-        }
-
-        const matchObj = {
-          id: match.id,
-          leagueName: league.name,
-          leagueId: league.id || league.primaryId,
-          ccode: league.ccode || "INT",
-          isFriendly: isFriendly,
-          isActive: isActive,
-          finished: !!status.finished,
-          home: {
-            id: match.home ? match.home.id : null,
-            name: match.home ? match.home.name : "Unknown",
-            score:
-              match.home && match.home.score !== undefined
-                ? match.home.score
-                : 0,
-          },
-          away: {
-            id: match.away ? match.away.id : null,
-            name: match.away ? match.away.name : "Unknown",
-            score:
-              match.away && match.away.score !== undefined
-                ? match.away.score
-                : 0,
-          },
-          homeLogo:
-            match.home && match.home.id
-              ? `https://images.fotmob.com/image_resources/logo/teamlogo/${match.home.id}.png`
-              : null,
-          awayLogo:
-            match.away && match.away.id
-              ? `https://images.fotmob.com/image_resources/logo/teamlogo/${match.away.id}.png`
-              : null,
-          minute: minute,
-          timeTS:
-            match.timeTS ||
-            (status.utcTime ? new Date(status.utcTime).getTime() : null),
-        };
-
-        if (isActive) {
-          liveList.push(matchObj);
-        }
+        const matchObj = transformFotmobMatch(match, league);
+        if (matchObj.isActive) liveList.push(matchObj);
         allList.push(matchObj);
       });
     });
@@ -687,7 +626,7 @@ function FotmobCompanion() {
     return () => clearInterval(timer);
   }, [fetchLiveScores]);
 
-  // Filter dataset by hardcoded leagues or favorite teams
+  // Dataset Filtering
   const activeDataset = showOnlyLive ? matches : allTodayMatches;
   let filteredMatches = activeDataset.filter(
     (m) =>
@@ -706,7 +645,7 @@ function FotmobCompanion() {
     );
   }
 
-  // Group matches by league
+  // Group Matches by League
   const groupedLeagues = {};
   filteredMatches.forEach((m) => {
     if (!groupedLeagues[m.leagueName]) {
@@ -719,13 +658,16 @@ function FotmobCompanion() {
     groupedLeagues[m.leagueName].matches.push(m);
   });
 
-  // Filter Live Goal Stream by hardcoded leagues (or favorite team/player bypass) & searchQuery
+  // Filter Live Goal Stream
+  const liveMatchIds = new Set(matches.map((m) => m.id));
   let filteredGoalFeed = goalFeed.filter(
     (g) =>
-      isMatchInFavoriteLeagues(g.leagueName) ||
-      g.isFavoriteTeam ||
-      g.isFavoritePlayer,
+      (isMatchInFavoriteLeagues(g.leagueName) ||
+        g.isFavoriteTeam ||
+        g.isFavoritePlayer) &&
+      (!showOnlyLive || liveMatchIds.has(g.matchId)),
   );
+
   if (searchQuery.trim() !== "") {
     const q = searchQuery.toLowerCase();
     filteredGoalFeed = filteredGoalFeed.filter(
@@ -769,7 +711,6 @@ function FotmobCompanion() {
 
       {/* Main Controls & Search Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 border-[0.5px] border-background-light rounded-xl bg-background-dark/30 shadow-md mb-6 flex-shrink-0">
-        {/* Search Bar */}
         <div className="relative flex-1 max-w-sm min-w-[220px]">
           <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-4 w-4 text-primary/40" />
           <input
@@ -838,7 +779,6 @@ function FotmobCompanion() {
                   key={groupIdx}
                   className="border-[0.5px] border-background-light rounded-xl overflow-hidden bg-background-dark/20 shadow-md"
                 >
-                  {/* League Header */}
                   <div className="px-4 py-3 border-b border-background-light/50 bg-background-dark/60 flex justify-between items-center">
                     <span className="font-bold text-sm tracking-wide">
                       {group.name}
@@ -850,14 +790,12 @@ function FotmobCompanion() {
                     )}
                   </div>
 
-                  {/* Matches Grid */}
                   <div className="divide-y divide-background-light/30">
                     {group.matches.map((m) => (
                       <div
                         key={m.id}
                         className="p-3.5 flex items-center justify-between hover:bg-background-light/30 transition-colors gap-2"
                       >
-                        {/* Match Minute / Time (Far Left) */}
                         <div className="w-14 flex-shrink-0 flex items-center justify-start">
                           <span
                             className={`text-[11px] font-semibold px-2 py-0.5 rounded font-mono ${
@@ -870,40 +808,21 @@ function FotmobCompanion() {
                           </span>
                         </div>
 
-                        {/* Home Team */}
                         <div className="flex-1 flex items-center justify-end space-x-2 text-right">
                           <span className="font-semibold text-sm line-clamp-1">
                             {m.home.name}
                           </span>
-                          <img
-                            src={m.homeLogo || DEFAULT_TEAM_LOGO}
-                            alt=""
-                            className="w-6 h-6 object-contain flex-shrink-0"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = DEFAULT_TEAM_LOGO;
-                            }}
-                          />
+                          <TeamLogo src={m.homeLogo} />
                         </div>
 
-                        {/* Score Badge (Centered) */}
                         <div className="px-3 min-w-[75px] text-center flex-shrink-0">
                           <div className="font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20">
                             {m.home.score} - {m.away.score}
                           </div>
                         </div>
 
-                        {/* Away Team */}
                         <div className="flex-1 flex items-center justify-start space-x-2 text-left">
-                          <img
-                            src={m.awayLogo || DEFAULT_TEAM_LOGO}
-                            alt=""
-                            className="w-6 h-6 object-contain flex-shrink-0"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = DEFAULT_TEAM_LOGO;
-                            }}
-                          />
+                          <TeamLogo src={m.awayLogo} />
                           <span className="font-semibold text-sm line-clamp-1">
                             {m.away.name}
                           </span>
@@ -943,40 +862,8 @@ function FotmobCompanion() {
                       : "border-background-light bg-background-dark/40 shadow-sm"
                   }`}
                 >
-                  {/* Goal Celebration Badges (Great Goal and/or Favorite Goal) */}
-                  <div className="absolute -top-2.5 right-4 flex items-center space-x-2">
-                    {goal.isGreatGoal && (
-                      <a
-                        href="https://www.goalstube.online/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-md transition-transform hover:scale-105 cursor-pointer no-underline"
-                        title="Low xG banger or exceptional finish! Click to watch on GoalsTube"
-                      >
-                        <span>GREAT GOAL!</span>
-                      </a>
-                    )}
+                  <GoalBadge goal={goal} />
 
-                    {goal.isFavorite && (
-                      <a
-                        href="https://www.goalstube.online/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-2.5 py-0.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-md transition-transform hover:scale-105 cursor-pointer no-underline"
-                        title="Click to search / watch goal on GoalsTube"
-                      >
-                        <span>
-                          {goal.isFavoriteTeam && goal.isFavoritePlayer
-                            ? "FAVORITE TEAM & PLAYER GOAL!"
-                            : goal.isFavoriteTeam
-                              ? "FAVORITE TEAM GOAL!"
-                              : "FAVORITE PLAYER GOAL!"}
-                        </span>
-                      </a>
-                    )}
-                  </div>
-
-                  {/* Goal Header */}
                   <div className="flex items-center justify-between text-xs mb-2">
                     <span className="font-bold text-secondary text-[11px] tracking-wide uppercase line-clamp-1">
                       {goal.leagueName}
@@ -986,17 +873,11 @@ function FotmobCompanion() {
                     </span>
                   </div>
 
-                  {/* Teams & Score */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <img
-                        src={goal.scoringLogo || DEFAULT_TEAM_LOGO}
-                        alt=""
+                      <TeamLogo
+                        src={goal.scoringLogo}
                         className="w-5 h-5 object-contain flex-shrink-0"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = DEFAULT_TEAM_LOGO;
-                        }}
                       />
                       <span className="font-bold text-sm">
                         {goal.scoringTeam}
@@ -1007,7 +888,6 @@ function FotmobCompanion() {
                     </span>
                   </div>
 
-                  {/* Optional Scorer & Assist Telemetry */}
                   {(goal.scorerName || goal.xG !== null) && (
                     <div className="text-xs pt-2 border-t border-background-light/40 mt-2 space-y-1">
                       {goal.scorerName && (
@@ -1033,49 +913,20 @@ function FotmobCompanion() {
           </ScrollableFeed>
         </div>
 
-        {/* RIGHT COLUMN: Custom Widgets / Content Blocks (3 Cols - 2 Blocks) */}
+        {/* RIGHT COLUMN: Custom Widgets (3 Cols - 2 Blocks) */}
         <div className="lg:col-span-3 flex flex-col space-y-4 min-h-0">
-          {/* Content Block 1 */}
-          <div className="flex-1 flex flex-col min-h-0">
-            <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
-                <SparklesIcon className="h-4 w-4 text-secondary" />
-                <span>Insight Block 1</span>
-              </h2>
-            </div>
-            <div className="flex-1 p-5 border-[0.5px] border-dashed border-background-light/70 rounded-xl bg-background-dark/20 flex flex-col items-center justify-center text-center">
-              <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
-                <SparklesIcon className="h-4 w-4" />
-              </div>
-              <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
-                Placeholder Content 1
-              </h3>
-              <p className="text-[11px] text-primary/50 max-w-[170px]">
-                Ready for upcoming telemetry, match analysis, or player stats.
-              </p>
-            </div>
-          </div>
-
-          {/* Content Block 2 */}
-          <div className="flex-1 flex flex-col min-h-0">
-            <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
-                <ChartBarIcon className="h-4 w-4 text-secondary" />
-                <span>Insight Block 2</span>
-              </h2>
-            </div>
-            <div className="flex-1 p-5 border-[0.5px] border-dashed border-background-light/70 rounded-xl bg-background-dark/20 flex flex-col items-center justify-center text-center">
-              <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
-                <ChartBarIcon className="h-4 w-4" />
-              </div>
-              <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
-                Placeholder Content 2
-              </h3>
-              <p className="text-[11px] text-primary/50 max-w-[170px]">
-                Ready for watchlist, standings, or custom quick-links.
-              </p>
-            </div>
-          </div>
+          <PlaceholderWidget
+            icon={SparklesIcon}
+            title="Insight Block 1"
+            placeholderTitle="Placeholder Content 1"
+            description="Ready for upcoming telemetry, match analysis, or player stats."
+          />
+          <PlaceholderWidget
+            icon={ChartBarIcon}
+            title="Insight Block 2"
+            placeholderTitle="Placeholder Content 2"
+            description="Ready for watchlist, standings, or custom quick-links."
+          />
         </div>
       </div>
     </div>
