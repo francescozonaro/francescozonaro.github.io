@@ -13,6 +13,11 @@
     --color-background: 245 245 245;
     --color-background-light: 230 230 230;
     --color-background-dark: 235 235 235;
+    --color-background-card: 235 235 235;
+
+    --color-background-score: 220 220 220;
+    --color-border-score: 195 195 195;
+    --color-text-score: 60 60 60;
 
     --color-border: 215 215 215;
     --color-border-light: 235 235 235;
@@ -32,6 +37,11 @@
     --color-background: 18 17 16;
     --color-background-light: 45 40 35;
     --color-background-dark: 30 27 24;
+    --color-background-card: 30 27 24;
+
+    --color-background-score: 24 22 19;
+    --color-border-score: 24 22 19;
+    --color-text-score: 180 175 165;
 
     --color-border: 42 38 33;
     --color-border-light: 62 55 46;

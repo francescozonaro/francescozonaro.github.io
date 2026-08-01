@@ -15,10 +15,17 @@ export default {
           "rgb(var(--color-background-light) / <alpha-value>)",
         ["background-dark"]:
           "rgb(var(--color-background-dark) / <alpha-value>)",
+        ["background-card"]:
+          "rgb(var(--color-background-card) / <alpha-value>)",
+        ["background-score"]:
+          "rgb(var(--color-background-score) / <alpha-value>)",
 
         ["border"]: "rgb(var(--color-border) / <alpha-value>)",
         ["border-light"]: "rgb(var(--color-border-light) / <alpha-value>)",
         ["border-dark"]: "rgb(var(--color-border-dark) / <alpha-value>)",
+        ["border-score"]: "rgb(var(--color-border-score) / <alpha-value>)",
+
+        ["text-score"]: "rgb(var(--color-text-score) / <alpha-value>)",
 
         ["primary"]: "rgb(var(--color-primary) / <alpha-value>)",
         ["primary-light"]: "rgb(var(--color-primary-light) / <alpha-value>)",

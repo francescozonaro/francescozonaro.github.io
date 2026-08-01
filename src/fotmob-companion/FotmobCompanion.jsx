@@ -144,6 +144,16 @@ function evaluateShotTelemetry(matchingShot, eg) {
   };
 }
 
+function calculateEstimatedGoalTimestamp(matchStartTS, minuteRaw) {
+  if (!matchStartTS) return 0;
+  const min = typeof minuteRaw === "number" ? minuteRaw : 0;
+  let offsetMs = min * 60 * 1000;
+  if (min > 45) {
+    offsetMs += 15 * 60 * 1000; // Halftime break estimate
+  }
+  return matchStartTS + offsetMs;
+}
+
 function parseMatchStatus(status = {}, match = {}) {
   if (status.finished) return "FT";
   if (status.cancelled) return "Cancelled";
@@ -356,6 +366,8 @@ function FotmobCompanion() {
   const updateGoalFeedFromDetails = (m, details) => {
     if (!details || details.length === 0) return;
 
+    const matchStartTS = m.timeTS || (m.status?.utcTime ? new Date(m.status.utcTime).getTime() : Date.now());
+
     const fullGoalCards = details
       .filter((g) => {
         const scoringTeam = g.isHome ? m.home.name : m.away.name;
@@ -368,6 +380,10 @@ function FotmobCompanion() {
 
         const scoreText = g.scoreDisplay || `${m.home.score} - ${m.away.score}`;
         const goalId = `${m.id}_${g.isHome ? "H" : "A"}_${scoreText}`;
+        const goalTimestamp = calculateEstimatedGoalTimestamp(
+          matchStartTS,
+          g.minuteRaw,
+        );
 
         return {
           id: goalId,
@@ -379,6 +395,7 @@ function FotmobCompanion() {
           scoreDisplay: scoreText,
           minute: g.time || m.minute || "Live",
           minuteRaw: g.minuteRaw,
+          goalTimestamp,
           timestampRaw: Date.now(),
           isFavorite: true,
           isFavoriteTeam: true,
@@ -417,7 +434,9 @@ function FotmobCompanion() {
         }
       });
       return Array.from(map.values()).sort(
-        (a, b) => b.minuteRaw - a.minuteRaw || b.timestampRaw - a.timestampRaw,
+        (a, b) =>
+          (b.goalTimestamp || 0) - (a.goalTimestamp || 0) ||
+          b.timestampRaw - a.timestampRaw,
       );
     });
   };
@@ -820,9 +839,7 @@ function FotmobCompanion() {
                             className={`font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded transition-colors ${
                               m.isActive
                                 ? "bg-secondary/10 text-secondary border border-secondary/20"
-                                : m.finished || m.minute === "FT"
-                                  ? "bg-gray-100/90 text-gray-700 border border-gray-300/70 dark:bg-zinc-800/40 dark:text-zinc-300 dark:border-zinc-700/40"
-                                  : "bg-background-dark/30 text-primary/40 border border-background-light/40"
+                                : "bg-background-score text-primary/70 border border-transparent"
                             }`}
                           >
                             {m.isActive || m.finished || m.minute === "FT"
@@ -878,9 +895,6 @@ function FotmobCompanion() {
                     <span className="font-bold text-secondary text-[11px] tracking-wide uppercase line-clamp-1">
                       {goal.leagueName}
                     </span>
-                    <span className="text-primary/50 font-mono text-[10px]">
-                      {goal.minute}
-                    </span>
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -898,18 +912,14 @@ function FotmobCompanion() {
                     </span>
                   </div>
 
-                  {(goal.scorerName || goal.xG !== null) && (
+                  {goal.scorerName && (
                     <div className="text-xs pt-2 border-t border-background-light/40 mt-2 space-y-1">
-                      {goal.scorerName && (
-                        <div className="flex items-center justify-between space-x-1.5 font-semibold text-primary/90">
-                          <span>⚽ {goal.scorerName}</span>
-                          {goal.xG !== null && (
-                            <span className="text-[10px] font-mono text-primary/50">
-                              xG: {goal.xG}
-                            </span>
-                          )}
-                        </div>
-                      )}
+                      <div className="flex items-center justify-between space-x-1.5 font-semibold text-primary/90">
+                        <span>⚽ {goal.scorerName}</span>
+                        <span className="text-[11px] font-mono text-primary/60 font-medium">
+                          {goal.minute}
+                        </span>
+                      </div>
                       {goal.assistName && (
                         <div className="flex items-center space-x-1.5 text-primary/60 text-[11px]">
                           <span>👟 {goal.assistName}</span>
