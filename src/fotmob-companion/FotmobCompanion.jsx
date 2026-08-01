@@ -850,8 +850,21 @@ function FotmobCompanion() {
                     {group.matches.map((m) => (
                       <div
                         key={m.id}
-                        className="p-4 flex items-center justify-between hover:bg-background-light/30 transition-colors gap-2"
+                        className="p-3.5 flex items-center justify-between hover:bg-background-light/30 transition-colors gap-2"
                       >
+                        {/* Match Minute / Time (Far Left) */}
+                        <div className="w-14 flex-shrink-0 flex items-center justify-start">
+                          <span
+                            className={`text-[11px] font-semibold px-2 py-0.5 rounded font-mono ${
+                              m.isActive
+                                ? "bg-secondary/15 text-secondary animate-pulse font-bold"
+                                : "text-primary/60 bg-background-dark/40"
+                            }`}
+                          >
+                            {m.minute}
+                          </span>
+                        </div>
+
                         {/* Home Team */}
                         <div className="flex-1 flex items-center justify-end space-x-2 text-right">
                           <span className="font-semibold text-sm line-clamp-1">
@@ -869,19 +882,10 @@ function FotmobCompanion() {
                           )}
                         </div>
 
-                        {/* Score & Minute Badge */}
-                        <div className="flex flex-col items-center justify-center px-3 min-w-[85px]">
-                          <div className="font-mono text-base font-bold tracking-wider">
+                        {/* Score Badge (Centered) */}
+                        <div className="px-3 min-w-[75px] text-center flex-shrink-0">
+                          <div className="font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20">
                             {m.home.score} - {m.away.score}
-                          </div>
-                          <div
-                            className={`text-[11px] font-semibold mt-0.5 px-2 py-0.5 rounded ${
-                              m.isActive
-                                ? "bg-secondary/15 text-secondary animate-pulse font-bold"
-                                : "text-primary/60"
-                            }`}
-                          >
-                            {m.minute}
                           </div>
                         </div>
 
