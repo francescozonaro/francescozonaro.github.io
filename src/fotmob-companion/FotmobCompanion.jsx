@@ -13,15 +13,16 @@ import ThemeToggle from "../components/ThemeToggle";
 
 // Config & Favorites Definitions
 const HARDCODED_FAVORITES_TEAMS = [
-  "Inter",
-  "Chelsea",
-  "Tottenham",
-  "Philippines",
+  "Werder Bremen",
+  "Southampton",
+  "Swansea",
+  "Roma",
+  "Man United",
+  "Atletico Madrid",
+  "Roma",
+  "Cardiff",
 ];
-const HARDCODED_FAVORITES_LEAGUES = [
-  "Club Friendlies",
-  "ASEAN Championship Grp. B",
-];
+const HARDCODED_FAVORITES_LEAGUES = ["Club Friendlies"];
 
 const DEFAULT_TEAM_LOGO =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E";
@@ -70,7 +71,8 @@ function formatScorerName(rawName, type) {
 function formatAssistName(rawAssist) {
   const assist = sanitizeText(rawAssist);
   if (!assist) return null;
-  return assist.toLowerCase().includes("assist") ? assist : `Assist: ${assist}`;
+  const cleaned = assist.replace(/^assist\s*:\s*/i, "").trim();
+  return cleaned || null;
 }
 
 function evaluateShotTelemetry(matchingShot, eg) {
@@ -92,9 +94,14 @@ function evaluateShotTelemetry(matchingShot, eg) {
         ? matchingShot.xGOT
         : null;
 
-  const situation = matchingShot.situation || matchingShot.shotType || null;
+  const situation = matchingShot.situation || matchingShot.shotType || "";
 
-  let isDistanceScreamer = false;
+  // Check if penalty
+  const isPenalty =
+    eg?.type === "GoalPen" ||
+    (eg?.scorerName && eg.scorerName.includes("(P)")) ||
+    situation.toLowerCase().includes("penalty");
+
   let shotDistanceMeters = null;
 
   if (typeof matchingShot.distance === "number") {
@@ -102,6 +109,7 @@ function evaluateShotTelemetry(matchingShot, eg) {
   }
 
   if (
+    shotDistanceMeters === null &&
     typeof matchingShot.x === "number" &&
     typeof matchingShot.y === "number"
   ) {
@@ -114,33 +122,31 @@ function evaluateShotTelemetry(matchingShot, eg) {
     const dx = Math.max(0, 105 - px);
     const dy = Math.abs(py - 34);
 
-    const directDist = Math.sqrt(dx * dx + dy * dy);
-    if (shotDistanceMeters === null) {
-      shotDistanceMeters = Math.round(directDist * 10) / 10;
-    }
-
-    const effectiveDist = directDist + dy * 0.75;
-    if (effectiveDist >= 22.0) {
-      isDistanceScreamer = true;
-    }
-  } else if (shotDistanceMeters !== null && shotDistanceMeters >= 22.0) {
-    isDistanceScreamer = true;
+    shotDistanceMeters = Math.round(Math.sqrt(dx * dx + dy * dy) * 10) / 10;
   }
 
+  // Outside the 18-yard box (16.5 meters)
+  const isOutsideTheBox =
+    (shotDistanceMeters !== null && shotDistanceMeters >= 16.5) ||
+    situation.toLowerCase().includes("outsidethebox") ||
+    situation.toLowerCase().includes("outside_box");
+
   const isLowXg = xG !== null && xG > 0 && xG <= 0.09;
-  const isFreeKick = !!(
-    situation && situation.toLowerCase().includes("freekick")
-  );
+  const isFreeKick = situation.toLowerCase().includes("freekick");
   const isGreatFinish =
     xGOT !== null &&
     xG !== null &&
     (xGOT - xG >= 0.35 || (xGOT >= 0.8 && xG <= 0.25));
 
+  // Penalties are NEVER great goals
+  const isGreatGoal =
+    !isPenalty && (isOutsideTheBox || isFreeKick || isLowXg || isGreatFinish);
+
   return {
     xG: xG !== null ? Math.round(xG * 100) / 100 : null,
     xGOT: xGOT !== null ? Math.round(xGOT * 100) / 100 : null,
     shotDistance: shotDistanceMeters,
-    isGreatGoal: isLowXg || isFreeKick || isGreatFinish || isDistanceScreamer,
+    isGreatGoal,
   };
 }
 
@@ -313,7 +319,7 @@ function PlaceholderWidget({
           <span>{title}</span>
         </h2>
       </div>
-      <div className="flex-1 p-5 border-[0.5px] border-dashed border-background-light/70 rounded-xl bg-background-dark/20 flex flex-col items-center justify-center text-center">
+      <div className="flex-1 p-5 mt-3 border-[0.5px] border-dashed border-background-light/70 rounded-xl bg-background-dark/20 flex flex-col items-center justify-center text-center">
         <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
           <Icon className="h-4 w-4" />
         </div>
@@ -366,20 +372,25 @@ function FotmobCompanion() {
   const updateGoalFeedFromDetails = (m, details) => {
     if (!details || details.length === 0) return;
 
-    const matchStartTS = m.timeTS || (m.status?.utcTime ? new Date(m.status.utcTime).getTime() : Date.now());
+    const matchStartTS =
+      m.timeTS ||
+      (m.status?.utcTime ? new Date(m.status.utcTime).getTime() : Date.now());
 
     const fullGoalCards = details
       .filter((g) => {
         const scoringTeam = g.isHome ? m.home.name : m.away.name;
         return isFavoriteTeam(scoringTeam);
       })
-      .map((g) => {
+      .map((g, idx) => {
         const scoringTeam = g.isHome ? m.home.name : m.away.name;
         const opponentTeam = g.isHome ? m.away.name : m.home.name;
         const scoringLogo = g.isHome ? m.homeLogo : m.awayLogo;
 
         const scoreText = g.scoreDisplay || `${m.home.score} - ${m.away.score}`;
-        const goalId = `${m.id}_${g.isHome ? "H" : "A"}_${scoreText}`;
+        const uniqueScorer = (g.scorer || "scorer")
+          .replace(/\W+/g, "")
+          .toLowerCase();
+        const goalId = `${m.id}_${g.isHome ? "H" : "A"}_m${g.minuteRaw || 0}_${uniqueScorer}`;
         const goalTimestamp = calculateEstimatedGoalTimestamp(
           matchStartTS,
           g.minuteRaw,
@@ -402,6 +413,7 @@ function FotmobCompanion() {
           isGreatGoal: !!g.isGreatGoal,
           xG: g.xG !== undefined ? g.xG : null,
           xGOT: g.xGOT !== undefined ? g.xGOT : null,
+          shotDistance: g.shotDistance !== undefined ? g.shotDistance : null,
           isLiveGoal: m.isActive,
           scorerName: g.scorer,
           assistName: g.assist,
@@ -409,8 +421,15 @@ function FotmobCompanion() {
       });
 
     setGoalFeed((prevFeed) => {
+      const validMatchGoalIds = new Set(fullGoalCards.map((item) => item.id));
       const map = new Map();
-      prevFeed.forEach((item) => map.set(item.id, item));
+
+      // Keep goals from OTHER matches, or goals from THIS match that are still in authoritative payload
+      prevFeed.forEach((item) => {
+        if (item.matchId !== m.id || validMatchGoalIds.has(item.id)) {
+          map.set(item.id, item);
+        }
+      });
       fullGoalCards.forEach((newItem) => {
         const existing = map.get(newItem.id);
         if (existing) {
@@ -428,6 +447,10 @@ function FotmobCompanion() {
             isGreatGoal: newItem.isGreatGoal || existing.isGreatGoal,
             xG: newItem.xG !== null ? newItem.xG : existing.xG,
             xGOT: newItem.xGOT !== null ? newItem.xGOT : existing.xGOT,
+            shotDistance:
+              newItem.shotDistance !== null
+                ? newItem.shotDistance
+                : existing.shotDistance,
           });
         } else {
           map.set(newItem.id, newItem);
@@ -595,24 +618,47 @@ function FotmobCompanion() {
 
       const prevTotal = prevScores[m.id];
       const isInitialCheck = prevTotal === undefined;
+      const scoreDecreased = !isInitialCheck && totalGoals < prevTotal;
       const scoreChanged = !isInitialCheck && totalGoals !== prevTotal;
       const isFinished = m.finished || m.minute === "FT";
+
+      // If score decreased (VAR disallowed goal), invalidate cache to force clean re-fetch
+      if (scoreDecreased) {
+        delete detailsCache[m.id];
+        saveDetailsCache(detailsCache);
+      }
 
       // Optimization: If details are already cached in memory or sessionStorage
       if (detailsCache[m.id]) {
         updateGoalFeedFromDetails(m, detailsCache[m.id]);
 
-        // Re-fetch only if a live match scored a NEW goal
-        if (scoreChanged && !isFinished) {
+        // Re-fetch if a live match scored a NEW goal OR if cached details are incomplete/missing scorer names
+        const cachedDetails = detailsCache[m.id] || [];
+        const cachedCount = cachedDetails.length;
+        const hasMissingScorer = cachedDetails.some(
+          (g) => !g.scorer || g.scorer.trim() === "",
+        );
+        const isIncomplete =
+          (cachedCount < totalGoals || hasMissingScorer) && !isFinished;
+
+        if (scoreChanged || isIncomplete) {
           fetchMatchDetails(m.id).then((details) => {
             if (details && details.length > 0) {
               detailsCache[m.id] = details;
               saveDetailsCache(detailsCache);
               updateGoalFeedFromDetails(m, details);
+              const detailsAreComplete =
+                details.length >= totalGoals &&
+                details.every((g) => g.scorer && g.scorer.trim() !== "");
+
+              if (detailsAreComplete || isFinished) {
+                prevScores[m.id] = totalGoals;
+              }
             }
           });
+        } else {
+          prevScores[m.id] = totalGoals;
         }
-        prevScores[m.id] = totalGoals;
         return;
       }
 
@@ -622,10 +668,15 @@ function FotmobCompanion() {
           detailsCache[m.id] = details;
           saveDetailsCache(detailsCache);
           updateGoalFeedFromDetails(m, details);
+          const detailsAreComplete =
+            details.length >= totalGoals &&
+            details.every((g) => g.scorer && g.scorer.trim() !== "");
+
+          if (detailsAreComplete || isFinished) {
+            prevScores[m.id] = totalGoals;
+          }
         }
       });
-
-      prevScores[m.id] = totalGoals;
     });
   }
 
@@ -915,14 +966,14 @@ function FotmobCompanion() {
                   {goal.scorerName && (
                     <div className="text-xs pt-2 border-t border-background-light/40 mt-2 space-y-1">
                       <div className="flex items-center justify-between space-x-1.5 font-semibold text-primary/90">
-                        <span>⚽ {goal.scorerName}</span>
+                        <span>{goal.scorerName}</span>
                         <span className="text-[11px] font-mono text-primary/60 font-medium">
                           {goal.minute}
                         </span>
                       </div>
                       {goal.assistName && (
                         <div className="flex items-center space-x-1.5 text-primary/60 text-[11px]">
-                          <span>👟 {goal.assistName}</span>
+                          <span>{goal.assistName}</span>
                         </div>
                       )}
                     </div>
