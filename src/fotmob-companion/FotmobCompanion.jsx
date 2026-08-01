@@ -12,9 +12,16 @@ import {
 import ThemeToggle from "../components/ThemeToggle";
 
 // Config & Favorites Definitions
-const HARDCODED_FAVORITES_TEAMS = ["Philippines"];
-const HARDCODED_FAVORITES_LEAGUES = ["ASEAN Championship Grp. B"];
-const HARDCODED_FAVORITES_PLAYERS = ["John"];
+const HARDCODED_FAVORITES_TEAMS = [
+  "Inter",
+  "Chelsea",
+  "Tottenham",
+  "Philippines",
+];
+const HARDCODED_FAVORITES_LEAGUES = [
+  "Club Friendlies",
+  "ASEAN Championship Grp. B",
+];
 
 const DEFAULT_TEAM_LOGO =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E";
@@ -27,14 +34,6 @@ function isFavoriteTeam(teamName) {
   if (!teamName) return false;
   const target = teamName.trim().toLowerCase();
   return HARDCODED_FAVORITES_TEAMS.some(
-    (fav) => fav.trim().toLowerCase() === target,
-  );
-}
-
-function isFavoritePlayer(playerName) {
-  if (!playerName) return false;
-  const target = playerName.trim().toLowerCase();
-  return HARDCODED_FAVORITES_PLAYERS.some(
     (fav) => fav.trim().toLowerCase() === target,
   );
 }
@@ -224,41 +223,39 @@ function TeamLogo({ src, className = "w-6 h-6 object-contain flex-shrink-0" }) {
 }
 
 function GoalBadge({ goal }) {
-  const getScorerSearchUrl = (scorerName) => {
-    if (!scorerName) return "https://x.com/search?q=great%20goal";
-    const cleanScorer = scorerName.replace(/\s*\((OG|P)\)/gi, "").trim();
-    return `https://x.com/search?q=${encodeURIComponent(cleanScorer + " goal")}`;
+  const getGoalSearchUrl = (g) => {
+    const team = g.scoringTeam || "";
+    if (!g.scorerName) {
+      return `https://x.com/search?q=${encodeURIComponent((team + " goal").trim())}`;
+    }
+    const cleanScorer = g.scorerName.replace(/\s*\((OG|P)\)/gi, "").trim();
+    return `https://x.com/search?q=${encodeURIComponent((cleanScorer + " " + team + " goal").trim())}`;
   };
+
+  const searchUrl = getGoalSearchUrl(goal);
+  const searchTitle = `Click to search for ${goal.scorerName ? goal.scorerName + " (" + goal.scoringTeam + ")" : goal.scoringTeam} goal on X (Twitter)`;
 
   return (
     <div className="absolute -top-2.5 right-4 flex items-center space-x-2">
-      {goal.isGreatGoal && (
+      {goal.isGreatGoal ? (
         <a
-          href={getScorerSearchUrl(goal.scorerName)}
+          href={searchUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-md transition-transform hover:scale-105 cursor-pointer no-underline"
-          title={`Click to search for ${goal.scorerName || "this goal"} on X (Twitter)`}
+          title={searchTitle}
         >
           <span>🚀 GREAT GOAL! ↗</span>
         </a>
-      )}
-
-      {goal.isFavorite && (
+      ) : (
         <a
-          href="https://www.goalstube.online/"
+          href={searchUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="px-2.5 py-0.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-md transition-transform hover:scale-105 cursor-pointer no-underline"
-          title="Click to search / watch goal on GoalsTube"
+          className="px-2.5 py-0.5 rounded-full bg-zinc-800/90 hover:bg-zinc-700 text-zinc-300 border border-zinc-700/60 font-bold text-[10px] uppercase tracking-wider flex items-center space-x-1 shadow-sm transition-transform hover:scale-105 cursor-pointer no-underline"
+          title={searchTitle}
         >
-          <span>
-            {goal.isFavoriteTeam && goal.isFavoritePlayer
-              ? "FAVORITE TEAM & PLAYER GOAL!"
-              : goal.isFavoriteTeam
-                ? "FAVORITE TEAM GOAL!"
-                : "FAVORITE PLAYER GOAL!"}
-          </span>
+          <span>SEARCH ON X ↗</span>
         </a>
       )}
     </div>
@@ -340,41 +337,40 @@ function FotmobCompanion() {
   const updateGoalFeedFromDetails = (m, details) => {
     if (!details || details.length === 0) return;
 
-    const fullGoalCards = details.map((g) => {
-      const scoringTeam = g.isHome ? m.home.name : m.away.name;
-      const opponentTeam = g.isHome ? m.away.name : m.home.name;
-      const scoringLogo = g.isHome ? m.homeLogo : m.awayLogo;
+    const fullGoalCards = details
+      .filter((g) => {
+        const scoringTeam = g.isHome ? m.home.name : m.away.name;
+        return isFavoriteTeam(scoringTeam);
+      })
+      .map((g) => {
+        const scoringTeam = g.isHome ? m.home.name : m.away.name;
+        const opponentTeam = g.isHome ? m.away.name : m.home.name;
+        const scoringLogo = g.isHome ? m.homeLogo : m.awayLogo;
 
-      const favTeam =
-        isFavoriteTeam(scoringTeam) || isFavoriteTeam(opponentTeam);
-      const favPlayer =
-        isFavoritePlayer(g.scorer) || isFavoritePlayer(g.assist);
+        const scoreText = g.scoreDisplay || `${m.home.score} - ${m.away.score}`;
+        const goalId = `${m.id}_${g.isHome ? "H" : "A"}_${scoreText}`;
 
-      const scoreText = g.scoreDisplay || `${m.home.score} - ${m.away.score}`;
-      const goalId = `${m.id}_${g.isHome ? "H" : "A"}_${scoreText}`;
-
-      return {
-        id: goalId,
-        matchId: m.id,
-        leagueName: m.leagueName,
-        scoringTeam,
-        opponentTeam,
-        scoringLogo,
-        scoreDisplay: scoreText,
-        minute: g.time || m.minute || "Live",
-        minuteRaw: g.minuteRaw,
-        timestampRaw: Date.now(),
-        isFavorite: favTeam || favPlayer,
-        isFavoriteTeam: favTeam,
-        isFavoritePlayer: favPlayer,
-        isGreatGoal: !!g.isGreatGoal,
-        xG: g.xG !== undefined ? g.xG : null,
-        xGOT: g.xGOT !== undefined ? g.xGOT : null,
-        isLiveGoal: m.isActive,
-        scorerName: g.scorer,
-        assistName: g.assist,
-      };
-    });
+        return {
+          id: goalId,
+          matchId: m.id,
+          leagueName: m.leagueName,
+          scoringTeam,
+          opponentTeam,
+          scoringLogo,
+          scoreDisplay: scoreText,
+          minute: g.time || m.minute || "Live",
+          minuteRaw: g.minuteRaw,
+          timestampRaw: Date.now(),
+          isFavorite: true,
+          isFavoriteTeam: true,
+          isGreatGoal: !!g.isGreatGoal,
+          xG: g.xG !== undefined ? g.xG : null,
+          xGOT: g.xGOT !== undefined ? g.xGOT : null,
+          isLiveGoal: m.isActive,
+          scorerName: g.scorer,
+          assistName: g.assist,
+        };
+      });
 
     setGoalFeed((prevFeed) => {
       const map = new Map();
@@ -384,10 +380,6 @@ function FotmobCompanion() {
         if (existing) {
           const updatedScorer = newItem.scorerName || existing.scorerName;
           const updatedAssist = newItem.assistName || existing.assistName;
-          const updatedFavPlayer =
-            isFavoritePlayer(updatedScorer) || isFavoritePlayer(updatedAssist);
-          const updatedFavTeam =
-            newItem.isFavoriteTeam || existing.isFavoriteTeam;
 
           map.set(newItem.id, {
             ...existing,
@@ -395,9 +387,8 @@ function FotmobCompanion() {
             timestampRaw: existing.timestampRaw,
             scorerName: updatedScorer,
             assistName: updatedAssist,
-            isFavoriteTeam: updatedFavTeam,
-            isFavoritePlayer: updatedFavPlayer,
-            isFavorite: updatedFavTeam || updatedFavPlayer,
+            isFavoriteTeam: true,
+            isFavorite: true,
             isGreatGoal: newItem.isGreatGoal || existing.isGreatGoal,
             xG: newItem.xG !== null ? newItem.xG : existing.xG,
             xGOT: newItem.xGOT !== null ? newItem.xGOT : existing.xGOT,
@@ -555,11 +546,9 @@ function FotmobCompanion() {
         return;
       }
 
-      // Only fetch details for matches in favorite leagues or favorite teams
+      // Query details ONLY if one of the competing teams is a tracked favorite team
       const isRelevantMatch =
-        isMatchInFavoriteLeagues(m.leagueName) ||
-        isFavoriteTeam(m.home.name) ||
-        isFavoriteTeam(m.away.name);
+        isFavoriteTeam(m.home.name) || isFavoriteTeam(m.away.name);
 
       if (!isRelevantMatch) {
         prevScores[m.id] = totalGoals;
@@ -622,7 +611,7 @@ function FotmobCompanion() {
 
   useEffect(() => {
     fetchLiveScores();
-    const timer = setInterval(fetchLiveScores, 3600000); // 1 hour auto-refresh
+    const timer = setInterval(fetchLiveScores, 60000); // 1 minute auto-refresh
     return () => clearInterval(timer);
   }, [fetchLiveScores]);
 
@@ -661,11 +650,7 @@ function FotmobCompanion() {
   // Filter Live Goal Stream
   const liveMatchIds = new Set(matches.map((m) => m.id));
   let filteredGoalFeed = goalFeed.filter(
-    (g) =>
-      (isMatchInFavoriteLeagues(g.leagueName) ||
-        g.isFavoriteTeam ||
-        g.isFavoritePlayer) &&
-      (!showOnlyLive || liveMatchIds.has(g.matchId)),
+    (g) => g.isFavoriteTeam && (!showOnlyLive || liveMatchIds.has(g.matchId)),
   );
 
   if (searchQuery.trim() !== "") {
@@ -783,11 +768,6 @@ function FotmobCompanion() {
                     <span className="font-bold text-sm tracking-wide">
                       {group.name}
                     </span>
-                    {group.isFriendly && (
-                      <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
-                        Friendly
-                      </span>
-                    )}
                   </div>
 
                   <div className="divide-y divide-background-light/30">
@@ -815,9 +795,20 @@ function FotmobCompanion() {
                           <TeamLogo src={m.homeLogo} />
                         </div>
 
+                        {/* Score Badge (Centered) */}
                         <div className="px-3 min-w-[75px] text-center flex-shrink-0">
-                          <div className="font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20">
-                            {m.home.score} - {m.away.score}
+                          <div
+                            className={`font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded transition-colors ${
+                              m.isActive
+                                ? "bg-secondary/10 text-secondary border border-secondary/20"
+                                : m.finished || m.minute === "FT"
+                                  ? "bg-gray-100/90 text-gray-700 border border-gray-300/70 dark:bg-zinc-800/40 dark:text-zinc-300 dark:border-zinc-700/40"
+                                  : "bg-background-dark/30 text-primary/40 border border-background-light/40"
+                            }`}
+                          >
+                            {m.isActive || m.finished || m.minute === "FT"
+                              ? `${m.home.score} - ${m.away.score}`
+                              : "-"}
                           </div>
                         </div>
 
@@ -857,8 +848,8 @@ function FotmobCompanion() {
                 <div
                   key={goal.id}
                   className={`relative p-4 rounded-xl border transition-all duration-300 ${
-                    goal.isFavorite
-                      ? "border-amber-400/60 bg-amber-500/10 shadow-[0_0_25px_rgba(245,158,11,0.2)]"
+                    goal.isGreatGoal
+                      ? "border-purple-500/50 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.15)]"
                       : "border-background-light bg-background-dark/40 shadow-sm"
                   }`}
                 >
