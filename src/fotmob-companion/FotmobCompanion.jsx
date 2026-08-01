@@ -13,16 +13,15 @@ import ThemeToggle from "../components/ThemeToggle";
 
 // Config & Favorites Definitions
 const HARDCODED_FAVORITES_TEAMS = [
-  "Werder Bremen",
-  "Southampton",
   "Swansea",
   "Roma",
-  "Man United",
-  "Atletico Madrid",
-  "Roma",
-  "Cardiff",
+  "Rochdale",
+  "Seattle Sounders",
 ];
-const HARDCODED_FAVORITES_LEAGUES = ["Club Friendlies"];
+const HARDCODED_FAVORITES_LEAGUES = [
+  55, // Serie A (Italy)
+  47, // Premier League (England)
+];
 
 const DEFAULT_TEAM_LOGO =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E";
@@ -39,18 +38,30 @@ function isFavoriteTeam(teamName) {
   );
 }
 
-function isMatchInFavoriteLeagues(leagueName) {
+function isMatchInFavoriteLeagues(leagueName, leagueId) {
   if (
     !HARDCODED_FAVORITES_LEAGUES ||
     HARDCODED_FAVORITES_LEAGUES.length === 0
   ) {
     return true;
   }
-  if (!leagueName) return false;
-  const target = leagueName.trim().toLowerCase();
-  return HARDCODED_FAVORITES_LEAGUES.some(
-    (favLeague) => favLeague.trim().toLowerCase() === target,
-  );
+  const targetName = (leagueName || "").trim().toLowerCase();
+  const targetId =
+    typeof leagueId === "number" ? leagueId : parseInt(leagueId, 10);
+
+  return HARDCODED_FAVORITES_LEAGUES.some((fav) => {
+    if (typeof fav === "number") {
+      return !isNaN(targetId) && fav === targetId;
+    }
+    if (typeof fav === "string") {
+      return fav.trim().toLowerCase() === targetName;
+    }
+    if (typeof fav === "object" && fav !== null) {
+      if (fav.id && !isNaN(targetId)) return fav.id === targetId;
+      if (fav.name) return fav.name.trim().toLowerCase() === targetName;
+    }
+    return false;
+  });
 }
 
 function sanitizeText(raw) {
@@ -708,7 +719,7 @@ function FotmobCompanion() {
   const activeDataset = showOnlyLive ? matches : allTodayMatches;
   let filteredMatches = activeDataset.filter(
     (m) =>
-      isMatchInFavoriteLeagues(m.leagueName) ||
+      isMatchInFavoriteLeagues(m.leagueName, m.leagueId) ||
       isFavoriteTeam(m.home.name) ||
       isFavoriteTeam(m.away.name),
   );
