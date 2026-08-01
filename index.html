@@ -1,12 +1,50 @@
 <!doctype html>
-<html lang="en" class="light-theme bg-background text-primary">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>Portfolio</title>
-    <script type="module" crossorigin src="/assets/index-e5244488.js"></script>
-    <link rel="stylesheet" href="/assets/index-6e863931.css">
+    <style>
+      html,
+      body,
+      #root {
+        background-color: #f5f5f5;
+        color: #161616;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+      html.dark-theme,
+      html.dark-theme body,
+      html.dark-theme #root {
+        background-color: #121110;
+        color: #f5f0eb;
+      }
+    </style>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var isDark = stored === "dark";
+          var root = document.documentElement;
+          if (isDark) {
+            root.classList.add("dark-theme");
+            root.classList.remove("light-theme");
+            root.style.backgroundColor = "#121110";
+            root.style.color = "#f5f0eb";
+          } else {
+            root.classList.add("light-theme");
+            root.classList.remove("dark-theme");
+            root.style.backgroundColor = "#f5f5f5";
+            root.style.color = "#161616";
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-8b7d2f35.js"></script>
+    <link rel="stylesheet" href="/assets/index-82626d75.css">
   </head>
   <body>
     <div id="root"></div>

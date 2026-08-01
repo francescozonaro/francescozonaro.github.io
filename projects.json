@@ -1,6 +1,16 @@
 {
   "projects": [
     {
+      "title": "FotMob Companion",
+      "description": "A real-time live score tracker siphoning public FotMob API data, with automatic live updates.",
+      "links": [
+        {
+          "type": "link",
+          "url": "/#/fotmob-companion"
+        }
+      ]
+    },
+    {
       "title": "StatsbombPlot",
       "description": "Developing visualization techniques for Statsbomb event data analysis, focusing on enhancing interpretability and actionable insights.",
       "links": [
