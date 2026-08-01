@@ -144,7 +144,7 @@ function evaluateShotTelemetry(matchingShot, eg) {
   };
 }
 
-function parseMatchStatus(status = {}) {
+function parseMatchStatus(status = {}, match = {}) {
   if (status.finished) return "FT";
   if (status.cancelled) return "Cancelled";
   if (status.reason?.shortKey === "halftime_short") return "HT";
@@ -154,9 +154,28 @@ function parseMatchStatus(status = {}) {
       ? `${cleaned}′`
       : cleaned.replace(/’/g, "′");
   }
-  if (status.startTimeStr) return status.startTimeStr;
-  if (status.reason?.short && status.reason.short !== "NS")
+  if (status.reason?.short && status.reason.short !== "NS") {
     return status.reason.short;
+  }
+  if (match.startTimeStr) return match.startTimeStr;
+
+  // Extract local HH:mm kickoff time from utcTime or timeTS
+  const timeSource = status.utcTime || match.timeTS;
+  if (timeSource) {
+    try {
+      const date = new Date(timeSource);
+      if (!isNaN(date.getTime())) {
+        return date.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+      }
+    } catch {
+      // ignore
+    }
+  }
+
   return "TBD";
 }
 
@@ -200,7 +219,7 @@ function transformFotmobMatch(match, league) {
     awayLogo: match.away?.id
       ? `https://images.fotmob.com/image_resources/logo/teamlogo/${match.away.id}.png`
       : null,
-    minute: parseMatchStatus(status),
+    minute: parseMatchStatus(status, match),
     timeTS:
       match.timeTS ||
       (status.utcTime ? new Date(status.utcTime).getTime() : null),
