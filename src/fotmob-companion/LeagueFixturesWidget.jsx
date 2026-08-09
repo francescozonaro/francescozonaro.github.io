@@ -144,7 +144,7 @@ export default function LeagueFixturesWidget({
                             >
                               {g.isLongRangeGoal && (
                                 <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
-                                  Long Range Goal
+                                  LRG
                                 </span>
                               )}
                               <a
@@ -191,7 +191,7 @@ export default function LeagueFixturesWidget({
                               </a>
                               {g.isLongRangeGoal && (
                                 <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
-                                  Long Range Goal
+                                  LRG
                                 </span>
                               )}
                             </div>

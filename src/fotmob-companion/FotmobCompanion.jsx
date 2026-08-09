@@ -40,13 +40,38 @@ ScrollableFeed.propTypes = {
 
 const getTodayCacheKey = () => {
   const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  return `fotmob_details_cache_${dateStr}`;
+  return `fotmob_details_cache_v4_${dateStr}`;
 };
 
 const loadDetailsCache = () => {
   try {
     const raw = sessionStorage.getItem(getTodayCacheKey());
-    return raw ? JSON.parse(raw) : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    Object.keys(parsed).forEach((matchId) => {
+      if (Array.isArray(parsed[matchId])) {
+        parsed[matchId].forEach((g) => {
+          const isOwnGoal =
+            g.type === "OwnGoal" ||
+            (g.scorer && g.scorer.toLowerCase().includes("(og)"));
+          const isPenalty =
+            g.type === "GoalPen" ||
+            (g.scorer && g.scorer.toLowerCase().includes("(p)"));
+          if (isOwnGoal || isPenalty) {
+            g.isLongRangeGoal = false;
+            g.distance = null;
+          } else if (typeof g.distance === "number" && !isNaN(g.distance)) {
+            g.isLongRangeGoal = g.distance >= 16.5;
+          } else if (typeof g.x === "number" && typeof g.y === "number") {
+            const dx = 105 - Math.min(g.x, 105);
+            const dy = 34 - g.y;
+            g.distance = Math.round(Math.hypot(dx, dy) * 10) / 10;
+            g.isLongRangeGoal = g.distance >= 16.5;
+          }
+        });
+      }
+    });
+    return parsed;
   } catch {
     return {};
   }
@@ -155,6 +180,7 @@ function FotmobCompanion() {
           scoreDisplay: g.newScore
             ? `${g.newScore[0]} - ${g.newScore[1]}`
             : null,
+          rawEvent: g,
         });
       });
 
@@ -193,9 +219,12 @@ function FotmobCompanion() {
         };
 
         const matchingShot =
+          eg.rawEvent?.shotmapEvent ||
           goalShots.find((s) => minMatch(s) && nameMatch(s)) ||
           goalShots.find((s) => nameMatch(s)) ||
           goalShots.find((s) => minMatch(s));
+
+        delete eg.rawEvent;
 
         const telemetry = evaluateShotTelemetry(matchingShot, eg);
         Object.assign(eg, telemetry);
@@ -240,14 +269,18 @@ function FotmobCompanion() {
         if (detailsCache[m.id]) {
           updateMatchDetails(m.id, detailsCache[m.id]);
 
-          // Re-fetch if a live match scored a NEW goal OR if cached details are incomplete/missing scorer names
+          // Re-fetch if a live match scored a NEW goal OR if cached details are incomplete/missing scorer names/telemetry
           const cachedDetails = detailsCache[m.id] || [];
           const cachedCount = cachedDetails.length;
           const hasMissingScorer = cachedDetails.some(
             (g) => !g.scorer || g.scorer.trim() === "",
           );
+          const hasMissingTelemetry = cachedDetails.some(
+            (g) => g.isLongRangeGoal === undefined,
+          );
           const isIncomplete =
-            (cachedCount < totalGoals || hasMissingScorer) && !isFinished;
+            (cachedCount < totalGoals || hasMissingScorer || hasMissingTelemetry) &&
+            !isFinished;
 
           if (scoreChanged || isIncomplete) {
             fetchMatchDetails(m.id).then((details) => {

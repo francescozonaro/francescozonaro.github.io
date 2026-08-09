@@ -73,15 +73,22 @@ export default function LongRangeGoalsWidget({
                 className="flex items-center justify-between gap-2 text-[11px] border-b border-background-light/20 pb-1.5 last:border-0 last:pb-0"
               >
                 <div className="min-w-0 flex-1">
-                  <a
-                    href={getGoalSearchUrl(g.scorer, g.team)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-primary hover:text-secondary hover:underline transition-colors"
-                    title={`Search ${g.scorer} on X`}
-                  >
-                    {g.scorer}
-                  </a>
+                  <div className="flex items-center space-x-1.5 flex-wrap">
+                    <a
+                      href={getGoalSearchUrl(g.scorer, g.team)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-primary hover:text-secondary hover:underline transition-colors"
+                      title={`Search ${g.scorer} on X`}
+                    >
+                      {g.scorer}
+                    </a>
+                    {g.distance !== null && g.distance !== undefined && (
+                      <span className="text-secondary font-mono text-[10px] font-bold">
+                        ({g.distance}m)
+                      </span>
+                    )}
+                  </div>
                   <p className="text-[10px] text-primary/50 truncate">
                     {g.team} vs {g.opponent} · {g.leagueName}
                   </p>
@@ -90,11 +97,6 @@ export default function LongRangeGoalsWidget({
                   {g.time && (
                     <span className="text-primary/45 font-mono text-[10px] block">
                       {g.time}
-                    </span>
-                  )}
-                  {g.distance !== null && g.distance !== undefined && (
-                    <span className="text-secondary font-mono text-[9px] block">
-                      {g.distance}m
                     </span>
                   )}
                 </div>

@@ -76,9 +76,7 @@ export const SERVERLESS_FIXTURES_WORKER_URL =
 
 export function getGoalSearchUrl(scorerName, teamName = "") {
   if (!scorerName) return "#";
-  const cleanName = scorerName
-    .replace(/\s*\((?:OG|P|\d+′?)\)/gi, "")
-    .trim();
+  const cleanName = scorerName.replace(/\s*\((?:OG|P|\d+′?)\)/gi, "").trim();
   const query = `${cleanName} ${teamName} goal`.trim();
   return `https://x.com/search?q=${encodeURIComponent(query)}&f=live`;
 }
@@ -136,35 +134,21 @@ export function formatAssistName(rawAssist) {
 }
 
 export function evaluateShotTelemetry(matchingShot, eg) {
-  if (!matchingShot) {
-    return { isLongRangeGoal: false, distance: null };
+  if (
+    !matchingShot ||
+    typeof matchingShot.x !== "number" ||
+    typeof matchingShot.y !== "number"
+  ) {
+    console.log(
+      `[Goal Telemetry] ${eg?.scorer || "Goal"} (${eg?.time || ""}): No telemetry / coordinates available`,
+    );
+    return { isLongRangeGoal: false, distance: null, x: null, y: null };
   }
 
-  let distance = null;
-  if (
-    typeof matchingShot.distance === "number" &&
-    !isNaN(matchingShot.distance)
-  ) {
-    distance = matchingShot.distance;
-  } else if (
-    typeof matchingShot.minDistance === "number" &&
-    !isNaN(matchingShot.minDistance)
-  ) {
-    distance = matchingShot.minDistance;
-  } else if (
-    typeof matchingShot.distanceToGoal === "number" &&
-    !isNaN(matchingShot.distanceToGoal)
-  ) {
-    distance = matchingShot.distanceToGoal;
-  } else if (
-    typeof matchingShot.x === "number" &&
-    typeof matchingShot.y === "number"
-  ) {
-    // Standard pitch coordinates: length 105m, width 68m. Goal center is at (105, 34).
-    const dx = 105 - Math.min(matchingShot.x, 105);
-    const dy = 34 - matchingShot.y;
-    distance = Math.round(Math.hypot(dx, dy) * 10) / 10;
-  }
+  const isOwnGoal =
+    matchingShot.isOwnGoal === true ||
+    eg?.type === "OwnGoal" ||
+    (eg?.scorer && eg.scorer.toLowerCase().includes("(og)"));
 
   const isPenalty =
     (eg?.scorer && eg.scorer.toLowerCase().includes("(p)")) ||
@@ -172,20 +156,37 @@ export function evaluateShotTelemetry(matchingShot, eg) {
     matchingShot.eventType === "Penalty" ||
     matchingShot.shotType === "Penalty";
 
-  let isLongRangeGoal = false;
-  if (!isPenalty) {
-    if (typeof matchingShot.isFromInsideBox === "boolean") {
-      isLongRangeGoal = !matchingShot.isFromInsideBox;
-    } else if (typeof matchingShot.isOutOfBox === "boolean") {
-      isLongRangeGoal = matchingShot.isOutOfBox;
-    } else if (typeof distance === "number" && distance !== null) {
-      isLongRangeGoal = distance >= 16.5;
-    }
+  // Pitch coordinates: length 105m, width 68m. Opponent goal center is at (105, 34).
+  const dx = 105 - Math.min(matchingShot.x, 105);
+  const dy = 34 - matchingShot.y;
+  const distance = Math.round(Math.hypot(dx, dy) * 10) / 10;
+
+  if (isOwnGoal || isPenalty) {
+    console.log(
+      `[Goal Telemetry] ${eg?.scorer || "Goal"} (${eg?.time || ""}): x=${matchingShot.x.toFixed(1)}, y=${matchingShot.y.toFixed(1)} -> distance=${distance}m (${isOwnGoal ? "Own Goal" : "Penalty"}) -> isLongRange=false`,
+    );
+    return {
+      isLongRangeGoal: false,
+      distance: isOwnGoal ? null : distance,
+      x: matchingShot.x,
+      y: matchingShot.y,
+    };
   }
+
+  // Official FotMob outside-the-box classification (isFromInsideBox === false)
+  const isLongRangeGoal =
+    matchingShot.isFromInsideBox === false ||
+    (typeof matchingShot.isFromInsideBox !== "boolean" && distance >= 16.5);
+
+  console.log(
+    `[Goal Telemetry] ${eg?.scorer || "Goal"} (${eg?.time || ""}): x=${matchingShot.x.toFixed(1)}, y=${matchingShot.y.toFixed(1)} -> distance=${distance}m, insideBox=${matchingShot.isFromInsideBox}, isLongRange=${isLongRangeGoal}`,
+  );
 
   return {
     isLongRangeGoal,
     distance,
+    x: matchingShot.x,
+    y: matchingShot.y,
   };
 }
 
@@ -285,7 +286,10 @@ export function getDisplayGoals(goalsArr, teamScore, isHome) {
   return result;
 }
 
-export function TeamLogo({ src, className = "w-6 h-6 object-contain flex-shrink-0" }) {
+export function TeamLogo({
+  src,
+  className = "w-6 h-6 object-contain flex-shrink-0",
+}) {
   return (
     <img
       src={src || DEFAULT_TEAM_LOGO}
