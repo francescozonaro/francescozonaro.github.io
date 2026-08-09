@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   ArrowPathIcon,
   SignalIcon,
@@ -7,13 +8,12 @@ import {
   BoltIcon,
   TrophyIcon,
   ChartBarIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
   EyeIcon,
   EyeSlashIcon,
 } from "@heroicons/react/24/solid";
 import ThemeToggle from "../components/ThemeToggle";
 import GoalsPerHourWidget from "./GoalsPerHourWidget";
+import CollapsibleCard from "./CollapsibleCard";
 
 // Config & Favorites Definitions
 const HARDCODED_FAVORITES_TEAMS = [
@@ -73,15 +73,14 @@ const HARDCODED_FAVORITES_TEAMS = [
   { id: 189481, name: "Union Brescia" },
 ];
 
+// FotMob league IDs (primaryId, stable across seasons/sponsor renames)
 const HARDCODED_FAVORITES_LEAGUES = [
   55, // Serie A (Italy)
   47, // Premier League (England)
-  57, // Serie B (Italy)
-  "EFL Cup",
-  "League Cup",
-  "Carabao Cup",
-  "Club Friendlies",
-  "Friendlies",
+  86, // Serie B (Italy)
+  133, // League Cup / Carabao Cup / EFL Cup (England)
+  114, // Friendlies (international)
+  489, // Club Friendlies
 ];
 
 const DEFAULT_TEAM_LOGO =
@@ -93,36 +92,16 @@ const SERVERLESS_FIXTURES_WORKER_URL =
   "https://fotmob-fixtures.turtleunderablanket.workers.dev";
 
 // Pure Modular Helper Functions
-function isFavoriteTeam(teamName, teamId) {
-  if (!teamName) return false;
-  let name = "";
-  let id = null;
-
-  if (typeof teamName === "object" && teamName !== null) {
-    name = teamName.name || "";
-    id = teamName.id !== undefined ? teamName.id : null;
-  } else {
-    name = teamName || "";
-    id = teamId !== undefined ? teamId : null;
-  }
-
-  const targetName = name.trim().toLowerCase();
-  const targetId = typeof id === "number" ? id : parseInt(id, 10);
+function isFavoriteTeam(team) {
+  if (!team) return false;
+  const targetName = (team.name || "").trim().toLowerCase();
+  const targetId =
+    typeof team.id === "number" ? team.id : parseInt(team.id, 10);
 
   return HARDCODED_FAVORITES_TEAMS.some((fav) => {
-    if (typeof fav === "number") {
-      return !isNaN(targetId) && fav === targetId;
-    }
-    if (typeof fav === "string") {
-      return targetName !== "" && fav.trim().toLowerCase() === targetName;
-    }
-    if (typeof fav === "object" && fav !== null) {
-      if (fav.id !== undefined && !isNaN(targetId)) {
-        return fav.id === targetId;
-      }
-      if (fav.name && targetName !== "") {
-        return fav.name.trim().toLowerCase() === targetName;
-      }
+    if (fav.id !== undefined && !isNaN(targetId)) return fav.id === targetId;
+    if (fav.name && targetName !== "") {
+      return fav.name.trim().toLowerCase() === targetName;
     }
     return false;
   });
@@ -135,35 +114,12 @@ function isMatchInFavoriteLeagues(leagueName, leagueId) {
   ) {
     return true;
   }
-  const targetName = (leagueName || "").trim().toLowerCase();
   const targetId =
     typeof leagueId === "number" ? leagueId : parseInt(leagueId, 10);
 
-  return HARDCODED_FAVORITES_LEAGUES.some((fav) => {
-    if (typeof fav === "number") {
-      return !isNaN(targetId) && fav === targetId;
-    }
-    if (typeof fav === "string") {
-      const favLower = fav.trim().toLowerCase();
-      return (
-        targetName === favLower ||
-        targetName.includes(favLower) ||
-        favLower.includes(targetName)
-      );
-    }
-    if (typeof fav === "object" && fav !== null) {
-      if (fav.id && !isNaN(targetId)) return fav.id === targetId;
-      if (fav.name) {
-        const favNameLower = fav.name.trim().toLowerCase();
-        return (
-          targetName === favNameLower ||
-          targetName.includes(favNameLower) ||
-          favNameLower.includes(targetName)
-        );
-      }
-    }
-    return false;
-  });
+  return HARDCODED_FAVORITES_LEAGUES.some(
+    (id) => !isNaN(targetId) && id === targetId,
+  );
 }
 
 function sanitizeText(raw) {
@@ -315,7 +271,8 @@ function transformFotmobMatch(match, league) {
   return {
     id: match.id,
     leagueName: league.name,
-    leagueId: league.id || league.primaryId,
+    // primaryId is stable across seasons; league.id can change per season/round for cups
+    leagueId: league.primaryId || league.id,
     ccode: league.ccode || "INT",
     isFriendly,
     isActive,
@@ -358,6 +315,11 @@ function TeamLogo({ src, className = "w-6 h-6 object-contain flex-shrink-0" }) {
   );
 }
 
+TeamLogo.propTypes = {
+  src: PropTypes.string,
+  className: PropTypes.string,
+};
+
 function getGoalSearchUrl(scorerName, teamName) {
   const team = teamName || "";
   if (!scorerName || scorerName.trim() === "" || scorerName === "Goal") {
@@ -390,6 +352,10 @@ function ScrollableFeed({ children }) {
   );
 }
 
+ScrollableFeed.propTypes = {
+  children: PropTypes.node,
+};
+
 function PlaceholderWidget({
   icon: Icon,
   title,
@@ -399,48 +365,33 @@ function PlaceholderWidget({
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className="border-[0.5px] border-background-light rounded-xl overflow-hidden bg-background-dark/20 shadow-md transition-all">
-      {/* Widget Header Bar (Matches League Header Style) */}
-      <div
-        className={`px-4 py-2.5 bg-background-dark/60 flex justify-between items-center ${
-          !isCollapsed ? "border-b border-background-light/50" : ""
-        }`}
-      >
-        <div className="flex items-center space-x-2">
-          <Icon className="h-4 w-4 text-secondary flex-shrink-0" />
-          <span className="font-bold text-sm tracking-wide">{title}</span>
+    <CollapsibleCard
+      icon={Icon}
+      title={title}
+      isCollapsed={isCollapsed}
+      onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+    >
+      <div className="p-6 border-[0.5px] border-dashed border-background-light/50 flex flex-col items-center justify-center text-center">
+        <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
+          <Icon className="h-4 w-4" />
         </div>
-
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1 rounded text-primary/60 hover:text-primary hover:bg-background-light/40 transition-colors border border-background-light/60 bg-background-dark/50 cursor-pointer"
-          title={isCollapsed ? "Expand widget" : "Collapse widget"}
-        >
-          {isCollapsed ? (
-            <ChevronDownIcon className="h-4 w-4" />
-          ) : (
-            <ChevronUpIcon className="h-4 w-4" />
-          )}
-        </button>
+        <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
+          {placeholderTitle}
+        </h3>
+        <p className="text-[11px] text-primary/50 max-w-[200px]">
+          {description}
+        </p>
       </div>
-
-      {/* Widget Content Body */}
-      {!isCollapsed && (
-        <div className="p-6 border-[0.5px] border-dashed border-background-light/50 flex flex-col items-center justify-center text-center">
-          <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
-            <Icon className="h-4 w-4" />
-          </div>
-          <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
-            {placeholderTitle}
-          </h3>
-          <p className="text-[11px] text-primary/50 max-w-[200px]">
-            {description}
-          </p>
-        </div>
-      )}
-    </div>
+    </CollapsibleCard>
   );
 }
+
+PlaceholderWidget.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  title: PropTypes.string.isRequired,
+  placeholderTitle: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+};
 
 const getTodayCacheKey = () => {
   const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
@@ -492,7 +443,7 @@ function FotmobCompanion() {
     }));
   };
 
-  const updateMatchDetails = (matchId, details) => {
+  const updateMatchDetails = useCallback((matchId, details) => {
     if (!details) return;
     const detailsCache = fetchedMatchDetailsCacheRef.current;
     detailsCache[matchId] = details;
@@ -501,10 +452,10 @@ function FotmobCompanion() {
       ...prev,
       [matchId]: details,
     }));
-  };
+  }, []);
 
   // Fetch detailed telemetry (events & shotmap xG) for a match
-  const fetchMatchDetails = async (matchId) => {
+  const fetchMatchDetails = useCallback(async (matchId) => {
     if (!SERVERLESS_WORKER_URL) return null;
 
     try {
@@ -586,40 +537,9 @@ function FotmobCompanion() {
     } catch {
       return null;
     }
-  };
-
-  // Main Live Score Polling
-  const fetchLiveScores = useCallback(async () => {
-    setLoading(true);
-    try {
-      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-      const endpoint = `${SERVERLESS_FIXTURES_WORKER_URL.replace(/\/$/, "")}?date=${dateStr}&_t=${Date.now()}`;
-
-      const res = await fetch(endpoint, { cache: "no-store" });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.leagues) {
-          const parsed = processFotmobData(data);
-          setMatches(parsed.liveList);
-          setAllTodayMatches(parsed.allList);
-          processGoalEvents(parsed.allList);
-
-          const nowStr = new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          });
-          setLastUpdated(nowStr);
-        }
-      }
-    } catch (err) {
-      console.error("Fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
   }, []);
 
-  function processGoalEvents(allMatchesList) {
+  const processGoalEvents = useCallback((allMatchesList) => {
     const prevScores = previousScoresRef.current;
     const detailsCache = fetchedMatchDetailsCacheRef.current;
 
@@ -693,7 +613,7 @@ function FotmobCompanion() {
         }
       });
     });
-  }
+  }, [updateMatchDetails, fetchMatchDetails]);
 
   function processFotmobData(data) {
     if (!data?.leagues) return { liveList: [], allList: [] };
@@ -712,6 +632,37 @@ function FotmobCompanion() {
 
     return { liveList, allList };
   }
+
+  // Main Live Score Polling
+  const fetchLiveScores = useCallback(async () => {
+    setLoading(true);
+    try {
+      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      const endpoint = `${SERVERLESS_FIXTURES_WORKER_URL.replace(/\/$/, "")}?date=${dateStr}&_t=${Date.now()}`;
+
+      const res = await fetch(endpoint, { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.leagues) {
+          const parsed = processFotmobData(data);
+          setMatches(parsed.liveList);
+          setAllTodayMatches(parsed.allList);
+          processGoalEvents(parsed.allList);
+
+          const nowStr = new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
+          setLastUpdated(nowStr);
+        }
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [processGoalEvents]);
 
   useEffect(() => {
     fetchLiveScores();
@@ -850,220 +801,190 @@ function FotmobCompanion() {
                 const areScorersHidden = !!hiddenScorersLeagues[group.name];
 
                 return (
-                  <div
+                  <CollapsibleCard
                     key={groupIdx}
-                    className="border-[0.5px] border-background-light rounded-xl overflow-hidden bg-background-dark/20 shadow-md transition-all"
+                    title={group.name}
+                    badge={
+                      <span className="text-xs text-primary/50 font-mono">
+                        ({group.matches.length})
+                      </span>
+                    }
+                    actions={
+                      <button
+                        onClick={() => toggleHideScorers(group.name)}
+                        className={`p-1 rounded transition-colors border ${
+                          areScorersHidden
+                            ? "border-secondary/40 bg-secondary/15 text-secondary"
+                            : "border-background-light/60 bg-background-dark/50 text-primary/60 hover:text-primary hover:bg-background-light/40"
+                        }`}
+                        title={
+                          areScorersHidden ? "Show scorers" : "Hide scorers"
+                        }
+                      >
+                        {areScorersHidden ? (
+                          <EyeSlashIcon className="h-4 w-4" />
+                        ) : (
+                          <EyeIcon className="h-4 w-4" />
+                        )}
+                      </button>
+                    }
+                    isCollapsed={isCollapsed}
+                    onToggleCollapse={() => toggleCollapseLeague(group.name)}
                   >
-                    {/* League Header with Toggle Controls */}
-                    <div className="px-4 py-2.5 border-b border-background-light/50 bg-background-dark/60 flex justify-between items-center">
-                      <div className="flex items-center space-x-2">
-                        <span className="font-bold text-sm tracking-wide">
-                          {group.name}
-                        </span>
-                        <span className="text-xs text-primary/50 font-mono">
-                          ({group.matches.length})
-                        </span>
-                      </div>
+                    <div className="divide-y divide-background-light/30">
+                      {group.matches.map((m) => {
+                        const matchGoals = matchDetailsMap[m.id] || [];
+                        const rawHomeGoals = matchGoals.filter(
+                          (g) => g.isHome,
+                        );
+                        const rawAwayGoals = matchGoals.filter(
+                          (g) => !g.isHome,
+                        );
 
-                      <div className="flex items-center space-x-2">
-                        {/* Hide / Show Scorers Button */}
-                        <button
-                          onClick={() => toggleHideScorers(group.name)}
-                          className={`p-1 rounded transition-colors border ${
-                            areScorersHidden
-                              ? "border-secondary/40 bg-secondary/15 text-secondary"
-                              : "border-background-light/60 bg-background-dark/50 text-primary/60 hover:text-primary hover:bg-background-light/40"
-                          }`}
-                          title={
-                            areScorersHidden ? "Show scorers" : "Hide scorers"
-                          }
-                        >
-                          {areScorersHidden ? (
-                            <EyeSlashIcon className="h-4 w-4" />
-                          ) : (
-                            <EyeIcon className="h-4 w-4" />
-                          )}
-                        </button>
+                        const homeGoals = getDisplayGoals(
+                          rawHomeGoals,
+                          m.home.score,
+                          true,
+                        );
+                        const awayGoals = getDisplayGoals(
+                          rawAwayGoals,
+                          m.away.score,
+                          false,
+                        );
+                        const hasGoals =
+                          (m.home.score > 0 || m.away.score > 0) &&
+                          (homeGoals.length > 0 || awayGoals.length > 0);
 
-                        {/* Collapse / Expand League Fixtures Button */}
-                        <button
-                          onClick={() => toggleCollapseLeague(group.name)}
-                          className="p-1 rounded text-primary/60 hover:text-primary hover:bg-background-light/40 transition-colors border border-background-light/60 bg-background-dark/50"
-                          title={
-                            isCollapsed
-                              ? "Expand match list"
-                              : "Collapse match list"
-                          }
-                        >
-                          {isCollapsed ? (
-                            <ChevronDownIcon className="h-4 w-4" />
-                          ) : (
-                            <ChevronUpIcon className="h-4 w-4" />
-                          )}
-                        </button>
-                      </div>
-                    </div>
+                        return (
+                          <div
+                            key={m.id}
+                            className="p-3.5 hover:bg-background-light/30 transition-colors flex flex-col gap-2"
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="w-14 flex-shrink-0 flex items-center justify-start">
+                                <span
+                                  className={`text-[11px] font-semibold px-2 py-0.5 rounded font-mono ${
+                                    m.isActive
+                                      ? "bg-secondary/15 text-secondary animate-pulse font-bold"
+                                      : "text-primary/60 bg-background-dark/40"
+                                  }`}
+                                >
+                                  {m.minute}
+                                </span>
+                              </div>
 
-                    {/* Match List (only rendered if not collapsed) */}
-                    {!isCollapsed && (
-                      <div className="divide-y divide-background-light/30">
-                        {group.matches.map((m) => {
-                          const matchGoals =
-                            matchDetailsMap[m.id] ||
-                            fetchedMatchDetailsCacheRef.current[m.id] ||
-                            [];
-                          const rawHomeGoals = matchGoals.filter(
-                            (g) => g.isHome,
-                          );
-                          const rawAwayGoals = matchGoals.filter(
-                            (g) => !g.isHome,
-                          );
+                              <div className="flex-1 flex items-center justify-end space-x-2 text-right">
+                                <span className="font-semibold text-sm line-clamp-1">
+                                  {m.home.name}
+                                </span>
+                                <TeamLogo src={m.homeLogo} />
+                              </div>
 
-                          const homeGoals = getDisplayGoals(
-                            rawHomeGoals,
-                            m.home.score,
-                            true,
-                          );
-                          const awayGoals = getDisplayGoals(
-                            rawAwayGoals,
-                            m.away.score,
-                            false,
-                          );
-                          const hasGoals =
-                            (m.home.score > 0 || m.away.score > 0) &&
-                            (homeGoals.length > 0 || awayGoals.length > 0);
-
-                          return (
-                            <div
-                              key={m.id}
-                              className="p-3.5 hover:bg-background-light/30 transition-colors flex flex-col gap-2"
-                            >
-                              <div className="flex items-center justify-between gap-2">
-                                <div className="w-14 flex-shrink-0 flex items-center justify-start">
-                                  <span
-                                    className={`text-[11px] font-semibold px-2 py-0.5 rounded font-mono ${
-                                      m.isActive
-                                        ? "bg-secondary/15 text-secondary animate-pulse font-bold"
-                                        : "text-primary/60 bg-background-dark/40"
-                                    }`}
-                                  >
-                                    {m.minute}
-                                  </span>
-                                </div>
-
-                                <div className="flex-1 flex items-center justify-end space-x-2 text-right">
-                                  <span className="font-semibold text-sm line-clamp-1">
-                                    {m.home.name}
-                                  </span>
-                                  <TeamLogo src={m.homeLogo} />
-                                </div>
-
-                                {/* Score Badge (Centered) */}
-                                <div className="px-3 min-w-[75px] text-center flex-shrink-0">
-                                  <div
-                                    className={`font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded transition-colors ${
-                                      m.isActive
-                                        ? "bg-secondary/10 text-secondary border border-secondary/20"
-                                        : "bg-background-score text-primary/70 border border-transparent"
-                                    }`}
-                                  >
-                                    {m.isActive ||
-                                    m.finished ||
-                                    m.minute === "FT"
-                                      ? `${m.home.score} - ${m.away.score}`
-                                      : "-"}
-                                  </div>
-                                </div>
-
-                                <div className="flex-1 flex items-center justify-start space-x-2 text-left">
-                                  <TeamLogo src={m.awayLogo} />
-                                  <span className="font-semibold text-sm line-clamp-1">
-                                    {m.away.name}
-                                  </span>
+                              {/* Score Badge (Centered) */}
+                              <div className="px-3 min-w-[75px] text-center flex-shrink-0">
+                                <div
+                                  className={`font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded transition-colors ${
+                                    m.isActive
+                                      ? "bg-secondary/10 text-secondary border border-secondary/20"
+                                      : "bg-background-score text-primary/70 border border-transparent"
+                                  }`}
+                                >
+                                  {m.isActive ||
+                                  m.finished ||
+                                  m.minute === "FT"
+                                    ? `${m.home.score} - ${m.away.score}`
+                                    : "-"}
                                 </div>
                               </div>
 
-                              {/* Scorers List Below Score (only if hasGoals and scorers not hidden for this league) */}
-                              {hasGoals && !areScorersHidden && (
-                                <div className="flex items-start justify-between text-[11px] pt-1.5 border-t border-background-light/20 gap-2">
-                                  <div className="w-14 flex-shrink-0" />
-
-                                  {/* Home Team Scorers (Right Aligned) */}
-                                  <div className="flex-1 text-right space-y-1">
-                                    {homeGoals.map((g, idx) => (
-                                      <div
-                                        key={idx}
-                                        className="flex items-center justify-end space-x-1.5 flex-wrap"
-                                      >
-                                        {g.isGreatGoal && (
-                                          <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
-                                            Great Goal
-                                          </span>
-                                        )}
-                                        <a
-                                          href={getGoalSearchUrl(
-                                            g.scorer,
-                                            m.home.name,
-                                          )}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
-                                          title={`Search ${g.scorer || "goal"} on X`}
-                                        >
-                                          {g.scorer || "Goal"}
-                                        </a>
-                                        {g.time && (
-                                          <span className="text-primary/45 font-mono text-[10px]">
-                                            {g.time}
-                                          </span>
-                                        )}
-                                      </div>
-                                    ))}
-                                  </div>
-
-                                  {/* Score Box Spacer */}
-                                  <div className="px-3 min-w-[75px] flex-shrink-0" />
-
-                                  {/* Away Team Scorers (Left Aligned) */}
-                                  <div className="flex-1 text-left space-y-1">
-                                    {awayGoals.map((g, idx) => (
-                                      <div
-                                        key={idx}
-                                        className="flex items-center justify-start space-x-1.5 flex-wrap"
-                                      >
-                                        {g.time && (
-                                          <span className="text-primary/45 font-mono text-[10px]">
-                                            {g.time}
-                                          </span>
-                                        )}
-                                        <a
-                                          href={getGoalSearchUrl(
-                                            g.scorer,
-                                            m.away.name,
-                                          )}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
-                                          title={`Search ${g.scorer || "goal"} on X`}
-                                        >
-                                          {g.scorer || "Goal"}
-                                        </a>
-                                        {g.isGreatGoal && (
-                                          <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
-                                            Great Goal
-                                          </span>
-                                        )}
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              )}
+                              <div className="flex-1 flex items-center justify-start space-x-2 text-left">
+                                <TeamLogo src={m.awayLogo} />
+                                <span className="font-semibold text-sm line-clamp-1">
+                                  {m.away.name}
+                                </span>
+                              </div>
                             </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
+
+                            {/* Scorers List Below Score (only if hasGoals and scorers not hidden for this league) */}
+                            {hasGoals && !areScorersHidden && (
+                              <div className="flex items-start justify-between text-[11px] pt-1.5 border-t border-background-light/20 gap-2">
+                                <div className="w-14 flex-shrink-0" />
+
+                                {/* Home Team Scorers (Right Aligned) */}
+                                <div className="flex-1 text-right space-y-1">
+                                  {homeGoals.map((g, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="flex items-center justify-end space-x-1.5 flex-wrap"
+                                    >
+                                      {g.isGreatGoal && (
+                                        <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
+                                          Great Goal
+                                        </span>
+                                      )}
+                                      <a
+                                        href={getGoalSearchUrl(
+                                          g.scorer,
+                                          m.home.name,
+                                        )}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
+                                        title={`Search ${g.scorer || "goal"} on X`}
+                                      >
+                                        {g.scorer || "Goal"}
+                                      </a>
+                                      {g.time && (
+                                        <span className="text-primary/45 font-mono text-[10px]">
+                                          {g.time}
+                                        </span>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+
+                                {/* Score Box Spacer */}
+                                <div className="px-3 min-w-[75px] flex-shrink-0" />
+
+                                {/* Away Team Scorers (Left Aligned) */}
+                                <div className="flex-1 text-left space-y-1">
+                                  {awayGoals.map((g, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="flex items-center justify-start space-x-1.5 flex-wrap"
+                                    >
+                                      {g.time && (
+                                        <span className="text-primary/45 font-mono text-[10px]">
+                                          {g.time}
+                                        </span>
+                                      )}
+                                      <a
+                                        href={getGoalSearchUrl(
+                                          g.scorer,
+                                          m.away.name,
+                                        )}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
+                                        title={`Search ${g.scorer || "goal"} on X`}
+                                      >
+                                        {g.scorer || "Goal"}
+                                      </a>
+                                      {g.isGreatGoal && (
+                                        <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
+                                          Great Goal
+                                        </span>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CollapsibleCard>
                 );
               })
             )}
