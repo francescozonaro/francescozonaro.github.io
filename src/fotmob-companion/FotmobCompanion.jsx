@@ -6,7 +6,6 @@ import {
   MagnifyingGlassIcon,
   BoltIcon,
   TrophyIcon,
-  SparklesIcon,
   ChartBarIcon,
   ChevronDownIcon,
   ChevronUpIcon,
@@ -14,6 +13,7 @@ import {
   EyeSlashIcon,
 } from "@heroicons/react/24/solid";
 import ThemeToggle from "../components/ThemeToggle";
+import GoalsPerHourWidget from "./GoalsPerHourWidget";
 
 // Config & Favorites Definitions
 const HARDCODED_FAVORITES_TEAMS = [
@@ -77,6 +77,11 @@ const HARDCODED_FAVORITES_LEAGUES = [
   55, // Serie A (Italy)
   47, // Premier League (England)
   57, // Serie B (Italy)
+  "EFL Cup",
+  "League Cup",
+  "Carabao Cup",
+  "Club Friendlies",
+  "Friendlies",
 ];
 
 const DEFAULT_TEAM_LOGO =
@@ -139,11 +144,23 @@ function isMatchInFavoriteLeagues(leagueName, leagueId) {
       return !isNaN(targetId) && fav === targetId;
     }
     if (typeof fav === "string") {
-      return fav.trim().toLowerCase() === targetName;
+      const favLower = fav.trim().toLowerCase();
+      return (
+        targetName === favLower ||
+        targetName.includes(favLower) ||
+        favLower.includes(targetName)
+      );
     }
     if (typeof fav === "object" && fav !== null) {
       if (fav.id && !isNaN(targetId)) return fav.id === targetId;
-      if (fav.name) return fav.name.trim().toLowerCase() === targetName;
+      if (fav.name) {
+        const favNameLower = fav.name.trim().toLowerCase();
+        return (
+          targetName === favNameLower ||
+          targetName.includes(favNameLower) ||
+          favNameLower.includes(targetName)
+        );
+      }
     }
     return false;
   });
@@ -221,18 +238,16 @@ function evaluateShotTelemetry(matchingShot, eg) {
     shotDistanceMeters = Math.round(Math.sqrt(dx * dx + dy * dy) * 10) / 10;
   }
 
-  // Outside the 18-yard box (16.5 meters)
+  // Long distance shot (22.0+ meters / 24+ yards)
   const isOutsideTheBox =
-    (shotDistanceMeters !== null && shotDistanceMeters >= 16.5) ||
+    (shotDistanceMeters !== null && shotDistanceMeters >= 22.0) ||
     situation.toLowerCase().includes("outsidethebox") ||
     situation.toLowerCase().includes("outside_box");
 
   const isLowXg = xG !== null && xG > 0 && xG <= 0.09;
   const isFreeKick = situation.toLowerCase().includes("freekick");
   const isGreatFinish =
-    xGOT !== null &&
-    xG !== null &&
-    (xGOT - xG >= 0.35 || (xGOT >= 0.8 && xG <= 0.25));
+    xGOT !== null && xG !== null && xGOT >= 0.8 && xG <= 0.09;
 
   // Penalties are NEVER great goals
   const isGreatGoal =
@@ -381,25 +396,48 @@ function PlaceholderWidget({
   placeholderTitle,
   description,
 }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
-    <div className="flex-1 flex flex-col min-h-0">
-      <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
-          <Icon className="h-4 w-4 text-secondary" />
-          <span>{title}</span>
-        </h2>
-      </div>
-      <div className="flex-1 p-5 border-[0.5px] border-dashed border-background-light/70 rounded-xl bg-background-dark/20 flex flex-col items-center justify-center text-center">
-        <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
-          <Icon className="h-4 w-4" />
+    <div className="border-[0.5px] border-background-light rounded-xl overflow-hidden bg-background-dark/20 shadow-md transition-all">
+      {/* Widget Header Bar (Matches League Header Style) */}
+      <div
+        className={`px-4 py-2.5 bg-background-dark/60 flex justify-between items-center ${
+          !isCollapsed ? "border-b border-background-light/50" : ""
+        }`}
+      >
+        <div className="flex items-center space-x-2">
+          <Icon className="h-4 w-4 text-secondary flex-shrink-0" />
+          <span className="font-bold text-sm tracking-wide">{title}</span>
         </div>
-        <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
-          {placeholderTitle}
-        </h3>
-        <p className="text-[11px] text-primary/50 max-w-[170px]">
-          {description}
-        </p>
+
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="p-1 rounded text-primary/60 hover:text-primary hover:bg-background-light/40 transition-colors border border-background-light/60 bg-background-dark/50 cursor-pointer"
+          title={isCollapsed ? "Expand widget" : "Collapse widget"}
+        >
+          {isCollapsed ? (
+            <ChevronDownIcon className="h-4 w-4" />
+          ) : (
+            <ChevronUpIcon className="h-4 w-4" />
+          )}
+        </button>
       </div>
+
+      {/* Widget Content Body */}
+      {!isCollapsed && (
+        <div className="p-6 border-[0.5px] border-dashed border-background-light/50 flex flex-col items-center justify-center text-center">
+          <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
+            <Icon className="h-4 w-4" />
+          </div>
+          <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
+            {placeholderTitle}
+          </h3>
+          <p className="text-[11px] text-primary/50 max-w-[200px]">
+            {description}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -733,7 +771,7 @@ function FotmobCompanion() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-light opacity-75"></span>
             <span className="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
           </span>
-          <span>FotMob Live Command Center</span>
+          <span>FotMob Siphon</span>
         </div>
         <p className="mt-3 text-xs text-center leading-relaxed max-w-2xl mx-auto text-primary/70">
           A real-time match command center siphoning live FotMob API scores,
@@ -782,7 +820,7 @@ function FotmobCompanion() {
         </div>
       </div>
 
-      {/* Split Dashboard: Fixtures (6 Cols) vs Placeholder Col 1 (3 Cols) vs Placeholder Col 2 (3 Cols) */}
+      {/* Split Dashboard: Fixtures (6 Cols) vs Insights (6 Cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 text-left items-stretch flex-1 min-h-[350px] overflow-hidden pb-2">
         {/* LEFT COLUMN: Matches List (6 Cols) */}
         <div className="lg:col-span-6 flex flex-col min-h-0">
@@ -837,9 +875,7 @@ function FotmobCompanion() {
                               : "border-background-light/60 bg-background-dark/50 text-primary/60 hover:text-primary hover:bg-background-light/40"
                           }`}
                           title={
-                            areScorersHidden
-                              ? "Show scorers"
-                              : "Hide scorers"
+                            areScorersHidden ? "Show scorers" : "Hide scorers"
                           }
                         >
                           {areScorersHidden ? (
@@ -1034,36 +1070,41 @@ function FotmobCompanion() {
           </ScrollableFeed>
         </div>
 
-        {/* MIDDLE COLUMN: Custom Widgets Column 1 (3 Cols) */}
-        <div className="lg:col-span-3 flex flex-col space-y-4 min-h-0">
-          <PlaceholderWidget
-            icon={SparklesIcon}
-            title="Insight Block 1"
-            placeholderTitle="Placeholder Content 1"
-            description="Ready for upcoming telemetry, match analysis, or player stats."
-          />
-          <PlaceholderWidget
-            icon={ChartBarIcon}
-            title="Insight Block 2"
-            placeholderTitle="Placeholder Content 2"
-            description="Ready for watchlist, standings, or custom quick-links."
-          />
-        </div>
+        {/* RIGHT COLUMN: Custom Widgets Column (6 Cols - Stacked vertically) */}
+        <div className="lg:col-span-6 flex flex-col min-h-0">
+          <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
+              <ChartBarIcon className="h-4 w-4 text-secondary" />
+              <span>Stats & Insights</span>
+            </h2>
+            <span className="text-xs text-primary/50">Telemetry</span>
+          </div>
 
-        {/* RIGHT COLUMN: Custom Widgets Column 2 (3 Cols) */}
-        <div className="lg:col-span-3 flex flex-col space-y-4 min-h-0">
-          <PlaceholderWidget
-            icon={BoltIcon}
-            title="Insight Block 3"
-            placeholderTitle="Placeholder Content 3"
-            description="Ready for detailed team metrics, form guides, or tactical overview."
-          />
-          <PlaceholderWidget
-            icon={TrophyIcon}
-            title="Insight Block 4"
-            placeholderTitle="Placeholder Content 4"
-            description="Ready for custom feeds, notifications, or head-to-head records."
-          />
+          <ScrollableFeed>
+            <GoalsPerHourWidget
+              allMatches={allTodayMatches}
+              matchDetailsMap={matchDetailsMap}
+              isFavoriteLeague={isMatchInFavoriteLeagues}
+            />
+            <PlaceholderWidget
+              icon={ChartBarIcon}
+              title="Insight Block 2"
+              placeholderTitle="Placeholder Content 2"
+              description="Ready for watchlist, standings, or custom quick-links."
+            />
+            <PlaceholderWidget
+              icon={BoltIcon}
+              title="Insight Block 3"
+              placeholderTitle="Placeholder Content 3"
+              description="Ready for detailed team metrics, form guides, or tactical overview."
+            />
+            <PlaceholderWidget
+              icon={TrophyIcon}
+              title="Insight Block 4"
+              placeholderTitle="Placeholder Content 4"
+              description="Ready for custom feeds, notifications, or head-to-head records."
+            />
+          </ScrollableFeed>
         </div>
       </div>
     </div>
