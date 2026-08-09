@@ -17,9 +17,6 @@ import {
   formatScorerName,
   formatAssistName,
   evaluateShotTelemetry,
-  isOwnGoalScorer,
-  isPenaltyScorer,
-  LONG_RANGE_THRESHOLD_M,
   transformFotmobMatch,
 } from "./utilities";
 
@@ -188,6 +185,36 @@ function enrichGoalWithTelemetry(eg, goalShots) {
 
 function FotmobCompanion() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const prevTitle = document.title;
+    let link = document.querySelector("link[rel*='icon']");
+    const prevHref = link ? link.getAttribute("href") : "/favicon.ico";
+    const prevType = link ? link.getAttribute("type") : "image/x-icon";
+
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "icon";
+      document.head.appendChild(link);
+    }
+
+    document.title = "FotMob Companion";
+    link.type = "image/svg+xml";
+    link.href = "/fotmob-favicon.svg";
+
+    return () => {
+      document.title = prevTitle;
+      if (link) {
+        if (prevType) {
+          link.type = prevType;
+        } else {
+          link.removeAttribute("type");
+        }
+        link.href = prevHref || "/favicon.ico";
+      }
+    };
+  }, []);
+
   const [matches, setMatches] = useState([]);
   const [allTodayMatches, setAllTodayMatches] = useState([]);
   const [showOnlyLive, setShowOnlyLive] = useState(true);
