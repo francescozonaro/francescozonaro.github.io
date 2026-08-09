@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bgGrad)" />
+  <g transform="translate(32, 32)">
+    <circle r="20" fill="#ffffff" />
+    <!-- Center Pentagon -->
+    <polygon points="0,-7.5 7.13,-2.32 4.41,6.07 -4.41,6.07 -7.13,-2.32" fill="#0f172a" />
+    <!-- Lines to edges -->
+    <line x1="0" y1="-7.5" x2="0" y2="-20" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="7.13" y1="-2.32" x2="19.02" y2="-6.18" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="4.41" y1="6.07" x2="11.76" y2="16.18" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="-4.41" y1="6.07" x2="-11.76" y2="16.18" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
+    <line x1="-7.13" y1="-2.32" x2="-19.02" y2="-6.18" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" />
+    <!-- Outer edge patches -->
+    <polygon points="-5,-19.3 0,-20 5,-19.3 3.5,-15 -3.5,-15" fill="#0f172a" />
+    <polygon points="19.0,-6.2 20,0 18.5,5 13.5,2 14.5,-4" fill="#0f172a" />
+    <polygon points="11.8,16.2 6.5,18.9 2.5,13.5 7,10.5 11.5,12.5" fill="#0f172a" />
+    <polygon points="-11.8,16.2 -6.5,18.9 -2.5,13.5 -7,10.5 -11.5,12.5" fill="#0f172a" />
+    <polygon points="-19.0,-6.2 -20,0 -18.5,5 -13.5,2 -14.5,-4" fill="#0f172a" />
+  </g>
+</svg>
