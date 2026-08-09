@@ -5,7 +5,6 @@ import {
   ArrowPathIcon,
   SignalIcon,
   MagnifyingGlassIcon,
-  BoltIcon,
   TrophyIcon,
   ChartBarIcon,
   EyeIcon,
@@ -13,7 +12,10 @@ import {
 } from "@heroicons/react/24/solid";
 import ThemeToggle from "../components/ThemeToggle";
 import GoalsPerHourWidget from "./GoalsPerHourWidget";
+import GreatGoalsWidget from "./GreatGoalsWidget";
+import FinishingQualityWidget from "./FinishingQualityWidget";
 import CollapsibleCard from "./CollapsibleCard";
+import { getGoalSearchUrl } from "./goalSearchUrl";
 
 // Config & Favorites Definitions
 const HARDCODED_FAVORITES_TEAMS = [
@@ -69,7 +71,6 @@ const HARDCODED_FAVORITES_TEAMS = [
   // Additional Hardcoded Favorites
   { id: 8634, name: "Barcelona" },
   { id: 10003, name: "Swansea" },
-  { id: 130394, name: "Seattle Sounders" },
   { id: 189481, name: "Union Brescia" },
 ];
 
@@ -79,8 +80,8 @@ const HARDCODED_FAVORITES_LEAGUES = [
   47, // Premier League (England)
   86, // Serie B (Italy)
   133, // League Cup / Carabao Cup / EFL Cup (England)
-  114, // Friendlies (international)
-  489, // Club Friendlies
+  40, // Belgian Pro League
+  57, // Eredivisie
 ];
 
 const DEFAULT_TEAM_LOGO =
@@ -146,7 +147,7 @@ function formatAssistName(rawAssist) {
 
 function evaluateShotTelemetry(matchingShot, eg) {
   if (!matchingShot) {
-    return { xG: null, xGOT: null, shotDistance: null, isGreatGoal: false };
+    return { xG: null, xGOT: null, isGreatGoal: false };
   }
 
   const xG =
@@ -163,56 +164,36 @@ function evaluateShotTelemetry(matchingShot, eg) {
         ? matchingShot.xGOT
         : null;
 
-  const situation = matchingShot.situation || matchingShot.shotType || "";
+  const situation = (
+    matchingShot.situation ||
+    matchingShot.shotType ||
+    ""
+  ).toLowerCase();
 
-  // Check if penalty
-  const isPenalty =
-    eg?.type === "GoalPen" ||
-    (eg?.scorerName && eg.scorerName.includes("(P)")) ||
-    situation.toLowerCase().includes("penalty");
+  // FotMob's own scorer suffix ("(P)") is the reliable penalty signal here;
+  // the shot's situation ("Penalty") is a fallback for when it's present.
+  const isPenalty = situation === "penalty" || !!eg?.scorer?.includes("(P)");
 
-  let shotDistanceMeters = null;
-
-  if (typeof matchingShot.distance === "number") {
-    shotDistanceMeters = Math.round(matchingShot.distance * 10) / 10;
-  }
-
-  if (
-    shotDistanceMeters === null &&
-    typeof matchingShot.x === "number" &&
-    typeof matchingShot.y === "number"
-  ) {
-    const sx = matchingShot.x;
-    const sy = matchingShot.y;
-
-    const px = sx > 1 ? (sx <= 100 ? (sx / 100) * 105 : sx) : sx * 105;
-    const py = sy > 1 ? (sy <= 100 ? (sy / 100) * 68 : sy) : sy * 68;
-
-    const dx = Math.max(0, 105 - px);
-    const dy = Math.abs(py - 34);
-
-    shotDistanceMeters = Math.round(Math.sqrt(dx * dx + dy * dy) * 10) / 10;
-  }
-
-  // Long distance shot (22.0+ meters / 24+ yards)
-  const isOutsideTheBox =
-    (shotDistanceMeters !== null && shotDistanceMeters >= 22.0) ||
-    situation.toLowerCase().includes("outsidethebox") ||
-    situation.toLowerCase().includes("outside_box");
-
-  const isLowXg = xG !== null && xG > 0 && xG <= 0.09;
-  const isFreeKick = situation.toLowerCase().includes("freekick");
-  const isGreatFinish =
-    xGOT !== null && xG !== null && xGOT >= 0.8 && xG <= 0.09;
+  // FotMob reports this directly — far more reliable than deriving it from
+  // shot x/y, which use a coordinate system that isn't a clean 0-105m pitch.
+  const isOutsideTheBox = matchingShot.isFromInsideBox === false;
+  const isDirectFreeKick = situation.includes("freekick");
+  // A goal scored from a chance FotMob rated as unlikely to go in.
+  const isLowProbabilityFinish = xG !== null && xG > 0 && xG <= 0.12;
+  // Placement well above what the chance quality alone would suggest.
+  const isSkillfulFinish = xG !== null && xGOT !== null && xGOT - xG >= 0.3;
 
   // Penalties are NEVER great goals
   const isGreatGoal =
-    !isPenalty && (isOutsideTheBox || isFreeKick || isLowXg || isGreatFinish);
+    !isPenalty &&
+    (isOutsideTheBox ||
+      isDirectFreeKick ||
+      isLowProbabilityFinish ||
+      isSkillfulFinish);
 
   return {
     xG: xG !== null ? Math.round(xG * 100) / 100 : null,
     xGOT: xGOT !== null ? Math.round(xGOT * 100) / 100 : null,
-    shotDistance: shotDistanceMeters,
     isGreatGoal,
   };
 }
@@ -319,15 +300,6 @@ TeamLogo.propTypes = {
   src: PropTypes.string,
   className: PropTypes.string,
 };
-
-function getGoalSearchUrl(scorerName, teamName) {
-  const team = teamName || "";
-  if (!scorerName || scorerName.trim() === "" || scorerName === "Goal") {
-    return `https://x.com/search?q=${encodeURIComponent((team + " goal").trim())}`;
-  }
-  const cleanScorer = scorerName.replace(/\s*\((OG|P)\)/gi, "").trim();
-  return `https://x.com/search?q=${encodeURIComponent((cleanScorer + " " + team + " goal").trim())}`;
-}
 
 function getDisplayGoals(goalsArr, teamScore, isHome) {
   if (teamScore <= 0) return [];
@@ -515,19 +487,25 @@ function FotmobCompanion() {
 
       // Enrich goals with shotmap xG telemetry
       const shotmapShots = data?.content?.shotmap?.shots || [];
+      const goalShots = shotmapShots.filter(
+        (s) => s.eventType === "Goal" || s.isGoal || s.type === "Goal",
+      );
       extractedGoals.forEach((eg) => {
-        const matchingShot = shotmapShots.find((s) => {
-          const isGoalShot =
-            s.eventType === "Goal" || s.isGoal || s.type === "Goal";
-          if (!isGoalShot) return false;
-          const minMatch =
-            Math.abs((s.min || s.minute || 0) - eg.minuteRaw) <= 1;
-          const nameMatch =
-            eg.scorer &&
-            s.player?.name &&
-            eg.scorer.toLowerCase().includes(s.player.name.toLowerCase());
-          return minMatch || nameMatch;
-        });
+        const shotMinute = (s) => s.min ?? s.minute ?? 0;
+        const shotPlayerName = (s) =>
+          s.playerName || s.fullName || s.player?.name || "";
+        const minMatch = (s) => Math.abs(shotMinute(s) - eg.minuteRaw) <= 1;
+
+        // Prefer a shot that matches both minute and scorer name; fall back
+        // to minute-only when the name can't be matched (formatting, etc).
+        const matchingShot =
+          goalShots.find(
+            (s) =>
+              minMatch(s) &&
+              eg.scorer &&
+              shotPlayerName(s) &&
+              eg.scorer.toLowerCase().includes(shotPlayerName(s).toLowerCase()),
+          ) || goalShots.find(minMatch);
 
         const telemetry = evaluateShotTelemetry(matchingShot, eg);
         Object.assign(eg, telemetry);
@@ -539,81 +517,84 @@ function FotmobCompanion() {
     }
   }, []);
 
-  const processGoalEvents = useCallback((allMatchesList) => {
-    const prevScores = previousScoresRef.current;
-    const detailsCache = fetchedMatchDetailsCacheRef.current;
+  const processGoalEvents = useCallback(
+    (allMatchesList) => {
+      const prevScores = previousScoresRef.current;
+      const detailsCache = fetchedMatchDetailsCacheRef.current;
 
-    allMatchesList.forEach((m) => {
-      const totalGoals = m.home.score + m.away.score;
-      if (totalGoals === 0 || !SERVERLESS_WORKER_URL) {
-        prevScores[m.id] = totalGoals;
-        return;
-      }
-
-      const prevTotal = prevScores[m.id];
-      const isInitialCheck = prevTotal === undefined;
-      const scoreDecreased = !isInitialCheck && totalGoals < prevTotal;
-      const scoreChanged = !isInitialCheck && totalGoals !== prevTotal;
-      const isFinished = m.finished || m.minute === "FT";
-
-      // If score decreased (VAR disallowed goal), invalidate cache to force clean re-fetch
-      if (scoreDecreased) {
-        delete detailsCache[m.id];
-        saveDetailsCache(detailsCache);
-        setMatchDetailsMap((prev) => {
-          const next = { ...prev };
-          delete next[m.id];
-          return next;
-        });
-      }
-
-      // Optimization: If details are already cached in memory or sessionStorage
-      if (detailsCache[m.id]) {
-        updateMatchDetails(m.id, detailsCache[m.id]);
-
-        // Re-fetch if a live match scored a NEW goal OR if cached details are incomplete/missing scorer names
-        const cachedDetails = detailsCache[m.id] || [];
-        const cachedCount = cachedDetails.length;
-        const hasMissingScorer = cachedDetails.some(
-          (g) => !g.scorer || g.scorer.trim() === "",
-        );
-        const isIncomplete =
-          (cachedCount < totalGoals || hasMissingScorer) && !isFinished;
-
-        if (scoreChanged || isIncomplete) {
-          fetchMatchDetails(m.id).then((details) => {
-            if (details && details.length > 0) {
-              updateMatchDetails(m.id, details);
-              const detailsAreComplete =
-                details.length >= totalGoals &&
-                details.every((g) => g.scorer && g.scorer.trim() !== "");
-
-              if (detailsAreComplete || isFinished) {
-                prevScores[m.id] = totalGoals;
-              }
-            }
-          });
-        } else {
+      allMatchesList.forEach((m) => {
+        const totalGoals = m.home.score + m.away.score;
+        if (totalGoals === 0 || !SERVERLESS_WORKER_URL) {
           prevScores[m.id] = totalGoals;
+          return;
         }
-        return;
-      }
 
-      // If NOT cached yet, fetch once and store in session cache
-      fetchMatchDetails(m.id).then((details) => {
-        if (details && details.length > 0) {
-          updateMatchDetails(m.id, details);
-          const detailsAreComplete =
-            details.length >= totalGoals &&
-            details.every((g) => g.scorer && g.scorer.trim() !== "");
+        const prevTotal = prevScores[m.id];
+        const isInitialCheck = prevTotal === undefined;
+        const scoreDecreased = !isInitialCheck && totalGoals < prevTotal;
+        const scoreChanged = !isInitialCheck && totalGoals !== prevTotal;
+        const isFinished = m.finished || m.minute === "FT";
 
-          if (detailsAreComplete || isFinished) {
+        // If score decreased (VAR disallowed goal), invalidate cache to force clean re-fetch
+        if (scoreDecreased) {
+          delete detailsCache[m.id];
+          saveDetailsCache(detailsCache);
+          setMatchDetailsMap((prev) => {
+            const next = { ...prev };
+            delete next[m.id];
+            return next;
+          });
+        }
+
+        // Optimization: If details are already cached in memory or sessionStorage
+        if (detailsCache[m.id]) {
+          updateMatchDetails(m.id, detailsCache[m.id]);
+
+          // Re-fetch if a live match scored a NEW goal OR if cached details are incomplete/missing scorer names
+          const cachedDetails = detailsCache[m.id] || [];
+          const cachedCount = cachedDetails.length;
+          const hasMissingScorer = cachedDetails.some(
+            (g) => !g.scorer || g.scorer.trim() === "",
+          );
+          const isIncomplete =
+            (cachedCount < totalGoals || hasMissingScorer) && !isFinished;
+
+          if (scoreChanged || isIncomplete) {
+            fetchMatchDetails(m.id).then((details) => {
+              if (details && details.length > 0) {
+                updateMatchDetails(m.id, details);
+                const detailsAreComplete =
+                  details.length >= totalGoals &&
+                  details.every((g) => g.scorer && g.scorer.trim() !== "");
+
+                if (detailsAreComplete || isFinished) {
+                  prevScores[m.id] = totalGoals;
+                }
+              }
+            });
+          } else {
             prevScores[m.id] = totalGoals;
           }
+          return;
         }
+
+        // If NOT cached yet, fetch once and store in session cache
+        fetchMatchDetails(m.id).then((details) => {
+          if (details && details.length > 0) {
+            updateMatchDetails(m.id, details);
+            const detailsAreComplete =
+              details.length >= totalGoals &&
+              details.every((g) => g.scorer && g.scorer.trim() !== "");
+
+            if (detailsAreComplete || isFinished) {
+              prevScores[m.id] = totalGoals;
+            }
+          }
+        });
       });
-    });
-  }, [updateMatchDetails, fetchMatchDetails]);
+    },
+    [updateMatchDetails, fetchMatchDetails],
+  );
 
   function processFotmobData(data) {
     if (!data?.leagues) return { liveList: [], allList: [] };
@@ -834,9 +815,7 @@ function FotmobCompanion() {
                     <div className="divide-y divide-background-light/30">
                       {group.matches.map((m) => {
                         const matchGoals = matchDetailsMap[m.id] || [];
-                        const rawHomeGoals = matchGoals.filter(
-                          (g) => g.isHome,
-                        );
+                        const rawHomeGoals = matchGoals.filter((g) => g.isHome);
                         const rawAwayGoals = matchGoals.filter(
                           (g) => !g.isHome,
                         );
@@ -889,9 +868,7 @@ function FotmobCompanion() {
                                       : "bg-background-score text-primary/70 border border-transparent"
                                   }`}
                                 >
-                                  {m.isActive ||
-                                  m.finished ||
-                                  m.minute === "FT"
+                                  {m.isActive || m.finished || m.minute === "FT"
                                     ? `${m.home.score} - ${m.away.score}`
                                     : "-"}
                                 </div>
@@ -1007,23 +984,21 @@ function FotmobCompanion() {
               matchDetailsMap={matchDetailsMap}
               isFavoriteLeague={isMatchInFavoriteLeagues}
             />
-            <PlaceholderWidget
-              icon={ChartBarIcon}
-              title="Insight Block 2"
-              placeholderTitle="Placeholder Content 2"
-              description="Ready for watchlist, standings, or custom quick-links."
+            <GreatGoalsWidget
+              allMatches={allTodayMatches}
+              matchDetailsMap={matchDetailsMap}
+              isFavoriteLeague={isMatchInFavoriteLeagues}
             />
-            <PlaceholderWidget
-              icon={BoltIcon}
-              title="Insight Block 3"
-              placeholderTitle="Placeholder Content 3"
-              description="Ready for detailed team metrics, form guides, or tactical overview."
+            <FinishingQualityWidget
+              allMatches={allTodayMatches}
+              matchDetailsMap={matchDetailsMap}
+              isFavoriteLeague={isMatchInFavoriteLeagues}
             />
             <PlaceholderWidget
               icon={TrophyIcon}
-              title="Insight Block 4"
-              placeholderTitle="Placeholder Content 4"
-              description="Ready for custom feeds, notifications, or head-to-head records."
+              title="Insight Block"
+              placeholderTitle="More Insights Coming"
+              description="Ready for standings, form guides, or head-to-head records."
             />
           </ScrollableFeed>
         </div>
