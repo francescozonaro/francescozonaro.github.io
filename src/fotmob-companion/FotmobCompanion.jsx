@@ -11,10 +11,7 @@ import GoalsPerHourWidget from "./GoalsPerHourWidget";
 import LongRangeGoalsWidget from "./LongRangeGoalsWidget";
 import FinishingQualityWidget from "./FinishingQualityWidget";
 import LeagueFixturesWidget from "./LeagueFixturesWidget";
-import CollapsibleCard from "./CollapsibleCard";
 import {
-  HARDCODED_FAVORITES_TEAMS,
-  HARDCODED_FAVORITES_LEAGUES,
   SERVERLESS_WORKER_URL,
   SERVERLESS_FIXTURES_WORKER_URL,
   isFavoriteTeam,
@@ -22,6 +19,10 @@ import {
   formatScorerName,
   formatAssistName,
   evaluateShotTelemetry,
+  classifyGoalDistance,
+  isOwnGoalScorer,
+  isPenaltyScorer,
+  LONG_RANGE_THRESHOLD_M,
   transformFotmobMatch,
 } from "./utilities";
 
@@ -43,33 +44,29 @@ const getTodayCacheKey = () => {
   return `fotmob_details_cache_v4_${dateStr}`;
 };
 
+// Cached goals may predate a distance/threshold formula change, so every
+// load reclassifies them with the current logic instead of trusting
+// whatever was cached.
+const reclassifyCachedGoal = (g) => {
+  if (typeof g.x === "number" && typeof g.y === "number") {
+    Object.assign(g, classifyGoalDistance({ x: g.x, y: g.y, scorer: g.scorer }));
+    return;
+  }
+  if (typeof g.distance === "number" && !isNaN(g.distance)) {
+    g.isLongRangeGoal =
+      !isOwnGoalScorer(g.scorer) &&
+      !isPenaltyScorer(g.scorer) &&
+      g.distance >= LONG_RANGE_THRESHOLD_M;
+  }
+};
+
 const loadDetailsCache = () => {
   try {
     const raw = sessionStorage.getItem(getTodayCacheKey());
     if (!raw) return {};
     const parsed = JSON.parse(raw);
-    Object.keys(parsed).forEach((matchId) => {
-      if (Array.isArray(parsed[matchId])) {
-        parsed[matchId].forEach((g) => {
-          const isOwnGoal =
-            g.type === "OwnGoal" ||
-            (g.scorer && g.scorer.toLowerCase().includes("(og)"));
-          const isPenalty =
-            g.type === "GoalPen" ||
-            (g.scorer && g.scorer.toLowerCase().includes("(p)"));
-          if (isOwnGoal || isPenalty) {
-            g.isLongRangeGoal = false;
-            g.distance = null;
-          } else if (typeof g.distance === "number" && !isNaN(g.distance)) {
-            g.isLongRangeGoal = g.distance >= 16.5;
-          } else if (typeof g.x === "number" && typeof g.y === "number") {
-            const dx = 105 - Math.min(g.x, 105);
-            const dy = 34 - g.y;
-            g.distance = Math.round(Math.hypot(dx, dy) * 10) / 10;
-            g.isLongRangeGoal = g.distance >= 16.5;
-          }
-        });
-      }
+    Object.values(parsed).forEach((goals) => {
+      if (Array.isArray(goals)) goals.forEach(reclassifyCachedGoal);
     });
     return parsed;
   } catch {
@@ -84,6 +81,121 @@ const saveDetailsCache = (cacheObj) => {
     // ignore
   }
 };
+
+// The header goal timeline isn't always populated (e.g. right after kickoff,
+// before FotMob backfills it) — fall back to the match facts event timeline.
+function extractRawGoalEvents(data) {
+  const homeGoalsObj = data?.header?.events?.homeTeamGoals || {};
+  const awayGoalsObj = data?.header?.events?.awayTeamGoals || {};
+
+  const rawEvents = [];
+  for (const arr of [...Object.values(homeGoalsObj), ...Object.values(awayGoalsObj)]) {
+    if (Array.isArray(arr)) rawEvents.push(...arr);
+  }
+  if (rawEvents.length > 0) return rawEvents;
+
+  const factsEvents =
+    data?.content?.matchFacts?.events?.events ||
+    data?.content?.matchFacts?.events ||
+    [];
+  return factsEvents.filter((e) => ["Goal", "GoalPen", "OwnGoal"].includes(e.type));
+}
+
+function buildExtractedGoal(rawEvent, homeTeamId, awayTeamId) {
+  const scorer = formatScorerName(
+    rawEvent.player?.name ||
+      rawEvent.fullName ||
+      rawEvent.nameStr ||
+      rawEvent.name ||
+      rawEvent.playerName,
+    rawEvent.type,
+  );
+  const assist = formatAssistName(
+    rawEvent.assistInput || rawEvent.assistStr || rawEvent.assistPlayer?.name,
+  );
+  const minuteRaw =
+    typeof rawEvent.time === "number"
+      ? rawEvent.time
+      : parseInt(rawEvent.timeStr, 10) || 0;
+
+  return {
+    scorer,
+    assist,
+    time: rawEvent.timeStr
+      ? `${rawEvent.timeStr}′`
+      : rawEvent.time
+        ? `${rawEvent.time}′`
+        : null,
+    minuteRaw,
+    isHome: !!rawEvent.isHome,
+    teamId: rawEvent.isHome ? homeTeamId : awayTeamId,
+    scoreDisplay: rawEvent.newScore
+      ? `${rawEvent.newScore[0]} - ${rawEvent.newScore[1]}`
+      : null,
+    rawEvent,
+  };
+}
+
+function findGoalShots(data) {
+  const shots = data?.content?.shotmap?.shots || [];
+  return shots.filter(
+    (s) => s.eventType === "Goal" || s.isGoal || s.type === "Goal",
+  );
+}
+
+// Pairs an extracted goal with its shotmap entry so we can read shot
+// location/xG. Tries progressively looser combinations of team, name and
+// minute matching — team+name+minute is the most reliable, and the looser
+// tiers exist as a fallback for shotmaps missing team ids or with slightly
+// off timing.
+function findMatchingShot(eg, goalShots) {
+  if (eg.rawEvent?.shotmapEvent) return eg.rawEvent.shotmapEvent;
+
+  const shotMinute = (s) => (s.min ?? s.minute ?? 0) + (s.minAdded ?? 0);
+  const shotPlayerName = (s) =>
+    (s.playerName || s.fullName || s.lastName || s.player?.name || "").toLowerCase();
+
+  const cleanScorer = (eg.scorer || "")
+    .replace(/\s*\([^)]*\)/g, "")
+    .trim()
+    .toLowerCase();
+  const scorerParts = cleanScorer.split(/\s+/);
+  const lastScorerPart = scorerParts[scorerParts.length - 1] || "";
+
+  const minuteMatches = (s) => Math.abs(shotMinute(s) - eg.minuteRaw) <= 10;
+  const teamMatches = (s) =>
+    eg.teamId != null && s.teamId != null && s.teamId === eg.teamId;
+  const nameMatches = (s) => {
+    const sName = shotPlayerName(s);
+    if (!sName || !cleanScorer) return false;
+    return (
+      cleanScorer.includes(sName) ||
+      sName.includes(cleanScorer) ||
+      (lastScorerPart.length >= 3 && sName.includes(lastScorerPart))
+    );
+  };
+
+  const matchTiers = [
+    (s) => teamMatches(s) && minuteMatches(s) && nameMatches(s),
+    (s) => minuteMatches(s) && nameMatches(s),
+    (s) => teamMatches(s) && nameMatches(s),
+    (s) => nameMatches(s),
+    (s) => minuteMatches(s),
+  ];
+
+  for (const tierMatches of matchTiers) {
+    const shot = goalShots.find(tierMatches);
+    if (shot) return shot;
+  }
+  return undefined;
+}
+
+function enrichGoalWithTelemetry(eg, goalShots) {
+  const matchingShot = findMatchingShot(eg, goalShots);
+  delete eg.rawEvent;
+  delete eg.teamId;
+  Object.assign(eg, evaluateShotTelemetry(matchingShot, eg));
+}
 
 function FotmobCompanion() {
   const navigate = useNavigate();
@@ -134,101 +246,15 @@ function FotmobCompanion() {
       if (!res.ok) return null;
 
       const data = await res.json();
-      const extractedGoals = [];
+      const homeTeamId = data?.general?.homeTeam?.id ?? null;
+      const awayTeamId = data?.general?.awayTeam?.id ?? null;
 
-      const rawEvents = [];
-      const homeGoalsObj = data?.header?.events?.homeTeamGoals || {};
-      const awayGoalsObj = data?.header?.events?.awayTeamGoals || {};
-
-      [...Object.values(homeGoalsObj), ...Object.values(awayGoalsObj)].forEach(
-        (arr) => {
-          if (Array.isArray(arr)) rawEvents.push(...arr);
-        },
+      const extractedGoals = extractRawGoalEvents(data).map((rawEvent) =>
+        buildExtractedGoal(rawEvent, homeTeamId, awayTeamId),
       );
 
-      if (rawEvents.length === 0) {
-        const factsEvents =
-          data?.content?.matchFacts?.events?.events ||
-          data?.content?.matchFacts?.events ||
-          [];
-        if (Array.isArray(factsEvents)) {
-          rawEvents.push(
-            ...factsEvents.filter((e) =>
-              ["Goal", "GoalPen", "OwnGoal"].includes(e.type),
-            ),
-          );
-        }
-      }
-
-      rawEvents.forEach((g) => {
-        const scorer = formatScorerName(
-          g.player?.name || g.fullName || g.nameStr || g.name || g.playerName,
-          g.type,
-        );
-        const assist = formatAssistName(
-          g.assistInput || g.assistStr || g.assistPlayer?.name,
-        );
-        const rawMin =
-          typeof g.time === "number" ? g.time : parseInt(g.timeStr, 10) || 0;
-
-        extractedGoals.push({
-          scorer,
-          assist,
-          time: g.timeStr ? `${g.timeStr}′` : g.time ? `${g.time}′` : null,
-          minuteRaw: rawMin,
-          isHome: !!g.isHome,
-          scoreDisplay: g.newScore
-            ? `${g.newScore[0]} - ${g.newScore[1]}`
-            : null,
-          rawEvent: g,
-        });
-      });
-
-      // Enrich goals with shotmap xG telemetry
-      const shotmapShots = data?.content?.shotmap?.shots || [];
-      const goalShots = shotmapShots.filter(
-        (s) => s.eventType === "Goal" || s.isGoal || s.type === "Goal",
-      );
-      extractedGoals.forEach((eg) => {
-        const shotMinute = (s) => (s.min ?? s.minute ?? 0) + (s.minAdded ?? 0);
-        const shotPlayerName = (s) =>
-          (
-            s.playerName ||
-            s.fullName ||
-            s.lastName ||
-            s.player?.name ||
-            ""
-          ).toLowerCase();
-        const minMatch = (s) => Math.abs(shotMinute(s) - eg.minuteRaw) <= 10;
-
-        const cleanScorer = (eg.scorer || "")
-          .replace(/\s*\([^)]*\)/g, "")
-          .trim()
-          .toLowerCase();
-
-        const nameMatch = (s) => {
-          const sName = shotPlayerName(s);
-          if (!sName || !cleanScorer) return false;
-          const scorerParts = cleanScorer.split(/\s+/);
-          const lastScorerPart = scorerParts[scorerParts.length - 1];
-          return (
-            cleanScorer.includes(sName) ||
-            sName.includes(cleanScorer) ||
-            (lastScorerPart.length >= 3 && sName.includes(lastScorerPart))
-          );
-        };
-
-        const matchingShot =
-          eg.rawEvent?.shotmapEvent ||
-          goalShots.find((s) => minMatch(s) && nameMatch(s)) ||
-          goalShots.find((s) => nameMatch(s)) ||
-          goalShots.find((s) => minMatch(s));
-
-        delete eg.rawEvent;
-
-        const telemetry = evaluateShotTelemetry(matchingShot, eg);
-        Object.assign(eg, telemetry);
-      });
+      const goalShots = findGoalShots(data);
+      extractedGoals.forEach((eg) => enrichGoalWithTelemetry(eg, goalShots));
 
       return extractedGoals.sort((a, b) => a.minuteRaw - b.minuteRaw);
     } catch {

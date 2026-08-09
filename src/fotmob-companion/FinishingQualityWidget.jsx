@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import CollapsibleCard from "./CollapsibleCard";
+import { filterFavoriteMatches } from "./utilities";
 
 const MAX_ROWS = 8;
 
@@ -14,14 +15,7 @@ export default function FinishingQualityWidget({
   const teams = useMemo(() => {
     const byTeam = {};
 
-    (allMatches || []).forEach((m) => {
-      if (
-        typeof isFavoriteLeague === "function" &&
-        !isFavoriteLeague(m.leagueName, m.leagueId)
-      ) {
-        return;
-      }
-
+    filterFavoriteMatches(allMatches, isFavoriteLeague).forEach((m) => {
       const goals = matchDetailsMap[m.id];
       if (!Array.isArray(goals)) return;
 

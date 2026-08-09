@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import CollapsibleCard from "./CollapsibleCard";
-import { getGoalSearchUrl } from "./utilities";
+import { getGoalSearchUrl, filterFavoriteMatches } from "./utilities";
 
 export default function LongRangeGoalsWidget({
   allMatches = [],
@@ -13,14 +13,7 @@ export default function LongRangeGoalsWidget({
   const longRangeGoals = useMemo(() => {
     const list = [];
 
-    (allMatches || []).forEach((m) => {
-      if (
-        typeof isFavoriteLeague === "function" &&
-        !isFavoriteLeague(m.leagueName, m.leagueId)
-      ) {
-        return;
-      }
-
+    filterFavoriteMatches(allMatches, isFavoriteLeague).forEach((m) => {
       const goals = matchDetailsMap[m.id];
       if (!Array.isArray(goals)) return;
 

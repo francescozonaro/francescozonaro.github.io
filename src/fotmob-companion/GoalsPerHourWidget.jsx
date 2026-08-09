@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import CollapsibleCard from "./CollapsibleCard";
+import { filterFavoriteMatches } from "./utilities";
 
 const LEAGUE_COLORS = [
   "#818CF8", // Indigo
@@ -46,16 +47,8 @@ export default function GoalsPerHourWidget({
         }
       };
 
-      (allMatches || []).forEach((m) => {
+      filterFavoriteMatches(allMatches, isFavoriteLeague).forEach((m) => {
         const league = m.leagueName || "Unknown League";
-
-        // Filter to favorite leagues if isFavoriteLeague filter function is provided
-        if (
-          typeof isFavoriteLeague === "function" &&
-          !isFavoriteLeague(m.leagueName, m.leagueId)
-        ) {
-          return;
-        }
 
         if (!rawCounts[league]) {
           rawCounts[league] = Array(25).fill(0);
