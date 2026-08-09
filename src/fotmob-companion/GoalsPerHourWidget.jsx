@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
-import { SparklesIcon } from "@heroicons/react/24/solid";
 import CollapsibleCard from "./CollapsibleCard";
 
 const LEAGUE_COLORS = [
@@ -229,7 +228,6 @@ export default function GoalsPerHourWidget({
 
   return (
     <CollapsibleCard
-      icon={SparklesIcon}
       title="Hourly Goals Telemetry"
       badge={
         <span className="text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full ml-1 font-mono">
@@ -240,7 +238,7 @@ export default function GoalsPerHourWidget({
       onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
     >
       {/* Main Card Content */}
-      <div className="p-3 flex flex-col justify-between min-h-0 relative overflow-hidden">
+      <div className="p-3.5 flex flex-col justify-between min-h-[220px] relative overflow-hidden">
         {/* Subheader / Hover indicator */}
         <div className="flex items-center justify-between mb-1 text-[10px]">
           <span className="font-semibold text-primary/60 uppercase tracking-wider">
@@ -255,7 +253,7 @@ export default function GoalsPerHourWidget({
         </div>
 
         {!hasGoals ? (
-          <div className="flex-1 min-h-[110px] flex flex-col items-center justify-center text-center gap-1">
+          <div className="flex-1 min-h-[140px] flex flex-col items-center justify-center text-center gap-1">
             <p className="text-[11px] text-primary/50 font-medium">
               No goals yet today
             </p>

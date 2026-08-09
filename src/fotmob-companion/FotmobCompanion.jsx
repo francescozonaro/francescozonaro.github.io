@@ -5,317 +5,27 @@ import {
   ArrowPathIcon,
   SignalIcon,
   MagnifyingGlassIcon,
-  TrophyIcon,
-  ChartBarIcon,
-  EyeIcon,
-  EyeSlashIcon,
 } from "@heroicons/react/24/solid";
 import ThemeToggle from "../components/ThemeToggle";
 import GoalsPerHourWidget from "./GoalsPerHourWidget";
-import GreatGoalsWidget from "./GreatGoalsWidget";
+import LongRangeGoalsWidget from "./LongRangeGoalsWidget";
 import FinishingQualityWidget from "./FinishingQualityWidget";
+import LeagueFixturesWidget from "./LeagueFixturesWidget";
 import CollapsibleCard from "./CollapsibleCard";
-import { getGoalSearchUrl } from "./goalSearchUrl";
-
-// Config & Favorites Definitions
-const HARDCODED_FAVORITES_TEAMS = [
-  // Premier League (England) - Exact FotMob Team IDs & Names
-  { id: 9825, name: "Arsenal" },
-  { id: 10252, name: "Aston Villa" },
-  { id: 8678, name: "Bournemouth" },
-  { id: 9937, name: "Brentford" },
-  { id: 10204, name: "Brighton" },
-  { id: 8455, name: "Chelsea" },
-  { id: 9826, name: "Crystal Palace" },
-  { id: 8668, name: "Everton" },
-  { id: 9879, name: "Fulham" },
-  { id: 9902, name: "Ipswich" },
-  { id: 8197, name: "Leicester" },
-  { id: 8650, name: "Liverpool" },
-  { id: 8456, name: "Man City" },
-  { id: 10260, name: "Man United" },
-  { id: 10261, name: "Newcastle" },
-  { id: 10203, name: "Nottm Forest" },
-  { id: 8466, name: "Southampton" },
-  { id: 8586, name: "Tottenham" },
-  { id: 8654, name: "West Ham" },
-  { id: 8602, name: "Wolves" },
-  { id: 8191, name: "Burnley" },
-  { id: 8344, name: "Luton" },
-  { id: 8657, name: "Sheffield United" },
-  { id: 8463, name: "Leeds" },
-  { id: 8472, name: "Sunderland" },
-
-  // Serie A (Italy) - Exact FotMob Team IDs & Names
-  { id: 8524, name: "Atalanta" },
-  { id: 9857, name: "Bologna" },
-  { id: 8529, name: "Cagliari" },
-  { id: 10171, name: "Como" },
-  { id: 8534, name: "Empoli" },
-  { id: 8535, name: "Fiorentina" },
-  { id: 10233, name: "Genoa" },
-  { id: 9876, name: "Hellas Verona" },
-  { id: 8636, name: "Inter" },
-  { id: 9885, name: "Juventus" },
-  { id: 8543, name: "Lazio" },
-  { id: 9888, name: "Lecce" },
-  { id: 8564, name: "Milan" },
-  { id: 6504, name: "Monza" },
-  { id: 9875, name: "Napoli" },
-  { id: 10167, name: "Parma" },
-  { id: 8686, name: "Roma" },
-  { id: 9804, name: "Torino" },
-  { id: 8600, name: "Udinese" },
-  { id: 7881, name: "Venezia" },
-
-  // Additional Hardcoded Favorites
-  { id: 8634, name: "Barcelona" },
-  { id: 10003, name: "Swansea" },
-  { id: 189481, name: "Union Brescia" },
-];
-
-// FotMob league IDs (primaryId, stable across seasons/sponsor renames)
-const HARDCODED_FAVORITES_LEAGUES = [
-  55, // Serie A (Italy)
-  47, // Premier League (England)
-  86, // Serie B (Italy)
-  133, // League Cup / Carabao Cup / EFL Cup (England)
-  40, // Belgian Pro League
-  57, // Eredivisie
-];
-
-const DEFAULT_TEAM_LOGO =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E";
-
-const SERVERLESS_WORKER_URL =
-  "https://fotmob-details.turtleunderablanket.workers.dev";
-const SERVERLESS_FIXTURES_WORKER_URL =
-  "https://fotmob-fixtures.turtleunderablanket.workers.dev";
-
-// Pure Modular Helper Functions
-function isFavoriteTeam(team) {
-  if (!team) return false;
-  const targetName = (team.name || "").trim().toLowerCase();
-  const targetId =
-    typeof team.id === "number" ? team.id : parseInt(team.id, 10);
-
-  return HARDCODED_FAVORITES_TEAMS.some((fav) => {
-    if (fav.id !== undefined && !isNaN(targetId)) return fav.id === targetId;
-    if (fav.name && targetName !== "") {
-      return fav.name.trim().toLowerCase() === targetName;
-    }
-    return false;
-  });
-}
-
-function isMatchInFavoriteLeagues(leagueName, leagueId) {
-  if (
-    !HARDCODED_FAVORITES_LEAGUES ||
-    HARDCODED_FAVORITES_LEAGUES.length === 0
-  ) {
-    return true;
-  }
-  const targetId =
-    typeof leagueId === "number" ? leagueId : parseInt(leagueId, 10);
-
-  return HARDCODED_FAVORITES_LEAGUES.some(
-    (id) => !isNaN(targetId) && id === targetId,
-  );
-}
-
-function sanitizeText(raw) {
-  if (!raw) return null;
-  const lower = raw.toLowerCase();
-  if (lower.includes("tbd") || lower.includes("<tbd>")) return null;
-  return raw;
-}
-
-function formatScorerName(rawName, type) {
-  let scorer = sanitizeText(rawName);
-  if (!scorer) return null;
-  if (type === "OwnGoal") scorer += " (OG)";
-  if (type === "GoalPen") scorer += " (P)";
-  return scorer;
-}
-
-function formatAssistName(rawAssist) {
-  const assist = sanitizeText(rawAssist);
-  if (!assist) return null;
-  const cleaned = assist.replace(/^assist\s*:\s*/i, "").trim();
-  return cleaned || null;
-}
-
-function evaluateShotTelemetry(matchingShot, eg) {
-  if (!matchingShot) {
-    return { xG: null, xGOT: null, isGreatGoal: false };
-  }
-
-  const xG =
-    typeof matchingShot.expectedGoals === "number"
-      ? matchingShot.expectedGoals
-      : typeof matchingShot.xG === "number"
-        ? matchingShot.xG
-        : null;
-
-  const xGOT =
-    typeof matchingShot.expectedGoalsOnTarget === "number"
-      ? matchingShot.expectedGoalsOnTarget
-      : typeof matchingShot.xGOT === "number"
-        ? matchingShot.xGOT
-        : null;
-
-  const situation = (
-    matchingShot.situation ||
-    matchingShot.shotType ||
-    ""
-  ).toLowerCase();
-
-  // FotMob's own scorer suffix ("(P)") is the reliable penalty signal here;
-  // the shot's situation ("Penalty") is a fallback for when it's present.
-  const isPenalty = situation === "penalty" || !!eg?.scorer?.includes("(P)");
-
-  // FotMob reports this directly — far more reliable than deriving it from
-  // shot x/y, which use a coordinate system that isn't a clean 0-105m pitch.
-  const isOutsideTheBox = matchingShot.isFromInsideBox === false;
-  const isDirectFreeKick = situation.includes("freekick");
-  // A goal scored from a chance FotMob rated as unlikely to go in.
-  const isLowProbabilityFinish = xG !== null && xG > 0 && xG <= 0.12;
-  // Placement well above what the chance quality alone would suggest.
-  const isSkillfulFinish = xG !== null && xGOT !== null && xGOT - xG >= 0.3;
-
-  // Penalties are NEVER great goals
-  const isGreatGoal =
-    !isPenalty &&
-    (isOutsideTheBox ||
-      isDirectFreeKick ||
-      isLowProbabilityFinish ||
-      isSkillfulFinish);
-
-  return {
-    xG: xG !== null ? Math.round(xG * 100) / 100 : null,
-    xGOT: xGOT !== null ? Math.round(xGOT * 100) / 100 : null,
-    isGreatGoal,
-  };
-}
-
-function parseMatchStatus(status = {}, match = {}) {
-  if (status.finished) return "FT";
-  if (status.cancelled) return "Cancelled";
-  if (status.reason?.shortKey === "halftime_short") return "HT";
-  if (status.liveTime?.short) {
-    const cleaned = status.liveTime.short.replace(/[\u200E\u200F]/g, "").trim();
-    return /^\d+(\+\d+)?$/.test(cleaned)
-      ? `${cleaned}′`
-      : cleaned.replace(/’/g, "′");
-  }
-  if (status.reason?.short && status.reason.short !== "NS") {
-    return status.reason.short;
-  }
-  if (match.startTimeStr) return match.startTimeStr;
-
-  // Extract local HH:mm kickoff time from utcTime or timeTS
-  const timeSource = status.utcTime || match.timeTS;
-  if (timeSource) {
-    try {
-      const date = new Date(timeSource);
-      if (!isNaN(date.getTime())) {
-        return date.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        });
-      }
-    } catch {
-      // ignore
-    }
-  }
-
-  return "TBD";
-}
-
-function transformFotmobMatch(match, league) {
-  const status = match.status || {};
-
-  // Strictly live: match is ongoing or has an active match clock/halftime, not finished/cancelled
-  const isActive =
-    !status.finished &&
-    !status.cancelled &&
-    (!!status.ongoing ||
-      !!status.liveTime?.short ||
-      status.reason?.shortKey === "halftime_short");
-
-  const isFriendly = league.name
-    ? league.name.toLowerCase().includes("friendly") ||
-      league.name.toLowerCase().includes("friendlies")
-    : false;
-
-  return {
-    id: match.id,
-    leagueName: league.name,
-    // primaryId is stable across seasons; league.id can change per season/round for cups
-    leagueId: league.primaryId || league.id,
-    ccode: league.ccode || "INT",
-    isFriendly,
-    isActive,
-    finished: !!status.finished,
-    home: {
-      id: match.home?.id || null,
-      name: match.home?.name || "Unknown",
-      score: match.home?.score !== undefined ? match.home.score : 0,
-    },
-    away: {
-      id: match.away?.id || null,
-      name: match.away?.name || "Unknown",
-      score: match.away?.score !== undefined ? match.away.score : 0,
-    },
-    homeLogo: match.home?.id
-      ? `https://images.fotmob.com/image_resources/logo/teamlogo/${match.home.id}.png`
-      : null,
-    awayLogo: match.away?.id
-      ? `https://images.fotmob.com/image_resources/logo/teamlogo/${match.away.id}.png`
-      : null,
-    minute: parseMatchStatus(status, match),
-    timeTS:
-      match.timeTS ||
-      (status.utcTime ? new Date(status.utcTime).getTime() : null),
-  };
-}
+import {
+  HARDCODED_FAVORITES_TEAMS,
+  HARDCODED_FAVORITES_LEAGUES,
+  SERVERLESS_WORKER_URL,
+  SERVERLESS_FIXTURES_WORKER_URL,
+  isFavoriteTeam,
+  isMatchInFavoriteLeagues,
+  formatScorerName,
+  formatAssistName,
+  evaluateShotTelemetry,
+  transformFotmobMatch,
+} from "./utilities";
 
 // Modular Sub-Components
-function TeamLogo({ src, className = "w-6 h-6 object-contain flex-shrink-0" }) {
-  return (
-    <img
-      src={src || DEFAULT_TEAM_LOGO}
-      alt=""
-      className={className}
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = DEFAULT_TEAM_LOGO;
-      }}
-    />
-  );
-}
-
-TeamLogo.propTypes = {
-  src: PropTypes.string,
-  className: PropTypes.string,
-};
-
-function getDisplayGoals(goalsArr, teamScore, isHome) {
-  if (teamScore <= 0) return [];
-  const result = [...goalsArr];
-  while (result.length < teamScore) {
-    result.push({
-      scorer: "Goal",
-      time: "",
-      isHome,
-      isGreatGoal: false,
-      isPlaceholder: true,
-    });
-  }
-  return result;
-}
-
 function ScrollableFeed({ children }) {
   return (
     <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-1 pt-3 pb-2 no-scrollbar scroll-smooth">
@@ -326,43 +36,6 @@ function ScrollableFeed({ children }) {
 
 ScrollableFeed.propTypes = {
   children: PropTypes.node,
-};
-
-function PlaceholderWidget({
-  icon: Icon,
-  title,
-  placeholderTitle,
-  description,
-}) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  return (
-    <CollapsibleCard
-      icon={Icon}
-      title={title}
-      isCollapsed={isCollapsed}
-      onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
-    >
-      <div className="p-6 border-[0.5px] border-dashed border-background-light/50 flex flex-col items-center justify-center text-center">
-        <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-2.5">
-          <Icon className="h-4 w-4" />
-        </div>
-        <h3 className="font-bold text-xs text-primary/80 uppercase tracking-wider mb-1">
-          {placeholderTitle}
-        </h3>
-        <p className="text-[11px] text-primary/50 max-w-[200px]">
-          {description}
-        </p>
-      </div>
-    </CollapsibleCard>
-  );
-}
-
-PlaceholderWidget.propTypes = {
-  icon: PropTypes.elementType.isRequired,
-  title: PropTypes.string.isRequired,
-  placeholderTitle: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
 };
 
 const getTodayCacheKey = () => {
@@ -491,21 +164,38 @@ function FotmobCompanion() {
         (s) => s.eventType === "Goal" || s.isGoal || s.type === "Goal",
       );
       extractedGoals.forEach((eg) => {
-        const shotMinute = (s) => s.min ?? s.minute ?? 0;
+        const shotMinute = (s) => (s.min ?? s.minute ?? 0) + (s.minAdded ?? 0);
         const shotPlayerName = (s) =>
-          s.playerName || s.fullName || s.player?.name || "";
-        const minMatch = (s) => Math.abs(shotMinute(s) - eg.minuteRaw) <= 1;
+          (
+            s.playerName ||
+            s.fullName ||
+            s.lastName ||
+            s.player?.name ||
+            ""
+          ).toLowerCase();
+        const minMatch = (s) => Math.abs(shotMinute(s) - eg.minuteRaw) <= 10;
 
-        // Prefer a shot that matches both minute and scorer name; fall back
-        // to minute-only when the name can't be matched (formatting, etc).
+        const cleanScorer = (eg.scorer || "")
+          .replace(/\s*\([^)]*\)/g, "")
+          .trim()
+          .toLowerCase();
+
+        const nameMatch = (s) => {
+          const sName = shotPlayerName(s);
+          if (!sName || !cleanScorer) return false;
+          const scorerParts = cleanScorer.split(/\s+/);
+          const lastScorerPart = scorerParts[scorerParts.length - 1];
+          return (
+            cleanScorer.includes(sName) ||
+            sName.includes(cleanScorer) ||
+            (lastScorerPart.length >= 3 && sName.includes(lastScorerPart))
+          );
+        };
+
         const matchingShot =
-          goalShots.find(
-            (s) =>
-              minMatch(s) &&
-              eg.scorer &&
-              shotPlayerName(s) &&
-              eg.scorer.toLowerCase().includes(shotPlayerName(s).toLowerCase()),
-          ) || goalShots.find(minMatch);
+          goalShots.find((s) => minMatch(s) && nameMatch(s)) ||
+          goalShots.find((s) => nameMatch(s)) ||
+          goalShots.find((s) => minMatch(s));
 
         const telemetry = evaluateShotTelemetry(matchingShot, eg);
         Object.assign(eg, telemetry);
@@ -757,9 +447,8 @@ function FotmobCompanion() {
         {/* LEFT COLUMN: Matches List (6 Cols) */}
         <div className="lg:col-span-6 flex flex-col min-h-0">
           <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
-              <TrophyIcon className="h-4 w-4 text-secondary" />
-              <span>League Fixtures ({filteredMatches.length})</span>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80">
+              League Fixtures ({filteredMatches.length})
             </h2>
             <span className="text-xs text-primary/50">
               {lastUpdated ? `Updated ${lastUpdated}` : "Loading..."}
@@ -767,224 +456,29 @@ function FotmobCompanion() {
           </div>
 
           <ScrollableFeed>
-            {Object.keys(groupedLeagues).length === 0 ? (
-              <div className="border-[0.5px] border-background-light rounded-xl p-8 text-center bg-background-dark/20 shadow-sm">
-                <h3 className="font-bold text-lg mb-2">No Matches Found</h3>
-                <p className="text-sm text-primary/70">
-                  {showOnlyLive
-                    ? "There are currently no active live matches for the selected search."
-                    : "No matches found under this filter."}
-                </p>
-              </div>
-            ) : (
-              Object.values(groupedLeagues).map((group, groupIdx) => {
-                const isCollapsed = !!collapsedLeagues[group.name];
-                const areScorersHidden = !!hiddenScorersLeagues[group.name];
-
-                return (
-                  <CollapsibleCard
-                    key={groupIdx}
-                    title={group.name}
-                    badge={
-                      <span className="text-xs text-primary/50 font-mono">
-                        ({group.matches.length})
-                      </span>
-                    }
-                    actions={
-                      <button
-                        onClick={() => toggleHideScorers(group.name)}
-                        className={`p-1 rounded transition-colors border ${
-                          areScorersHidden
-                            ? "border-secondary/40 bg-secondary/15 text-secondary"
-                            : "border-background-light/60 bg-background-dark/50 text-primary/60 hover:text-primary hover:bg-background-light/40"
-                        }`}
-                        title={
-                          areScorersHidden ? "Show scorers" : "Hide scorers"
-                        }
-                      >
-                        {areScorersHidden ? (
-                          <EyeSlashIcon className="h-4 w-4" />
-                        ) : (
-                          <EyeIcon className="h-4 w-4" />
-                        )}
-                      </button>
-                    }
-                    isCollapsed={isCollapsed}
-                    onToggleCollapse={() => toggleCollapseLeague(group.name)}
-                  >
-                    <div className="divide-y divide-background-light/30">
-                      {group.matches.map((m) => {
-                        const matchGoals = matchDetailsMap[m.id] || [];
-                        const rawHomeGoals = matchGoals.filter((g) => g.isHome);
-                        const rawAwayGoals = matchGoals.filter(
-                          (g) => !g.isHome,
-                        );
-
-                        const homeGoals = getDisplayGoals(
-                          rawHomeGoals,
-                          m.home.score,
-                          true,
-                        );
-                        const awayGoals = getDisplayGoals(
-                          rawAwayGoals,
-                          m.away.score,
-                          false,
-                        );
-                        const hasGoals =
-                          (m.home.score > 0 || m.away.score > 0) &&
-                          (homeGoals.length > 0 || awayGoals.length > 0);
-
-                        return (
-                          <div
-                            key={m.id}
-                            className="p-3.5 hover:bg-background-light/30 transition-colors flex flex-col gap-2"
-                          >
-                            <div className="flex items-center justify-between gap-2">
-                              <div className="w-14 flex-shrink-0 flex items-center justify-start">
-                                <span
-                                  className={`text-[11px] font-semibold px-2 py-0.5 rounded font-mono ${
-                                    m.isActive
-                                      ? "bg-secondary/15 text-secondary animate-pulse font-bold"
-                                      : "text-primary/60 bg-background-dark/40"
-                                  }`}
-                                >
-                                  {m.minute}
-                                </span>
-                              </div>
-
-                              <div className="flex-1 flex items-center justify-end space-x-2 text-right">
-                                <span className="font-semibold text-sm line-clamp-1">
-                                  {m.home.name}
-                                </span>
-                                <TeamLogo src={m.homeLogo} />
-                              </div>
-
-                              {/* Score Badge (Centered) */}
-                              <div className="px-3 min-w-[75px] text-center flex-shrink-0">
-                                <div
-                                  className={`font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded transition-colors ${
-                                    m.isActive
-                                      ? "bg-secondary/10 text-secondary border border-secondary/20"
-                                      : "bg-background-score text-primary/70 border border-transparent"
-                                  }`}
-                                >
-                                  {m.isActive || m.finished || m.minute === "FT"
-                                    ? `${m.home.score} - ${m.away.score}`
-                                    : "-"}
-                                </div>
-                              </div>
-
-                              <div className="flex-1 flex items-center justify-start space-x-2 text-left">
-                                <TeamLogo src={m.awayLogo} />
-                                <span className="font-semibold text-sm line-clamp-1">
-                                  {m.away.name}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Scorers List Below Score (only if hasGoals and scorers not hidden for this league) */}
-                            {hasGoals && !areScorersHidden && (
-                              <div className="flex items-start justify-between text-[11px] pt-1.5 border-t border-background-light/20 gap-2">
-                                <div className="w-14 flex-shrink-0" />
-
-                                {/* Home Team Scorers (Right Aligned) */}
-                                <div className="flex-1 text-right space-y-1">
-                                  {homeGoals.map((g, idx) => (
-                                    <div
-                                      key={idx}
-                                      className="flex items-center justify-end space-x-1.5 flex-wrap"
-                                    >
-                                      {g.isGreatGoal && (
-                                        <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
-                                          Great Goal
-                                        </span>
-                                      )}
-                                      <a
-                                        href={getGoalSearchUrl(
-                                          g.scorer,
-                                          m.home.name,
-                                        )}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
-                                        title={`Search ${g.scorer || "goal"} on X`}
-                                      >
-                                        {g.scorer || "Goal"}
-                                      </a>
-                                      {g.time && (
-                                        <span className="text-primary/45 font-mono text-[10px]">
-                                          {g.time}
-                                        </span>
-                                      )}
-                                    </div>
-                                  ))}
-                                </div>
-
-                                {/* Score Box Spacer */}
-                                <div className="px-3 min-w-[75px] flex-shrink-0" />
-
-                                {/* Away Team Scorers (Left Aligned) */}
-                                <div className="flex-1 text-left space-y-1">
-                                  {awayGoals.map((g, idx) => (
-                                    <div
-                                      key={idx}
-                                      className="flex items-center justify-start space-x-1.5 flex-wrap"
-                                    >
-                                      {g.time && (
-                                        <span className="text-primary/45 font-mono text-[10px]">
-                                          {g.time}
-                                        </span>
-                                      )}
-                                      <a
-                                        href={getGoalSearchUrl(
-                                          g.scorer,
-                                          m.away.name,
-                                        )}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
-                                        title={`Search ${g.scorer || "goal"} on X`}
-                                      >
-                                        {g.scorer || "Goal"}
-                                      </a>
-                                      {g.isGreatGoal && (
-                                        <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
-                                          Great Goal
-                                        </span>
-                                      )}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </CollapsibleCard>
-                );
-              })
-            )}
+            <LeagueFixturesWidget
+              groupedLeagues={groupedLeagues}
+              collapsedLeagues={collapsedLeagues}
+              hiddenScorersLeagues={hiddenScorersLeagues}
+              toggleCollapseLeague={toggleCollapseLeague}
+              toggleHideScorers={toggleHideScorers}
+              matchDetailsMap={matchDetailsMap}
+              showOnlyLive={showOnlyLive}
+            />
           </ScrollableFeed>
         </div>
 
         {/* RIGHT COLUMN: Custom Widgets Column (6 Cols - Stacked vertically) */}
         <div className="lg:col-span-6 flex flex-col min-h-0">
           <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80 flex items-center space-x-2">
-              <ChartBarIcon className="h-4 w-4 text-secondary" />
-              <span>Stats & Insights</span>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80">
+              Stats & Insights
             </h2>
             <span className="text-xs text-primary/50">Telemetry</span>
           </div>
 
           <ScrollableFeed>
-            <GoalsPerHourWidget
-              allMatches={allTodayMatches}
-              matchDetailsMap={matchDetailsMap}
-              isFavoriteLeague={isMatchInFavoriteLeagues}
-            />
-            <GreatGoalsWidget
+            <LongRangeGoalsWidget
               allMatches={allTodayMatches}
               matchDetailsMap={matchDetailsMap}
               isFavoriteLeague={isMatchInFavoriteLeagues}
@@ -994,11 +488,10 @@ function FotmobCompanion() {
               matchDetailsMap={matchDetailsMap}
               isFavoriteLeague={isMatchInFavoriteLeagues}
             />
-            <PlaceholderWidget
-              icon={TrophyIcon}
-              title="Insight Block"
-              placeholderTitle="More Insights Coming"
-              description="Ready for standings, form guides, or head-to-head records."
+            <GoalsPerHourWidget
+              allMatches={allTodayMatches}
+              matchDetailsMap={matchDetailsMap}
+              isFavoriteLeague={isMatchInFavoriteLeagues}
             />
           </ScrollableFeed>
         </div>

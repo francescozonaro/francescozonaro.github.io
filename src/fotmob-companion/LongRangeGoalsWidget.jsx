@@ -1,17 +1,16 @@
 import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
-import { BoltIcon } from "@heroicons/react/24/solid";
 import CollapsibleCard from "./CollapsibleCard";
-import { getGoalSearchUrl } from "./goalSearchUrl";
+import { getGoalSearchUrl } from "./utilities";
 
-export default function GreatGoalsWidget({
+export default function LongRangeGoalsWidget({
   allMatches = [],
   matchDetailsMap = {},
   isFavoriteLeague,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const greatGoals = useMemo(() => {
+  const longRangeGoals = useMemo(() => {
     const list = [];
 
     (allMatches || []).forEach((m) => {
@@ -26,7 +25,7 @@ export default function GreatGoalsWidget({
       if (!Array.isArray(goals)) return;
 
       goals.forEach((g) => {
-        if (!g.isGreatGoal) return;
+        if (!g.isLongRangeGoal) return;
         const team = g.isHome ? m.home.name : m.away.name;
         const opponent = g.isHome ? m.away.name : m.home.name;
 
@@ -37,41 +36,38 @@ export default function GreatGoalsWidget({
           opponent,
           leagueName: m.leagueName,
           time: g.time,
-          xG: g.xG,
-          sortKey: (m.timeTS || 0) + (g.minuteRaw || 0) * 60000,
+          distance: g.distance,
         });
       });
     });
 
-    return list.sort((a, b) => b.sortKey - a.sortKey);
+    return list.sort((a, b) => (b.distance ?? 0) - (a.distance ?? 0));
   }, [allMatches, matchDetailsMap, isFavoriteLeague]);
 
   return (
     <CollapsibleCard
-      icon={BoltIcon}
-      title="Great Goals"
+      title="Long Range Goals"
       badge={
         <span className="text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full ml-1 font-mono">
-          {greatGoals.length} today
+          {longRangeGoals.length} today
         </span>
       }
       isCollapsed={isCollapsed}
       onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
     >
-      <div className="p-3">
-        {greatGoals.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-center gap-1 py-6">
+      <div className="p-3.5 min-h-[220px] flex flex-col justify-between">
+        {longRangeGoals.length === 0 ? (
+          <div className="flex-1 flex flex-col items-center justify-center text-center gap-1 py-8">
             <p className="text-[11px] text-primary/50 font-medium">
-              No great goals yet today
+              No long range goals yet today
             </p>
             <p className="text-[10px] text-primary/35">
-              Long-range strikes, free kicks, and low-odds finishes show up
-              here
+              Goals scored from outside the box show up here
             </p>
           </div>
         ) : (
-          <ul className="space-y-1.5 max-h-60 overflow-y-auto no-scrollbar">
-            {greatGoals.map((g) => (
+          <ul className="space-y-2 min-h-[160px] max-h-72 overflow-y-auto no-scrollbar">
+            {longRangeGoals.map((g) => (
               <li
                 key={g.id}
                 className="flex items-center justify-between gap-2 text-[11px] border-b border-background-light/20 pb-1.5 last:border-0 last:pb-0"
@@ -96,9 +92,9 @@ export default function GreatGoalsWidget({
                       {g.time}
                     </span>
                   )}
-                  {g.xG !== null && g.xG !== undefined && (
+                  {g.distance !== null && g.distance !== undefined && (
                     <span className="text-secondary font-mono text-[9px] block">
-                      xG {g.xG.toFixed(2)}
+                      {g.distance}m
                     </span>
                   )}
                 </div>
@@ -111,7 +107,7 @@ export default function GreatGoalsWidget({
   );
 }
 
-GreatGoalsWidget.propTypes = {
+LongRangeGoalsWidget.propTypes = {
   allMatches: PropTypes.array,
   matchDetailsMap: PropTypes.object,
   isFavoriteLeague: PropTypes.func,

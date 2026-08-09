@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
-import { ChartBarIcon } from "@heroicons/react/24/solid";
 import CollapsibleCard from "./CollapsibleCard";
 
 const MAX_ROWS = 8;
@@ -51,7 +50,6 @@ export default function FinishingQualityWidget({
 
   return (
     <CollapsibleCard
-      icon={ChartBarIcon}
       title="Clinical Finishing"
       badge={
         <span className="text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full ml-1 font-mono">
@@ -61,48 +59,50 @@ export default function FinishingQualityWidget({
       isCollapsed={isCollapsed}
       onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
     >
-      <div className="p-3">
-        <p className="text-[10px] text-primary/40 mb-2">
-          Goals scored minus the xG of those chances — highest means the most
-          efficient finishing today.
-        </p>
+      <div className="p-3.5 min-h-[220px] flex flex-col justify-between">
+        <div>
+          <p className="text-[10px] text-primary/40 mb-2.5">
+            Goals scored minus the xG of those chances — highest means the most
+            efficient finishing today.
+          </p>
 
-        {teams.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-center gap-1 py-6">
-            <p className="text-[11px] text-primary/50 font-medium">
-              No rated goals yet today
-            </p>
-            <p className="text-[10px] text-primary/35">
-              Leaderboard appears once a tracked league scores
-            </p>
-          </div>
-        ) : (
-          <ul className="space-y-2">
-            {teams.map((t) => (
-              <li key={t.team} className="text-[11px]">
-                <div className="flex items-center justify-between mb-0.5">
-                  <span className="font-semibold text-primary truncate max-w-[60%]">
-                    {t.team}
-                  </span>
-                  <span className="font-mono text-secondary font-bold">
-                    +{t.delta.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex-1 h-1.5 rounded-full bg-background-dark/50 overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-secondary/70"
-                      style={{ width: `${t.barPct}%` }}
-                    />
+          {teams.length === 0 ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center gap-1 py-8">
+              <p className="text-[11px] text-primary/50 font-medium">
+                No rated goals yet today
+              </p>
+              <p className="text-[10px] text-primary/35">
+                Leaderboard appears once a tracked league scores
+              </p>
+            </div>
+          ) : (
+            <ul className="space-y-2.5 min-h-[140px]">
+              {teams.map((t) => (
+                <li key={t.team} className="text-[11px]">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <span className="font-semibold text-primary truncate max-w-[60%]">
+                      {t.team}
+                    </span>
+                    <span className="font-mono text-secondary font-bold">
+                      +{t.delta.toFixed(2)}
+                    </span>
                   </div>
-                  <span className="text-[9px] text-primary/40 font-mono flex-shrink-0">
-                    {t.goals}g · {t.xgSum.toFixed(2)}xg
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex-1 h-1.5 rounded-full bg-background-dark/50 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-secondary/70"
+                        style={{ width: `${t.barPct}%` }}
+                      />
+                    </div>
+                    <span className="text-[9px] text-primary/40 font-mono flex-shrink-0">
+                      {t.goals}g · {t.xgSum.toFixed(2)}xg
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </CollapsibleCard>
   );
