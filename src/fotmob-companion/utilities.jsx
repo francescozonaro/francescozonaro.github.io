@@ -2,67 +2,17 @@ import PropTypes from "prop-types";
 
 // Config & Favorites Definitions
 export const HARDCODED_FAVORITES_TEAMS = [
-  // Premier League (England) - Exact FotMob Team IDs & Names
-  // { id: 9825, name: "Arsenal" },
-  // { id: 10252, name: "Aston Villa" },
-  // { id: 8678, name: "Bournemouth" },
-  // { id: 9937, name: "Brentford" },
-  // { id: 10204, name: "Brighton" },
-  // { id: 8455, name: "Chelsea" },
-  // { id: 9826, name: "Crystal Palace" },
-  // { id: 8668, name: "Everton" },
-  // { id: 9879, name: "Fulham" },
-  // { id: 9902, name: "Ipswich" },
-  // { id: 8197, name: "Leicester" },
-  // { id: 8650, name: "Liverpool" },
-  // { id: 8456, name: "Man City" },
-  // { id: 10260, name: "Man United" },
-  // { id: 10261, name: "Newcastle" },
-  // { id: 10203, name: "Nottm Forest" },
-  // { id: 8466, name: "Southampton" },
-  // { id: 8586, name: "Tottenham" },
-  // { id: 8654, name: "West Ham" },
-  // { id: 8602, name: "Wolves" },
-  // { id: 8191, name: "Burnley" },
-  // { id: 8344, name: "Luton" },
-  // { id: 8657, name: "Sheffield United" },
-  // { id: 8463, name: "Leeds" },
-  // { id: 8472, name: "Sunderland" },
-
-  // // Serie A (Italy) - Exact FotMob Team IDs & Names
-  // { id: 8524, name: "Atalanta" },
-  // { id: 9857, name: "Bologna" },
-  // { id: 8529, name: "Cagliari" },
-  // { id: 10171, name: "Como" },
-  // { id: 8534, name: "Empoli" },
-  // { id: 8535, name: "Fiorentina" },
-  // { id: 10233, name: "Genoa" },
-  // { id: 9876, name: "Hellas Verona" },
-  // { id: 8636, name: "Inter" },
-  // { id: 9885, name: "Juventus" },
-  // { id: 8543, name: "Lazio" },
-  // { id: 9888, name: "Lecce" },
-  // { id: 8564, name: "Milan" },
-  // { id: 6504, name: "Monza" },
-  // { id: 9875, name: "Napoli" },
-  // { id: 10167, name: "Parma" },
-  // { id: 8686, name: "Roma" },
-  // { id: 9804, name: "Torino" },
-  // { id: 8600, name: "Udinese" },
-  // { id: 7881, name: "Venezia" },
-
-  // // Additional Hardcoded Favorites
-  // { id: 8634, name: "Barcelona" },
-  // { id: 10003, name: "Swansea" },
+  // Additional Hardcoded Favorites
+  { id: 8634, name: "Barcelona" },
+  { id: 10003, name: "Swansea" },
   { id: 189481, name: "Union Brescia" },
 ];
 
 export const HARDCODED_FAVORITES_LEAGUES = [
-  // 55, // Serie A (Italy)
-  // 47, // Premier League (England)
-  // 86, // Serie B (Italy)
-  // 133, // League Cup / Carabao Cup / EFL Cup (England)
-  // 57, // Eredivisie
+  55, // Serie A (Italy)
+  47, // Premier League (England)
+  86, // Serie B (Italy)
+  57, // Eredivisie
   40, // Belgian Pro League
 ];
 
@@ -144,14 +94,9 @@ const PITCH_LENGTH_M = 105;
 const PITCH_WIDTH_M = 68;
 export const LONG_RANGE_THRESHOLD_M = 16.5;
 
-// FotMob shotmap coordinates are normalized to a 0-100 scale (percent of
-// pitch length/width), not raw meters, so they must be scaled before any
-// meter-based distance math.
-export function shotDistanceFromGoal(xPct, yPct) {
-  const xMeters = (xPct / 100) * PITCH_LENGTH_M;
-  const yMeters = (yPct / 100) * PITCH_WIDTH_M;
-  const dx = PITCH_LENGTH_M - Math.min(xMeters, PITCH_LENGTH_M);
-  const dy = PITCH_WIDTH_M / 2 - yMeters;
+export function shotDistanceFromGoal(xM, yM) {
+  const dx = PITCH_LENGTH_M - Math.min(xM, PITCH_LENGTH_M);
+  const dy = PITCH_WIDTH_M / 2 - yM;
   return Math.round(Math.hypot(dx, dy) * 10) / 10;
 }
 
@@ -166,58 +111,39 @@ export function isPenaltyScorer(scorer) {
   return !!scorer && scorer.toLowerCase().includes("(p)");
 }
 
-// Single source of truth for turning a shot location + scorer label into a
-// distance and long-range verdict. Own goals have no meaningful shooting
-// distance; penalties are placed at a fixed spot so their distance isn't a
-// measure of long-range finishing.
-export function classifyGoalDistance({ x, y, scorer, shot = {} }) {
-  if (typeof x !== "number" || typeof y !== "number") {
-    return { distance: null, isLongRangeGoal: false };
-  }
-
-  const isOwnGoal = shot.isOwnGoal === true || isOwnGoalScorer(scorer);
-  const isPenalty =
-    isPenaltyScorer(scorer) ||
-    shot.situation === "Penalty" ||
-    shot.eventType === "Penalty" ||
-    shot.shotType === "Penalty";
-
-  const distance = shotDistanceFromGoal(x, y);
-
-  if (isOwnGoal) return { distance: null, isLongRangeGoal: false };
-  if (isPenalty) return { distance, isLongRangeGoal: false };
-  return { distance, isLongRangeGoal: distance >= LONG_RANGE_THRESHOLD_M };
-}
-
 export function evaluateShotTelemetry(matchingShot, eg) {
+  console.log(matchingShot, eg);
+
   if (
     !matchingShot ||
     typeof matchingShot.x !== "number" ||
     typeof matchingShot.y !== "number"
   ) {
-    console.log(
-      `[Goal Telemetry] ${eg?.scorer || "Goal"} (${eg?.time || ""}): No telemetry / coordinates available`,
-    );
     return { isLongRangeGoal: false, distance: null, x: null, y: null };
   }
 
-  const { distance, isLongRangeGoal } = classifyGoalDistance({
-    x: matchingShot.x,
-    y: matchingShot.y,
-    scorer: eg?.scorer,
-    shot: matchingShot,
-  });
+  const { x, y } = matchingShot;
+  const scorer = eg?.scorer;
 
-  console.log(
-    `[Goal Telemetry] ${eg?.scorer || "Goal"} (${eg?.time || ""}): x=${matchingShot.x.toFixed(1)}, y=${matchingShot.y.toFixed(1)} -> distance=${distance}m, isLongRange=${isLongRangeGoal}`,
-  );
+  const isOwnGoal = matchingShot.isOwnGoal === true || isOwnGoalScorer(scorer);
+  const isPenalty =
+    isPenaltyScorer(scorer) ||
+    matchingShot.situation === "Penalty" ||
+    matchingShot.eventType === "Penalty" ||
+    matchingShot.shotType === "Penalty";
 
-  return {
-    isLongRangeGoal,
-    distance,
-    x: matchingShot.x,
-    y: matchingShot.y,
-  };
+  const distance = shotDistanceFromGoal(x, y);
+
+  let isLongRangeGoal = false;
+  let outDistance = distance;
+
+  if (isOwnGoal) {
+    outDistance = null;
+  } else if (!isPenalty) {
+    isLongRangeGoal = distance >= LONG_RANGE_THRESHOLD_M;
+  }
+
+  return { isLongRangeGoal, distance: outDistance, x, y };
 }
 
 export function parseMatchStatus(status = {}, match = {}) {

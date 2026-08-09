@@ -7,9 +7,7 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
 import ThemeToggle from "../components/ThemeToggle";
-import GoalsPerHourWidget from "./GoalsPerHourWidget";
 import LongRangeGoalsWidget from "./LongRangeGoalsWidget";
-import FinishingQualityWidget from "./FinishingQualityWidget";
 import LeagueFixturesWidget from "./LeagueFixturesWidget";
 import {
   SERVERLESS_WORKER_URL,
@@ -19,7 +17,6 @@ import {
   formatScorerName,
   formatAssistName,
   evaluateShotTelemetry,
-  classifyGoalDistance,
   isOwnGoalScorer,
   isPenaltyScorer,
   LONG_RANGE_THRESHOLD_M,
@@ -44,30 +41,11 @@ const getTodayCacheKey = () => {
   return `fotmob_details_cache_v4_${dateStr}`;
 };
 
-// Cached goals may predate a distance/threshold formula change, so every
-// load reclassifies them with the current logic instead of trusting
-// whatever was cached.
-const reclassifyCachedGoal = (g) => {
-  if (typeof g.x === "number" && typeof g.y === "number") {
-    Object.assign(g, classifyGoalDistance({ x: g.x, y: g.y, scorer: g.scorer }));
-    return;
-  }
-  if (typeof g.distance === "number" && !isNaN(g.distance)) {
-    g.isLongRangeGoal =
-      !isOwnGoalScorer(g.scorer) &&
-      !isPenaltyScorer(g.scorer) &&
-      g.distance >= LONG_RANGE_THRESHOLD_M;
-  }
-};
-
 const loadDetailsCache = () => {
   try {
     const raw = sessionStorage.getItem(getTodayCacheKey());
     if (!raw) return {};
     const parsed = JSON.parse(raw);
-    Object.values(parsed).forEach((goals) => {
-      if (Array.isArray(goals)) goals.forEach(reclassifyCachedGoal);
-    });
     return parsed;
   } catch {
     return {};
@@ -89,7 +67,10 @@ function extractRawGoalEvents(data) {
   const awayGoalsObj = data?.header?.events?.awayTeamGoals || {};
 
   const rawEvents = [];
-  for (const arr of [...Object.values(homeGoalsObj), ...Object.values(awayGoalsObj)]) {
+  for (const arr of [
+    ...Object.values(homeGoalsObj),
+    ...Object.values(awayGoalsObj),
+  ]) {
     if (Array.isArray(arr)) rawEvents.push(...arr);
   }
   if (rawEvents.length > 0) return rawEvents;
@@ -98,7 +79,9 @@ function extractRawGoalEvents(data) {
     data?.content?.matchFacts?.events?.events ||
     data?.content?.matchFacts?.events ||
     [];
-  return factsEvents.filter((e) => ["Goal", "GoalPen", "OwnGoal"].includes(e.type));
+  return factsEvents.filter((e) =>
+    ["Goal", "GoalPen", "OwnGoal"].includes(e.type),
+  );
 }
 
 function buildExtractedGoal(rawEvent, homeTeamId, awayTeamId) {
@@ -153,7 +136,13 @@ function findMatchingShot(eg, goalShots) {
 
   const shotMinute = (s) => (s.min ?? s.minute ?? 0) + (s.minAdded ?? 0);
   const shotPlayerName = (s) =>
-    (s.playerName || s.fullName || s.lastName || s.player?.name || "").toLowerCase();
+    (
+      s.playerName ||
+      s.fullName ||
+      s.lastName ||
+      s.player?.name ||
+      ""
+    ).toLowerCase();
 
   const cleanScorer = (eg.scorer || "")
     .replace(/\s*\([^)]*\)/g, "")
@@ -305,7 +294,9 @@ function FotmobCompanion() {
             (g) => g.isLongRangeGoal === undefined,
           );
           const isIncomplete =
-            (cachedCount < totalGoals || hasMissingScorer || hasMissingTelemetry) &&
+            (cachedCount < totalGoals ||
+              hasMissingScorer ||
+              hasMissingTelemetry) &&
             !isFinished;
 
           if (scoreChanged || isIncomplete) {
@@ -538,16 +529,6 @@ function FotmobCompanion() {
 
           <ScrollableFeed>
             <LongRangeGoalsWidget
-              allMatches={allTodayMatches}
-              matchDetailsMap={matchDetailsMap}
-              isFavoriteLeague={isMatchInFavoriteLeagues}
-            />
-            <FinishingQualityWidget
-              allMatches={allTodayMatches}
-              matchDetailsMap={matchDetailsMap}
-              isFavoriteLeague={isMatchInFavoriteLeagues}
-            />
-            <GoalsPerHourWidget
               allMatches={allTodayMatches}
               matchDetailsMap={matchDetailsMap}
               isFavoriteLeague={isMatchInFavoriteLeagues}
