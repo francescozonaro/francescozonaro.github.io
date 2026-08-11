@@ -14,6 +14,7 @@ export const HARDCODED_FAVORITES_LEAGUES = [
   86, // Serie B (Italy)
   57, // Eredivisie
   40, // Belgian Pro League
+  10611, // CL
 ];
 
 export const DEFAULT_TEAM_LOGO =
