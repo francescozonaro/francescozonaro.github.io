@@ -10,8 +10,8 @@
       html,
       body,
       #root {
-        background-color: #f5f5f5;
-        color: #161616;
+        background-color: rgb(240, 240, 240);
+        color: rgb(22, 22, 22);
         margin: 0;
         padding: 0;
         min-height: 100vh;
@@ -19,8 +19,8 @@
       html.dark-theme,
       html.dark-theme body,
       html.dark-theme #root {
-        background-color: #121110;
-        color: #f5f0eb;
+        background-color: rgb(27, 27, 27);
+        color: rgb(240, 240, 240);
       }
     </style>
     <script>
@@ -32,19 +32,15 @@
           if (isDark) {
             root.classList.add("dark-theme");
             root.classList.remove("light-theme");
-            root.style.backgroundColor = "#121110";
-            root.style.color = "#f5f0eb";
           } else {
             root.classList.add("light-theme");
             root.classList.remove("dark-theme");
-            root.style.backgroundColor = "#f5f5f5";
-            root.style.color = "#161616";
           }
         } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index-1dbf6229.js"></script>
-    <link rel="stylesheet" href="/assets/index-183e0f90.css">
+    <script type="module" crossorigin src="/assets/index-57c9e6c7.js"></script>
+    <link rel="stylesheet" href="/assets/index-927fc9a2.css">
   </head>
   <body>
     <div id="root"></div>
