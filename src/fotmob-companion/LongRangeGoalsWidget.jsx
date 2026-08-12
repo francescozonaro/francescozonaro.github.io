@@ -65,7 +65,7 @@ export default function LongRangeGoalsWidget({
             {longRangeGoals.map((g) => (
               <li
                 key={g.id}
-                className="flex items-center justify-between gap-2 text-[11px] border-b border-background-light/20 pb-1.5 last:border-0 last:pb-0"
+                className="flex items-center justify-between gap-2 text-[11px] border-b border-background-dark/20 pb-1.5 last:border-0 last:pb-0"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center space-x-1.5 flex-wrap">

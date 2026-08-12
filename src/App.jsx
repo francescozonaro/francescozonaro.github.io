@@ -100,7 +100,7 @@ function App() {
 
           {data.projects.map((project, index) => (
             <div
-              className="mt-8 border-[0.5px] rounded-xl p-6 border-background-light shadow-xl"
+              className="mt-8 border-[0.5px] rounded-xl p-6 border-background-dark shadow-xl"
               key={project.title || index}
             >
               <div className="font-bold">{project.title}</div>
@@ -123,7 +123,7 @@ function App() {
 
           {data.reports.map((report, index) => (
             <div
-              className="mt-8 border-[0.5px] rounded-xl p-6 border-background-light shadow-xl"
+              className="mt-8 border-[0.5px] rounded-xl p-6 border-background-dark shadow-xl"
               key={report.title || index}
             >
               <div className="font-bold">{report.title}</div>

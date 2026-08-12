@@ -527,18 +527,15 @@ function FotmobCompanion() {
   return (
     <div className="w-11/12 lg:w-11/12 xl:w-5/6 mx-auto font-sans py-6 h-screen flex flex-col overflow-hidden text-center">
       {/* Top Header Nav */}
-      <div className="flex justify-between items-center mb-3 flex-shrink-0">
+      <div className="flex justify-between items-center mb-16 flex-shrink-0 pt-1 px-1">
         <button
-          className="cardComponent smallEnlarge text-xs text-secondary px-3 py-1.5 cursor-pointer"
+          className="cardComponent smallEnlarge origin-left text-xs text-secondary px-3 py-1.5 cursor-pointer"
           onClick={() => navigate("/")}
         >
           ← Portfolio
         </button>
-        <ThemeToggle />
-      </div>
 
-      {/* Header Banner */}
-      <div className="mt-1 mb-5 text-center flex-shrink-0">
+        {/* Header Title */}
         <div className="flex items-center justify-center space-x-2 text-2xl font-bold tracking-tight">
           <span className="relative flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-light opacity-75"></span>
@@ -546,15 +543,12 @@ function FotmobCompanion() {
           </span>
           <span>FotMob Siphon</span>
         </div>
-        <p className="mt-3 text-xs text-center leading-relaxed max-w-2xl mx-auto text-primary/70">
-          A real-time match command center siphoning live FotMob API scores,
-          tracking league fixtures with live scorer telemetry and interactive X
-          goal search.
-        </p>
+
+        <ThemeToggle />
       </div>
 
       {/* Main Controls & Search Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 border-[0.5px] border-background-light rounded-xl bg-background-dark/30 shadow-md mb-6 flex-shrink-0">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 border-[0.5px] border-background-dark rounded-xl bg-background-dark/30 shadow-md mb-16 flex-shrink-0">
         {/* Left Side: Search Bar & Date Selector grouped together */}
         <div className="flex flex-wrap items-center gap-3">
           {/* Search Bar */}
@@ -565,15 +559,17 @@ function FotmobCompanion() {
               placeholder="Search teams or leagues..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-md border border-background-light bg-background-dark/80 text-primary placeholder-primary/40 focus:outline-none focus:border-secondary"
+              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-md border border-background-dark bg-background-dark/80 text-primary placeholder-primary/40 focus:outline-none focus:border-secondary"
             />
           </div>
 
           {/* Date Selector (Monochrome) */}
-          <div className="flex items-center space-x-1 border border-background-light/60 bg-background-dark/60 rounded-md p-1">
+          <div className="flex items-center space-x-1 border border-background-dark/60 bg-background-dark/60 rounded-md p-1">
             <button
-              onClick={() => handleDateChange(shiftDateString(selectedDate, -1))}
-              className="p-1 rounded text-primary/70 hover:text-primary hover:bg-background-light/40 transition-colors cursor-pointer"
+              onClick={() =>
+                handleDateChange(shiftDateString(selectedDate, -1))
+              }
+              className="p-1 rounded text-primary/70 hover:text-primary hover:bg-background-darker transition-colors cursor-pointer"
               title="Previous Day"
             >
               <ChevronLeftIcon className="h-4 w-4" />
@@ -597,7 +593,7 @@ function FotmobCompanion() {
 
             <button
               onClick={() => handleDateChange(shiftDateString(selectedDate, 1))}
-              className="p-1 rounded text-primary/70 hover:text-primary hover:bg-background-light/40 transition-colors cursor-pointer"
+              className="p-1 rounded text-primary/70 hover:text-primary hover:bg-background-darker transition-colors cursor-pointer"
               title="Next Day"
             >
               <ChevronRightIcon className="h-4 w-4" />
@@ -606,7 +602,7 @@ function FotmobCompanion() {
             {!isToday && (
               <button
                 onClick={() => handleDateChange(todayStr)}
-                className="ml-1 px-2 py-0.5 text-[10px] font-bold text-primary/80 bg-background-light/40 border border-background-light/60 rounded hover:bg-background-light/60 hover:text-primary transition-colors cursor-pointer"
+                className="ml-1 px-2 py-0.5 text-[10px] font-bold text-primary/80 bg-background-dark/40 border border-background-dark/60 rounded hover:bg-background-darker hover:text-primary transition-colors cursor-pointer"
                 title="Jump to Today"
               >
                 Today
@@ -622,7 +618,7 @@ function FotmobCompanion() {
             disabled={!isToday}
             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center space-x-1.5 ${
               !isToday
-                ? "opacity-40 cursor-not-allowed border border-background-light/40 bg-background-dark/40 text-primary/40"
+                ? "opacity-40 cursor-not-allowed border border-background-dark/40 bg-background-dark/40 text-primary/40"
                 : showOnlyLive
                   ? "border border-secondary/50 bg-secondary/10 text-secondary cursor-pointer"
                   : "cardComponent text-primary cursor-pointer"
@@ -638,11 +634,13 @@ function FotmobCompanion() {
             disabled={!isToday || loading}
             className={`px-3 py-1.5 text-xs font-semibold flex items-center space-x-1.5 ${
               !isToday
-                ? "opacity-40 cursor-not-allowed border border-background-light/40 bg-background-dark/40 text-primary/40 rounded-md"
+                ? "opacity-40 cursor-not-allowed border border-background-dark/40 bg-background-dark/40 text-primary/40 rounded-md"
                 : "cardComponent smallEnlarge text-secondary cursor-pointer"
             }`}
             title={
-              !isToday ? "Live refresh is only active for today" : "Refresh Scores"
+              !isToday
+                ? "Live refresh is only active for today"
+                : "Refresh Scores"
             }
           >
             <ArrowPathIcon

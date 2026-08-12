@@ -10,31 +10,28 @@ export default {
         code: ["Consolas"],
       },
       colors: {
-        ["background"]: "rgb(var(--color-background) / <alpha-value>)",
-        ["background-light"]:
-          "rgb(var(--color-background-light) / <alpha-value>)",
-        ["background-dark"]:
-          "rgb(var(--color-background-dark) / <alpha-value>)",
-        ["background-card"]:
-          "rgb(var(--color-background-card) / <alpha-value>)",
-        ["background-score"]:
-          "rgb(var(--color-background-score) / <alpha-value>)",
+        background: {
+          DEFAULT: "rgb(var(--color-background) / <alpha-value>)",
+          light: "rgb(var(--color-background-light) / <alpha-value>)",
+          dark: "rgb(var(--color-background-dark) / <alpha-value>)",
+          darker: "rgb(var(--color-background-darker) / <alpha-value>)",
+        },
 
-        ["border"]: "rgb(var(--color-border) / <alpha-value>)",
-        ["border-light"]: "rgb(var(--color-border-light) / <alpha-value>)",
-        ["border-dark"]: "rgb(var(--color-border-dark) / <alpha-value>)",
-        ["border-score"]: "rgb(var(--color-border-score) / <alpha-value>)",
+        border: {
+          DEFAULT: "rgb(var(--color-border) / <alpha-value>)",
+        },
 
-        ["text-score"]: "rgb(var(--color-text-score) / <alpha-value>)",
+        primary: {
+          DEFAULT: "rgb(var(--color-primary) / <alpha-value>)",
+          light: "rgb(var(--color-primary-light) / <alpha-value>)",
+          dark: "rgb(var(--color-primary-dark) / <alpha-value>)",
+        },
 
-        ["primary"]: "rgb(var(--color-primary) / <alpha-value>)",
-        ["primary-light"]: "rgb(var(--color-primary-light) / <alpha-value>)",
-        ["primary-dark"]: "rgb(var(--color-primary-shadow) / <alpha-value>)",
-
-        ["secondary"]: "rgb(var(--color-secondary) / <alpha-value>)",
-        ["secondary-light"]:
-          "rgb(var(--color-secondary-light) / <alpha-value>)",
-        ["secondary-dark"]: "rgb(var(--color-secondary-dark) / <alpha-value>)",
+        secondary: {
+          DEFAULT: "rgb(var(--color-secondary) / <alpha-value>)",
+          light: "rgb(var(--color-secondary-light) / <alpha-value>)",
+          dark: "rgb(var(--color-secondary-dark) / <alpha-value>)",
+        },
       },
     },
   },
@@ -42,7 +39,7 @@ export default {
     function ({ addUtilities }) {
       addUtilities({
         ".cardComponent": {
-          "@apply rounded-md border-[0.5px] border-background-light bg-background-dark hover:bg-background-light hover:bg-opacity-50":
+          "@apply rounded-md border-[0.5px] border-background-dark bg-background-dark hover:bg-background-darker hover:bg-opacity-50":
             {},
         },
         ".smallEnlarge": {

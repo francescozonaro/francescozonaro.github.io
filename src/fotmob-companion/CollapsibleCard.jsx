@@ -13,10 +13,10 @@ export default function CollapsibleCard({
   children,
 }) {
   return (
-    <div className="border-[0.5px] border-background-light rounded-xl overflow-hidden bg-background-dark/20 shadow-md transition-all">
+    <div className="border-[0.5px] border-background-dark rounded-xl overflow-hidden bg-background-dark/20 shadow-md transition-all">
       <div
         className={`px-4 py-2.5 bg-background-dark/60 flex justify-between items-center ${
-          !isCollapsed ? "border-b border-background-light/50" : ""
+          !isCollapsed ? "border-b border-background-dark/50" : ""
         }`}
       >
         <div className="flex items-center space-x-2">
@@ -29,7 +29,7 @@ export default function CollapsibleCard({
           {actions}
           <button
             onClick={onToggleCollapse}
-            className="p-1 rounded text-primary/60 hover:text-primary hover:bg-background-light/40 transition-colors border border-background-light/60 bg-background-dark/50 cursor-pointer"
+            className="p-1 rounded text-primary/60 hover:text-primary hover:bg-background-darker transition-colors border border-background-dark/60 bg-background-dark/50 cursor-pointer"
             title={isCollapsed ? "Expand" : "Collapse"}
           >
             {isCollapsed ? (

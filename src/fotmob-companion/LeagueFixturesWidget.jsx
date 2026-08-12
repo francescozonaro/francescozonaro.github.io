@@ -57,7 +57,7 @@ export default function LeagueFixturesWidget({
                 className={`p-1 rounded transition-colors border ${
                   areScorersHidden
                     ? "border-secondary/40 bg-secondary/15 text-secondary"
-                    : "border-background-light/60 bg-background-dark/50 text-primary/60 hover:text-primary hover:bg-background-light/40"
+                    : "border-background-dark/60 bg-background-dark/50 text-primary/60 hover:text-primary hover:bg-background-darker"
                 }`}
                 title={areScorersHidden ? "Show scorers" : "Hide scorers"}
               >
@@ -94,7 +94,7 @@ export default function LeagueFixturesWidget({
                 return (
                   <div
                     key={m.id}
-                    className="p-3.5 hover:bg-background-light/30 transition-colors flex flex-col gap-2"
+                    className="p-3.5 hover:bg-background-darker transition-colors flex flex-col gap-2"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <div className="w-14 flex-shrink-0 flex items-center justify-start">
@@ -122,7 +122,7 @@ export default function LeagueFixturesWidget({
                           className={`font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded transition-colors ${
                             m.isActive
                               ? "bg-secondary/10 text-secondary border border-secondary/20"
-                              : "bg-background-score text-primary/70 border border-transparent"
+                              : "bg-background-dark text-primary/70 border border-transparent"
                           }`}
                         >
                           {m.isActive || m.finished || m.minute === "FT"
@@ -141,7 +141,7 @@ export default function LeagueFixturesWidget({
 
                     {/* Scorers List Below Score (only if hasGoals and scorers not hidden for this league) */}
                     {hasGoals && !areScorersHidden && (
-                      <div className="flex items-start justify-between text-[11px] pt-1.5 border-t border-background-light/20 gap-2">
+                      <div className="flex items-start justify-between text-[11px] pt-1.5 border-t border-background-dark/20 gap-2">
                         <div className="w-14 flex-shrink-0" />
 
                         {/* Home Team Scorers (Right Aligned) */}

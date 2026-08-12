@@ -42,7 +42,7 @@ export default function ThemeToggle({ className = "" }) {
 
   return (
     <div
-      className={`relative inline-flex items-center p-1 rounded-full border border-background-light/80 bg-background-dark/60 backdrop-blur-md shadow-inner select-none ${className}`}
+      className={`relative inline-flex items-center p-1 rounded-full border border-background-dark/80 bg-background-dark/60 backdrop-blur-md shadow-inner select-none ${className}`}
       role="radiogroup"
       aria-label="Theme selector"
     >
@@ -78,7 +78,7 @@ export default function ThemeToggle({ className = "" }) {
       </button>
 
       <div
-        className={`absolute top-1 bottom-1 rounded-full bg-background-light border border-border-light/80 shadow-md transition-all duration-300 ease-out pointer-events-none ${
+        className={`absolute top-1 bottom-1 rounded-full bg-background-dark border border-background-dark/80 shadow-md transition-all duration-300 ease-out pointer-events-none ${
           !isDark
             ? "left-1 w-[calc(50%-4px)]"
             : "left-[calc(50%+2px)] w-[calc(50%-4px)]"
