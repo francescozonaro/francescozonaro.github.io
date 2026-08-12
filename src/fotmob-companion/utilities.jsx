@@ -15,6 +15,7 @@ export const HARDCODED_FAVORITES_LEAGUES = [
   57, // Eredivisie
   40, // Belgian Pro League
   10611, // CL
+  10043, // Leagues Cup (USA)
 ];
 
 export const DEFAULT_TEAM_LOGO =

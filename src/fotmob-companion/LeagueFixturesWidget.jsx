@@ -1,3 +1,4 @@
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import CollapsibleCard from "./CollapsibleCard";
@@ -12,18 +13,26 @@ export default function LeagueFixturesWidget({
   matchDetailsMap = {},
   showOnlyLive = false,
 }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const groups = Object.values(groupedLeagues);
 
   if (groups.length === 0) {
     return (
-      <div className="border-[0.5px] border-background-light rounded-xl p-8 text-center bg-background-dark/20 shadow-sm">
-        <h3 className="font-bold text-lg mb-2">No Matches Found</h3>
-        <p className="text-sm text-primary/70">
-          {showOnlyLive
-            ? "There are currently no active live matches for the selected search."
-            : "No matches found under this filter."}
-        </p>
-      </div>
+      <CollapsibleCard
+        title="No leagues found"
+        isCollapsed={isCollapsed}
+        onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+      >
+        <div className="p-3.5 min-h-[220px] flex flex-col justify-between">
+          <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
+            <p className="text-[11px] text-primary/50 font-medium">
+              {showOnlyLive
+                ? "There are currently no active live matches for the selected search."
+                : "No leagues found under this filter."}
+            </p>
+          </div>
+        </div>
+      </CollapsibleCard>
     );
   }
 

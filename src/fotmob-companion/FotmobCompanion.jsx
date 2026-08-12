@@ -525,7 +525,7 @@ function FotmobCompanion() {
         <div className="lg:col-span-6 flex flex-col min-h-0">
           <div className="flex items-center justify-between px-2 mb-3 flex-shrink-0">
             <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80">
-              League Fixtures ({filteredMatches.length})
+              Fixtures
             </h2>
             <span className="text-xs text-primary/50">
               {lastUpdated ? `Updated ${lastUpdated}` : "Loading..."}
@@ -551,7 +551,6 @@ function FotmobCompanion() {
             <h2 className="text-sm font-bold uppercase tracking-wider text-primary/80">
               Stats & Insights
             </h2>
-            <span className="text-xs text-primary/50">Telemetry</span>
           </div>
 
           <ScrollableFeed>

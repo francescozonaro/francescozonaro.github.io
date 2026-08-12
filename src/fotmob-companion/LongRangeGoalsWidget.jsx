@@ -41,9 +41,11 @@ export default function LongRangeGoalsWidget({
     <CollapsibleCard
       title="Long Range Goals"
       badge={
-        <span className="text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full ml-1 font-mono">
-          {longRangeGoals.length} today
-        </span>
+        longRangeGoals.length > 0 && (
+          <span className="text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full ml-1 font-mono">
+            {longRangeGoals.length} today
+          </span>
+        )
       }
       isCollapsed={isCollapsed}
       onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
