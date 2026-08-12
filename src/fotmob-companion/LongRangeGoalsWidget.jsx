@@ -6,14 +6,14 @@ import { getGoalSearchUrl, filterFavoriteMatches } from "./commons";
 export default function LongRangeGoalsWidget({
   allMatches = [],
   matchDetailsMap = {},
-  isFavoriteLeague,
+  filterMatch,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const longRangeGoals = useMemo(() => {
     const list = [];
 
-    filterFavoriteMatches(allMatches, isFavoriteLeague).forEach((m) => {
+    filterFavoriteMatches(allMatches, filterMatch).forEach((m) => {
       const goals = matchDetailsMap[m.id];
       if (!Array.isArray(goals)) return;
 
@@ -35,7 +35,7 @@ export default function LongRangeGoalsWidget({
     });
 
     return list.sort((a, b) => (b.distance ?? 0) - (a.distance ?? 0));
-  }, [allMatches, matchDetailsMap, isFavoriteLeague]);
+  }, [allMatches, matchDetailsMap, filterMatch]);
 
   return (
     <CollapsibleCard
@@ -107,5 +107,5 @@ export default function LongRangeGoalsWidget({
 LongRangeGoalsWidget.propTypes = {
   allMatches: PropTypes.array,
   matchDetailsMap: PropTypes.object,
-  isFavoriteLeague: PropTypes.func,
+  filterMatch: PropTypes.func,
 };

@@ -24,11 +24,12 @@ function App() {
     "cardComponent smallEnlarge align-middle justify-center flex p-1";
 
   const renderLinkButton = (url, IconComponent) => {
-    const isInternal = url.startsWith("/#/") || url.startsWith("/");
+    const isInternal = url.startsWith("/#/") || url.startsWith("#/");
     if (isInternal) {
+      const targetPath = url.replace(/^(\/#|#)/, "");
       return (
         <Link
-          to={url.replace(/^\/#/, "")}
+          to={targetPath}
           className={`${linkBtnClass} text-secondary`}
         >
           <IconComponent className="h-5 w-5" />
@@ -57,9 +58,9 @@ function App() {
     <div className="App">
       <div className="grid gap-x-12 mt-12 md:grid-cols-1 gap-y-4 lg:grid-cols-2 mb-12">
         <div className="flex flex-col justify-center align-middle">
-          <div className="text-3xl">
+          <h1 className="text-3xl font-normal">
             <strong>Francesco</strong> Zonaro
-          </div>
+          </h1>
         </div>
         <div className="flex justify-center items-center space-x-2">
           <a
@@ -82,7 +83,7 @@ function App() {
         </div>
 
         <div className="mt-12 text-left">
-          <h1 className="font-bold mt-4 text-center text-2xl">Projects</h1>
+          <h2 className="font-bold mt-4 text-center text-2xl">Projects</h2>
 
           {data.projects.map((project, index) => (
             <CardItem
@@ -94,7 +95,7 @@ function App() {
         </div>
 
         <div className="mt-12 text-left">
-          <h1 className="font-bold mt-4 text-center text-2xl">Reports</h1>
+          <h2 className="font-bold mt-4 text-center text-2xl">Reports</h2>
 
           {data.reports.map((report, index) => (
             <CardItem

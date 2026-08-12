@@ -7,11 +7,3 @@
   width: 60%;
   margin: auto;
 }
-
-a {
-  @apply text-secondary;
-}
-
-a:hover {
-  @apply text-secondary-dark;
-}

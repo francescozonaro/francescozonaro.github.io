@@ -1,7 +1,7 @@
 import "./StatsbombShowcase.css";
 
 import { useNavigate } from "react-router-dom";
-import ThemeToggle from "../components/ThemeToggle";
+import PageHeader from "../components/PageHeader";
 
 function StatsbombShowcase() {
   const navigate = useNavigate();
@@ -12,18 +12,9 @@ function StatsbombShowcase() {
 
   return (
     <div className="StatsbombShowcase">
-      <div className="header flex justify-between items-center mt-8">
-        <button
-          className="cardComponent smallEnlarge text-xs text-secondary px-3 py-1.5 cursor-pointer"
-          onClick={() => navigate("/")}
-        >
-          ← Portfolio
-        </button>
-        <div className="text-3xl leading-tight tracking-tighter">
-          <strong>Plotting Statsbomb Data</strong>
-        </div>
-        <ThemeToggle />
-      </div>
+      <PageHeader className="mt-8">
+        <strong>Plotting Statsbomb Data</strong>
+      </PageHeader>
 
       <div className="mt-12">
         <div className="leading-6 text-justify">
@@ -67,7 +58,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/pressuresItaly.png"
               alt="Pressures Italy"
-            ></img>
+            />
           </a>
           <a
             href="img/statsbomb-showcase/defActionItaly.png"
@@ -77,7 +68,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/defActionItaly.png"
               alt="Defensive Actions Italy"
-            ></img>
+            />
           </a>
         </div>
       </div>
@@ -105,7 +96,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/shotmap.png"
               alt="Shotmap Image"
-            ></img>
+            />
           </a>
         </div>
       </div>
@@ -143,7 +134,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/chiesaProgressiveAttempted.png"
               alt="Chiesa Progressive Attempted"
-            ></img>{" "}
+            />{" "}
           </a>
           <a
             href="img/statsbomb-showcase/chiesaProgressive.png"
@@ -153,7 +144,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/chiesaProgressive.png"
               alt="Chiesa Progressive"
-            ></img>
+            />
           </a>
         </div>
       </div>
@@ -186,7 +177,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/ItalyPassingNetwork.png"
               alt="Italy Passing Network"
-            ></img>
+            />
           </a>
           <a
             href="img/statsbomb-showcase/EnglandPassingNetwork.png"
@@ -196,7 +187,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/EnglandPassingNetwork.png"
               alt="England Passing Network"
-            ></img>
+            />
           </a>
         </div>
       </div>
@@ -323,7 +314,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/shawGoal.png"
               alt="Shaw Goal Breakdown"
-            ></img>
+            />
           </a>
         </div>
       </div>
@@ -352,7 +343,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/englandFrozenShot.png"
               alt="Shot frame freeze"
-            ></img>
+            />
           </a>
         </div>
       </div>
@@ -389,7 +380,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/lowPercShots.png"
               alt="Low xG goals scored"
-            ></img>
+            />
           </a>
         </div>
       </div>
@@ -424,7 +415,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/goalkeeperZonalDistribution.png"
               alt="Donnarumma successful passes distribution"
-            ></img>
+            />
           </a>
         </div>
       </div>
@@ -465,7 +456,7 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/scatterplotShareOfLong_a.png"
               alt="Premier League 2015/16 Goalkeeper Distribution Scatterplot"
-            ></img>
+            />
           </a>
           <a
             href="img/statsbomb-showcase/scatterplotShareOfLong_b.png"
@@ -475,27 +466,25 @@ function StatsbombShowcase() {
             <img
               src="img/statsbomb-showcase/scatterplotShareOfLong_b.png"
               alt="Premier League 2015/16 Goalkeeper Distribution Scatterplot"
-            ></img>
+            />
           </a>
         </div>
       </div>
 
-      <div id="mb-12">
-        <div className="flex justify-center space-x-8 mt-12 mb-8">
-          <button
-            className="button text-secondary w-[150px]"
-            onClick={() => navigate("/")}
-          >
-            Portfolio
-          </button>
+      <div className="flex justify-center space-x-8 mt-12 mb-8">
+        <button
+          className="button text-secondary w-[150px]"
+          onClick={() => navigate("/")}
+        >
+          Portfolio
+        </button>
 
-          <button
-            className="button text-secondary w-[150px] "
-            onClick={() => scrollToTop()}
-          >
-            Back to the top
-          </button>
-        </div>
+        <button
+          className="button text-secondary w-[150px] "
+          onClick={() => scrollToTop()}
+        >
+          Back to the top
+        </button>
       </div>
     </div>
   );

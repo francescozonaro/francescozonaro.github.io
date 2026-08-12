@@ -48,11 +48,17 @@ export function isFavoriteTeam(team) {
   });
 }
 
-export function filterFavoriteMatches(matches, isFavoriteLeague) {
-  if (typeof isFavoriteLeague !== "function") return matches || [];
-  return (matches || []).filter((m) =>
-    isFavoriteLeague(m.leagueName, m.leagueId),
+export function isFavoriteMatch(match) {
+  if (!match) return false;
+  return (
+    isMatchInFavoriteLeagues(match.leagueName, match.leagueId) ||
+    isFavoriteTeam(match.home) ||
+    isFavoriteTeam(match.away)
   );
+}
+
+export function filterFavoriteMatches(matches, filterFn = isFavoriteMatch) {
+  return (matches || []).filter((m) => filterFn(m));
 }
 
 export function isMatchInFavoriteLeagues(leagueName, leagueId) {

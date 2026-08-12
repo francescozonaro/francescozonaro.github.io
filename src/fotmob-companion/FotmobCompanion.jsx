@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   ArrowPathIcon,
@@ -9,7 +8,7 @@ import {
   ChevronRightIcon,
   CalendarIcon,
 } from "@heroicons/react/24/solid";
-import ThemeToggle from "../components/ThemeToggle";
+import PageHeader from "../components/PageHeader";
 import LongRangeGoalsWidget from "./LongRangeGoalsWidget";
 import LeagueFixturesWidget from "./LeagueFixturesWidget";
 import {
@@ -17,6 +16,7 @@ import {
   SERVERLESS_FIXTURES_WORKER_URL,
   isFavoriteTeam,
   isMatchInFavoriteLeagues,
+  isFavoriteMatch,
   formatScorerName,
   formatAssistName,
   evaluateShot,
@@ -116,13 +116,22 @@ function extractRawGoalEvents(data) {
   );
 }
 
+function extractPlayerName(obj) {
+  if (!obj) return "";
+  return (
+    obj.player?.name ||
+    obj.playerName ||
+    obj.fullName ||
+    obj.nameStr ||
+    obj.lastName ||
+    obj.name ||
+    ""
+  );
+}
+
 function buildExtractedGoal(rawEvent, homeTeamId, awayTeamId) {
   const scorer = formatScorerName(
-    rawEvent.player?.name ||
-      rawEvent.fullName ||
-      rawEvent.nameStr ||
-      rawEvent.name ||
-      rawEvent.playerName,
+    extractPlayerName(rawEvent),
     rawEvent.type,
   );
   const assist = formatAssistName(
@@ -167,14 +176,7 @@ function findMatchingShot(eg, goalShots) {
   if (eg.rawEvent?.shotmapEvent) return eg.rawEvent.shotmapEvent;
 
   const shotMinute = (s) => (s.min ?? s.minute ?? 0) + (s.minAdded ?? 0);
-  const shotPlayerName = (s) =>
-    (
-      s.playerName ||
-      s.fullName ||
-      s.lastName ||
-      s.player?.name ||
-      ""
-    ).toLowerCase();
+  const shotPlayerName = (s) => extractPlayerName(s).toLowerCase();
 
   const cleanScorer = (eg.scorer || "")
     .replace(/\s*\([^)]*\)/g, "")
@@ -219,7 +221,6 @@ function enrichGoalWithTelemetry(eg, goalShots) {
 }
 
 function FotmobCompanion() {
-  const navigate = useNavigate();
   const dateInputRef = useRef(null);
 
   useEffect(() => {
@@ -232,29 +233,10 @@ function FotmobCompanion() {
     const prevHref = link.getAttribute("href");
     const prevType = link.getAttribute("type");
 
-    const updateFavicon = () => {
-      const isDark = document.documentElement.classList.contains("dark-theme");
-      const accent = isDark ? "%23818cf8" : "%23b94648";
-      const bg = isDark ? "%23121110" : "%23f5f5f5";
-      const border = isDark ? "%23262626" : "%23d5d5d5";
-      const lines = isDark ? "%23f5f0eb" : "%23161616";
-
-      const svgData = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' width='64' height='64'><rect width='64' height='64' rx='16' fill='${bg}' stroke='${border}' stroke-width='1'/><g transform='translate(32, 32)'><circle r='18' fill='none' stroke='${lines}' stroke-width='2.5'/><polygon points='0,-6 5.7,-1.8 3.5,4.9 -3.5,4.9 -5.7,-1.8' fill='${accent}'/><line x1='0' y1='-6' x2='0' y2='-18' stroke='${lines}' stroke-width='2' stroke-linecap='round'/><line x1='5.7' y1='-1.8' x2='17.1' y2='-5.5' stroke='${lines}' stroke-width='2' stroke-linecap='round'/><line x1='3.5' y1='4.9' x2='10.6' y2='14.6' stroke='${lines}' stroke-width='2' stroke-linecap='round'/><line x1='-3.5' y1='4.9' x2='-10.6' y2='14.6' stroke='${lines}' stroke-width='2' stroke-linecap='round'/><line x1='-5.7' y1='-1.8' x2='-17.1' y2='-5.5' stroke='${lines}' stroke-width='2' stroke-linecap='round'/></g></svg>`;
-
-      link.setAttribute("type", "image/svg+xml");
-      link.setAttribute("href", svgData);
-    };
-
-    updateFavicon();
-
-    const observer = new MutationObserver(() => updateFavicon());
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
+    link.setAttribute("type", "image/svg+xml");
+    link.setAttribute("href", "/fotmob-favicon.svg?v=2");
 
     return () => {
-      observer.disconnect();
       document.title = prevTitle;
       if (prevType !== null) {
         link.setAttribute("type", prevType);
@@ -286,7 +268,10 @@ function FotmobCompanion() {
   const previousScoresRef = useRef({});
   const fetchedMatchDetailsCacheRef = useRef(loadDetailsCache(todayStr));
   const selectedDateRef = useRef(selectedDate);
-  selectedDateRef.current = selectedDate;
+
+  useEffect(() => {
+    selectedDateRef.current = selectedDate;
+  }, [selectedDate]);
 
   const toggleCollapseLeague = (leagueName) => {
     setCollapsedLeagues((prev) => ({
@@ -350,6 +335,21 @@ function FotmobCompanion() {
       const detailsCache = fetchedMatchDetailsCacheRef.current;
       const currentDateStr = targetDateStr || selectedDateRef.current;
 
+      const fetchAndStoreDetails = (matchId, totalGoals, isFinished) => {
+        fetchMatchDetails(matchId).then((details) => {
+          if (details && details.length > 0) {
+            updateMatchDetails(matchId, details, currentDateStr);
+            const detailsAreComplete =
+              details.length >= totalGoals &&
+              details.every((g) => g.scorer && g.scorer.trim() !== "");
+
+            if (detailsAreComplete || isFinished) {
+              prevScores[matchId] = totalGoals;
+            }
+          }
+        });
+      };
+
       allMatchesList.forEach((m) => {
         const totalGoals = m.home.score + m.away.score;
         if (totalGoals === 0 || !SERVERLESS_WORKER_URL) {
@@ -394,18 +394,7 @@ function FotmobCompanion() {
             !isFinished;
 
           if (scoreChanged || isIncomplete) {
-            fetchMatchDetails(m.id).then((details) => {
-              if (details && details.length > 0) {
-                updateMatchDetails(m.id, details, currentDateStr);
-                const detailsAreComplete =
-                  details.length >= totalGoals &&
-                  details.every((g) => g.scorer && g.scorer.trim() !== "");
-
-                if (detailsAreComplete || isFinished) {
-                  prevScores[m.id] = totalGoals;
-                }
-              }
-            });
+            fetchAndStoreDetails(m.id, totalGoals, isFinished);
           } else {
             prevScores[m.id] = totalGoals;
           }
@@ -413,18 +402,7 @@ function FotmobCompanion() {
         }
 
         // If NOT cached yet, fetch once and store in session cache
-        fetchMatchDetails(m.id).then((details) => {
-          if (details && details.length > 0) {
-            updateMatchDetails(m.id, details, currentDateStr);
-            const detailsAreComplete =
-              details.length >= totalGoals &&
-              details.every((g) => g.scorer && g.scorer.trim() !== "");
-
-            if (detailsAreComplete || isFinished) {
-              prevScores[m.id] = totalGoals;
-            }
-          }
-        });
+        fetchAndStoreDetails(m.id, totalGoals, isFinished);
       });
     },
     [updateMatchDetails, fetchMatchDetails],
@@ -515,12 +493,7 @@ function FotmobCompanion() {
   // Dataset Filtering
   const effectiveShowOnlyLive = isToday ? showOnlyLive : false;
   const activeDataset = effectiveShowOnlyLive ? matches : allMatchesForDate;
-  let filteredMatches = activeDataset.filter(
-    (m) =>
-      isMatchInFavoriteLeagues(m.leagueName, m.leagueId) ||
-      isFavoriteTeam(m.home) ||
-      isFavoriteTeam(m.away),
-  );
+  let filteredMatches = activeDataset.filter(isFavoriteMatch);
 
   if (searchQuery.trim() !== "") {
     const q = searchQuery.toLowerCase();
@@ -548,25 +521,13 @@ function FotmobCompanion() {
   return (
     <div className="w-11/12 lg:w-11/12 xl:w-5/6 mx-auto font-sans py-6 h-screen flex flex-col overflow-hidden text-center">
       {/* Top Header Nav */}
-      <div className="flex justify-between items-center mb-16 flex-shrink-0 pt-1 px-1">
-        <button
-          className="cardComponent smallEnlarge origin-left text-xs text-secondary px-3 py-1.5 cursor-pointer"
-          onClick={() => navigate("/")}
-        >
-          ← Portfolio
-        </button>
-
-        {/* Header Title */}
-        <div className="flex items-center justify-center space-x-2 text-2xl font-bold tracking-tight">
-          <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-light opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
-          </span>
-          <span>FotMob Siphon</span>
-        </div>
-
-        <ThemeToggle />
-      </div>
+      <PageHeader className="mb-16">
+        <span className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-light opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
+        </span>
+        <span>FotMob Siphon</span>
+      </PageHeader>
 
       {/* Main Controls & Search Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 border-[0.5px] border-background-dark rounded-xl bg-background-dark/30 shadow-md mb-16 flex-shrink-0">
@@ -596,7 +557,8 @@ function FotmobCompanion() {
               <ChevronLeftIcon className="h-4 w-4" />
             </button>
 
-            <div
+            <button
+              type="button"
               onClick={() => dateInputRef.current?.showPicker()}
               className="relative flex items-center px-2 py-1 rounded hover:bg-background-darker transition-colors cursor-pointer"
               title="Click to select date"
@@ -614,7 +576,7 @@ function FotmobCompanion() {
                 }
                 className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
               />
-            </div>
+            </button>
 
             <button
               onClick={() => handleDateChange(shiftDateString(selectedDate, 1))}
@@ -714,7 +676,7 @@ function FotmobCompanion() {
             <LongRangeGoalsWidget
               allMatches={allMatchesForDate}
               matchDetailsMap={matchDetailsMap}
-              isFavoriteLeague={isMatchInFavoriteLeagues}
+              filterMatch={isFavoriteMatch}
             />
           </ScrollableFeed>
         </div>

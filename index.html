@@ -7,6 +7,7 @@
     <meta name="color-scheme" content="light dark" />
     <title>Portfolio</title>
     <style>
+      /* Baseline styles to prevent FOUC (Flash of Unstyled Content) before CSS bundle hydrates */
       html,
       body,
       #root {
@@ -26,6 +27,7 @@
     <script>
       (function () {
         try {
+          // Light-first design: defaults to light theme unless "dark" is explicitly stored.
           var stored = localStorage.getItem("theme");
           var isDark = stored === "dark";
           var root = document.documentElement;

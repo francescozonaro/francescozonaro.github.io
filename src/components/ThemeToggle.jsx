@@ -2,8 +2,17 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
+// Default to light theme ("light-first" design).
+// Check localStorage explicitly first, falling back to the DOM class list.
 function getInitialThemeIsDark() {
   if (typeof window === "undefined") return false;
+  try {
+    const stored = localStorage.getItem("theme");
+    if (stored === "dark") return true;
+    if (stored === "light") return false;
+  } catch (e) {
+    // Ignore storage access errors
+  }
   return document.documentElement.classList.contains("dark-theme");
 }
 
@@ -74,10 +83,8 @@ export default function ThemeToggle({ className = "" }) {
       </button>
 
       <div
-        className={`absolute top-1 bottom-1 rounded-full bg-background-dark border border-background-dark/80 shadow-md transition-all duration-300 ease-out pointer-events-none ${
-          !isDark
-            ? "left-1 w-[calc(50%-4px)]"
-            : "left-[calc(50%+2px)] w-[calc(50%-4px)]"
+        className={`absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-background-dark border border-background-dark/80 shadow-md transition-transform duration-300 ease-out pointer-events-none ${
+          !isDark ? "translate-x-0" : "translate-x-full"
         }`}
       />
     </div>

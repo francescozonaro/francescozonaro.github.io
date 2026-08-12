@@ -80,6 +80,10 @@
       color 0.25s ease,
       border-color 0.25s ease !important;
   }
+
+  a {
+    @apply text-secondary hover:text-secondary-dark;
+  }
 }
 
 @layer utilities {
