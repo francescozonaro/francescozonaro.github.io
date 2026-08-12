@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import CollapsibleCard from "./CollapsibleCard";
 import TeamLogo from "./TeamLogo";
-import { getDisplayGoals, getGoalSearchUrl } from "./utilities";
+import { getDisplayGoals, getGoalSearchUrl } from "./commons";
 
 export default function LeagueFixturesWidget({
   groupedLeagues = {},

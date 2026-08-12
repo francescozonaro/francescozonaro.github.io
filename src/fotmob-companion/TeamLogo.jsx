@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { DEFAULT_TEAM_LOGO } from "./utilities";
+import { DEFAULT_TEAM_LOGO } from "./commons";
 
 export function TeamLogo({
   src,

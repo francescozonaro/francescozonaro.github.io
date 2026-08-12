@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import CollapsibleCard from "./CollapsibleCard";
-import { getGoalSearchUrl, filterFavoriteMatches } from "./utilities";
+import { getGoalSearchUrl, filterFavoriteMatches } from "./commons";
 
 export default function LongRangeGoalsWidget({
   allMatches = [],

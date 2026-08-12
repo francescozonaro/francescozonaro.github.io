@@ -14,7 +14,8 @@ export const HARDCODED_FAVORITES_LEAGUES = [
   86, // Serie B (Italy)
   57, // Eredivisie
   40, // Belgian Pro League
-  10611, // CL
+  74, // UEFA Super Cup
+  10611, // Champions League Qualifiers
   10043, // Leagues Cup (USA)
 ];
 
@@ -240,4 +241,3 @@ export function getDisplayGoals(goalsArr, teamScore, isHome) {
   }
   return result;
 }
-

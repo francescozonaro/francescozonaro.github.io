@@ -21,7 +21,7 @@ import {
   formatAssistName,
   evaluateShot,
   transformFotmobMatch,
-} from "./utilities";
+} from "./commons";
 
 // Modular Sub-Components
 function ScrollableFeed({ children }) {
@@ -220,6 +220,7 @@ function enrichGoalWithTelemetry(eg, goalShots) {
 
 function FotmobCompanion() {
   const navigate = useNavigate();
+  const dateInputRef = useRef(null);
 
   useEffect(() => {
     const prevTitle = document.title;
@@ -231,10 +232,29 @@ function FotmobCompanion() {
     const prevHref = link.getAttribute("href");
     const prevType = link.getAttribute("type");
 
-    link.setAttribute("type", "image/svg+xml");
-    link.setAttribute("href", "/fotmob-favicon.svg");
+    const updateFavicon = () => {
+      const isDark = document.documentElement.classList.contains("dark-theme");
+      const accent = isDark ? "%23818cf8" : "%23b94648";
+      const bg = isDark ? "%23121110" : "%23f5f5f5";
+      const border = isDark ? "%23262626" : "%23d5d5d5";
+      const lines = isDark ? "%23f5f0eb" : "%23161616";
+
+      const svgData = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' width='64' height='64'><rect width='64' height='64' rx='16' fill='${bg}' stroke='${border}' stroke-width='1'/><g transform='translate(32, 32)'><circle r='18' fill='none' stroke='${lines}' stroke-width='2.5'/><polygon points='0,-6 5.7,-1.8 3.5,4.9 -3.5,4.9 -5.7,-1.8' fill='${accent}'/><line x1='0' y1='-6' x2='0' y2='-18' stroke='${lines}' stroke-width='2' stroke-linecap='round'/><line x1='5.7' y1='-1.8' x2='17.1' y2='-5.5' stroke='${lines}' stroke-width='2' stroke-linecap='round'/><line x1='3.5' y1='4.9' x2='10.6' y2='14.6' stroke='${lines}' stroke-width='2' stroke-linecap='round'/><line x1='-3.5' y1='4.9' x2='-10.6' y2='14.6' stroke='${lines}' stroke-width='2' stroke-linecap='round'/><line x1='-5.7' y1='-1.8' x2='-17.1' y2='-5.5' stroke='${lines}' stroke-width='2' stroke-linecap='round'/></g></svg>`;
+
+      link.setAttribute("type", "image/svg+xml");
+      link.setAttribute("href", svgData);
+    };
+
+    updateFavicon();
+
+    const observer = new MutationObserver(() => updateFavicon());
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     return () => {
+      observer.disconnect();
       document.title = prevTitle;
       if (prevType !== null) {
         link.setAttribute("type", prevType);
@@ -576,19 +596,23 @@ function FotmobCompanion() {
               <ChevronLeftIcon className="h-4 w-4" />
             </button>
 
-            <div className="relative flex items-center px-1.5 py-0.5">
-              <CalendarIcon className="h-3.5 w-3.5 text-primary/60 mr-1.5 flex-shrink-0" />
-              <span className="text-xs font-semibold text-primary select-none cursor-pointer whitespace-nowrap">
+            <div
+              onClick={() => dateInputRef.current?.showPicker()}
+              className="relative flex items-center px-2 py-1 rounded hover:bg-background-darker transition-colors cursor-pointer"
+              title="Click to select date"
+            >
+              <CalendarIcon className="h-3.5 w-3.5 text-primary/60 mr-1.5 flex-shrink-0 pointer-events-none" />
+              <span className="text-xs font-semibold text-primary select-none whitespace-nowrap pointer-events-none">
                 {formatDateLabel(selectedDate)}
               </span>
               <input
+                ref={dateInputRef}
                 type="date"
                 value={selectedDate}
                 onChange={(e) =>
                   e.target.value && handleDateChange(e.target.value)
                 }
                 className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                title="Click to select date"
               />
             </div>
 
