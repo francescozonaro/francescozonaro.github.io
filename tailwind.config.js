@@ -5,9 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        inter: ["Libre Franklin"],
-        sans: ["Montserrat"],
-        code: ["Consolas"],
+        sans: ["Montserrat", "sans-serif"],
       },
       colors: {
         background: {

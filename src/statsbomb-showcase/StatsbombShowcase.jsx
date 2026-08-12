@@ -1,5 +1,4 @@
 import "./StatsbombShowcase.css";
-import "../App.css";
 
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";

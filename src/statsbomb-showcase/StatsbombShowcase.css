@@ -35,6 +35,6 @@
 }
 
 .section-wrapper .visual-previews img {
-  @apply mt-2 rounded-md w-[300px] smallEnlarge opacity-80 border-[2px] border-background-dark bg-background-dark hover:bg-background-darker hover:bg-opacity-50;
+  @apply mt-2 w-[300px] opacity-80 cardComponent smallEnlarge;
 }
 

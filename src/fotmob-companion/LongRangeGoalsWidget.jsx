@@ -70,7 +70,7 @@ export default function LongRangeGoalsWidget({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center space-x-1.5 flex-wrap">
                     <a
-                      href={getGoalSearchUrl(g.scorer, g.team)}
+                      href={getGoalSearchUrl(g.scorer)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-semibold text-primary hover:text-secondary hover:underline transition-colors"

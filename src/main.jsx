@@ -5,11 +5,7 @@ import App from "./App";
 import StatsbombShowcase from "./statsbomb-showcase/StatsbombShowcase";
 import FotmobCompanion from "./fotmob-companion/FotmobCompanion";
 
-import {
-  // createBrowserRouter,
-  createHashRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 
 const router = createHashRouter([
   {

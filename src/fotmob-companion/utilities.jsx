@@ -112,9 +112,7 @@ export function isPenaltyScorer(scorer) {
   return !!scorer && scorer.toLowerCase().includes("(p)");
 }
 
-export function evaluateShotTelemetry(matchingShot, eg) {
-  console.log(matchingShot, eg);
-
+export function evaluateShot(matchingShot, eg) {
   if (
     !matchingShot ||
     typeof matchingShot.x !== "number" ||
@@ -243,24 +241,3 @@ export function getDisplayGoals(goalsArr, teamScore, isHome) {
   return result;
 }
 
-export function TeamLogo({
-  src,
-  className = "w-6 h-6 object-contain flex-shrink-0",
-}) {
-  return (
-    <img
-      src={src || DEFAULT_TEAM_LOGO}
-      alt=""
-      className={className}
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = DEFAULT_TEAM_LOGO;
-      }}
-    />
-  );
-}
-
-TeamLogo.propTypes = {
-  src: PropTypes.string,
-  className: PropTypes.string,
-};

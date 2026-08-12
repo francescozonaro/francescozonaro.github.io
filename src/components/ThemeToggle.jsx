@@ -13,13 +13,9 @@ function applyTheme(isDark) {
   if (isDark) {
     root.classList.add("dark-theme");
     root.classList.remove("light-theme");
-    root.style.backgroundColor = "#121110";
-    root.style.color = "#f5f0eb";
   } else {
     root.classList.add("light-theme");
     root.classList.remove("dark-theme");
-    root.style.backgroundColor = "#f5f5f5";
-    root.style.color = "#161616";
   }
   try {
     localStorage.setItem("theme", isDark ? "dark" : "light");

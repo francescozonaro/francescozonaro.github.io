@@ -19,7 +19,7 @@ import {
   isMatchInFavoriteLeagues,
   formatScorerName,
   formatAssistName,
-  evaluateShotTelemetry,
+  evaluateShot,
   transformFotmobMatch,
 } from "./utilities";
 
@@ -215,7 +215,7 @@ function enrichGoalWithTelemetry(eg, goalShots) {
   const matchingShot = findMatchingShot(eg, goalShots);
   delete eg.rawEvent;
   delete eg.teamId;
-  Object.assign(eg, evaluateShotTelemetry(matchingShot, eg));
+  Object.assign(eg, evaluateShot(matchingShot, eg));
 }
 
 function FotmobCompanion() {
@@ -223,29 +223,26 @@ function FotmobCompanion() {
 
   useEffect(() => {
     const prevTitle = document.title;
-    let link = document.querySelector("link[rel*='icon']");
-    const prevHref = link ? link.getAttribute("href") : "/favicon.ico";
-    const prevType = link ? link.getAttribute("type") : "image/x-icon";
-
-    if (!link) {
-      link = document.createElement("link");
-      link.rel = "icon";
-      document.head.appendChild(link);
-    }
-
     document.title = "FotMob Companion";
-    link.type = "image/svg+xml";
-    link.href = "/fotmob-favicon.svg";
+
+    const link = document.querySelector("link[rel*='icon']");
+    if (!link) return;
+
+    const prevHref = link.getAttribute("href");
+    const prevType = link.getAttribute("type");
+
+    link.setAttribute("type", "image/svg+xml");
+    link.setAttribute("href", "/fotmob-favicon.svg");
 
     return () => {
       document.title = prevTitle;
-      if (link) {
-        if (prevType) {
-          link.type = prevType;
-        } else {
-          link.removeAttribute("type");
-        }
-        link.href = prevHref || "/favicon.ico";
+      if (prevType !== null) {
+        link.setAttribute("type", prevType);
+      } else {
+        link.removeAttribute("type");
+      }
+      if (prevHref !== null) {
+        link.setAttribute("href", prevHref);
       }
     };
   }, []);
@@ -285,17 +282,21 @@ function FotmobCompanion() {
     }));
   };
 
-  const updateMatchDetails = useCallback((matchId, details) => {
-    if (!details) return;
-    const currentDateStr = selectedDateRef.current;
-    const detailsCache = fetchedMatchDetailsCacheRef.current;
-    detailsCache[matchId] = details;
-    saveDetailsCache(currentDateStr, detailsCache);
-    setMatchDetailsMap((prev) => ({
-      ...prev,
-      [matchId]: details,
-    }));
-  }, []);
+  const updateMatchDetails = useCallback(
+    (matchId, details, targetDateStr) => {
+      if (!details) return;
+      const currentDateStr = targetDateStr || selectedDateRef.current;
+      if (currentDateStr !== selectedDateRef.current) return;
+      const detailsCache = fetchedMatchDetailsCacheRef.current;
+      detailsCache[matchId] = details;
+      saveDetailsCache(currentDateStr, detailsCache);
+      setMatchDetailsMap((prev) => ({
+        ...prev,
+        [matchId]: details,
+      }));
+    },
+    [],
+  );
 
   // Fetch detailed telemetry (events & shotmap xG) for a match
   const fetchMatchDetails = useCallback(async (matchId) => {
@@ -324,10 +325,10 @@ function FotmobCompanion() {
   }, []);
 
   const processGoalEvents = useCallback(
-    (allMatchesList) => {
+    (allMatchesList, targetDateStr) => {
       const prevScores = previousScoresRef.current;
       const detailsCache = fetchedMatchDetailsCacheRef.current;
-      const currentDateStr = selectedDateRef.current;
+      const currentDateStr = targetDateStr || selectedDateRef.current;
 
       allMatchesList.forEach((m) => {
         const totalGoals = m.home.score + m.away.score;
@@ -355,7 +356,7 @@ function FotmobCompanion() {
 
         // Optimization: If details are already cached in memory or sessionStorage
         if (detailsCache[m.id]) {
-          updateMatchDetails(m.id, detailsCache[m.id]);
+          updateMatchDetails(m.id, detailsCache[m.id], currentDateStr);
 
           // Re-fetch if a live match scored a NEW goal OR if cached details are incomplete/missing scorer names/telemetry
           const cachedDetails = detailsCache[m.id] || [];
@@ -375,7 +376,7 @@ function FotmobCompanion() {
           if (scoreChanged || isIncomplete) {
             fetchMatchDetails(m.id).then((details) => {
               if (details && details.length > 0) {
-                updateMatchDetails(m.id, details);
+                updateMatchDetails(m.id, details, currentDateStr);
                 const detailsAreComplete =
                   details.length >= totalGoals &&
                   details.every((g) => g.scorer && g.scorer.trim() !== "");
@@ -394,7 +395,7 @@ function FotmobCompanion() {
         // If NOT cached yet, fetch once and store in session cache
         fetchMatchDetails(m.id).then((details) => {
           if (details && details.length > 0) {
-            updateMatchDetails(m.id, details);
+            updateMatchDetails(m.id, details, currentDateStr);
             const detailsAreComplete =
               details.length >= totalGoals &&
               details.every((g) => g.scorer && g.scorer.trim() !== "");
@@ -442,7 +443,7 @@ function FotmobCompanion() {
             const parsed = processFotmobData(data);
             setMatches(parsed.liveList);
             setAllMatchesForDate(parsed.allList);
-            processGoalEvents(parsed.allList);
+            processGoalEvents(parsed.allList, targetDateStr);
 
             const nowStr = new Date().toLocaleTimeString([], {
               hour: "2-digit",

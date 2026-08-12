@@ -20,51 +20,37 @@ function App() {
       );
   }, []);
 
-  const linkIcons = {
-    code: (url) => (
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="cardComponent smallEnlarge align-middle justify-center flex p-1"
-      >
-        <CodeBracketIcon className="h-5 w-5" />
-      </a>
-    ),
-    link: (url) => {
-      const isInternal = url.startsWith("/#/") || url.startsWith("/");
-      if (isInternal) {
-        const path = url.replace(/^\/#/, "");
-        return (
-          <Link
-            to={path}
-            className="cardComponent smallEnlarge align-middle justify-center flex p-1 text-secondary"
-          >
-            <LinkIcon className="h-5 w-5" />
-          </Link>
-        );
-      }
+  const linkBtnClass =
+    "cardComponent smallEnlarge align-middle justify-center flex p-1";
+
+  const renderLinkButton = (url, IconComponent) => {
+    const isInternal = url.startsWith("/#/") || url.startsWith("/");
+    if (isInternal) {
       return (
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="cardComponent smallEnlarge align-middle justify-center flex p-1"
+        <Link
+          to={url.replace(/^\/#/, "")}
+          className={`${linkBtnClass} text-secondary`}
         >
-          <LinkIcon className="h-5 w-5" />
-        </a>
+          <IconComponent className="h-5 w-5" />
+        </Link>
       );
-    },
-    pdf: (url) => (
+    }
+    return (
       <a
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="cardComponent smallEnlarge align-middle justify-center flex p-1"
+        className={linkBtnClass}
       >
-        <DocumentIcon className="h-5 w-5" />
+        <IconComponent className="h-5 w-5" />
       </a>
-    ),
+    );
+  };
+
+  const linkIcons = {
+    code: (url) => renderLinkButton(url, CodeBracketIcon),
+    link: (url) => renderLinkButton(url, LinkIcon),
+    pdf: (url) => renderLinkButton(url, DocumentIcon),
   };
 
   return (
@@ -99,22 +85,11 @@ function App() {
           <h1 className="font-bold mt-4 text-center text-2xl">Projects</h1>
 
           {data.projects.map((project, index) => (
-            <div
-              className="mt-8 border-[0.5px] rounded-xl p-6 border-background-dark shadow-xl"
+            <CardItem
               key={project.title || index}
-            >
-              <div className="font-bold">{project.title}</div>
-              <div className="mt-2 text-sm text-justify">
-                {project.description}
-              </div>
-              <div className="flex justify-center space-x-6 mt-6">
-                {project.links.map((link, lIdx) => (
-                  <span key={lIdx}>
-                    {linkIcons[link.type]?.(link.url) || null}
-                  </span>
-                ))}
-              </div>
-            </div>
+              item={project}
+              linkIcons={linkIcons}
+            />
           ))}
         </div>
 
@@ -122,24 +97,27 @@ function App() {
           <h1 className="font-bold mt-4 text-center text-2xl">Reports</h1>
 
           {data.reports.map((report, index) => (
-            <div
-              className="mt-8 border-[0.5px] rounded-xl p-6 border-background-dark shadow-xl"
+            <CardItem
               key={report.title || index}
-            >
-              <div className="font-bold">{report.title}</div>
-              <div className="mt-2 text-sm text-justify">
-                {report.description}
-              </div>
-              <div className="flex justify-center space-x-6 mt-6">
-                {report.links.map((link, lIdx) => (
-                  <span key={lIdx}>
-                    {linkIcons[link.type]?.(link.url) || null}
-                  </span>
-                ))}
-              </div>
-            </div>
+              item={report}
+              linkIcons={linkIcons}
+            />
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function CardItem({ item, linkIcons }) {
+  return (
+    <div className="mt-8 border-[0.5px] rounded-xl p-6 border-background-dark shadow-xl">
+      <div className="font-bold">{item.title}</div>
+      <div className="mt-2 text-sm text-justify">{item.description}</div>
+      <div className="flex justify-center space-x-6 mt-6">
+        {item.links.map((link, lIdx) => (
+          <span key={lIdx}>{linkIcons[link.type]?.(link.url) || null}</span>
+        ))}
       </div>
     </div>
   );

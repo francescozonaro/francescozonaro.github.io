@@ -2,7 +2,8 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import CollapsibleCard from "./CollapsibleCard";
-import { TeamLogo, getDisplayGoals, getGoalSearchUrl } from "./utilities";
+import TeamLogo from "./TeamLogo";
+import { getDisplayGoals, getGoalSearchUrl } from "./utilities";
 
 export default function LeagueFixturesWidget({
   groupedLeagues = {},
@@ -13,15 +14,15 @@ export default function LeagueFixturesWidget({
   matchDetailsMap = {},
   showOnlyLive = false,
 }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isEmptyCardCollapsed, setIsEmptyCardCollapsed] = useState(false);
   const groups = Object.values(groupedLeagues);
 
   if (groups.length === 0) {
     return (
       <CollapsibleCard
         title="No leagues found"
-        isCollapsed={isCollapsed}
-        onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+        isCollapsed={isEmptyCardCollapsed}
+        onToggleCollapse={() => setIsEmptyCardCollapsed(!isEmptyCardCollapsed)}
       >
         <div className="p-3.5 min-h-[220px] flex flex-col justify-between">
           <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
@@ -157,7 +158,7 @@ export default function LeagueFixturesWidget({
                                 </span>
                               )}
                               <a
-                                href={getGoalSearchUrl(g.scorer, m.home.name)}
+                                href={getGoalSearchUrl(g.scorer)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
@@ -190,7 +191,7 @@ export default function LeagueFixturesWidget({
                                 </span>
                               )}
                               <a
-                                href={getGoalSearchUrl(g.scorer, m.away.name)}
+                                href={getGoalSearchUrl(g.scorer)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
