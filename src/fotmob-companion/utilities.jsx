@@ -26,11 +26,10 @@ export const SERVERLESS_WORKER_URL =
 export const SERVERLESS_FIXTURES_WORKER_URL =
   "https://fotmob-fixtures.turtleunderablanket.workers.dev";
 
-export function getGoalSearchUrl(scorerName, teamName = "") {
+export function getGoalSearchUrl(scorerName) {
   if (!scorerName) return "#";
   const cleanName = scorerName.replace(/\s*\((?:OG|P|\d+′?)\)/gi, "").trim();
-  const query = `${cleanName} ${teamName} goal`.trim();
-  return `https://x.com/search?q=${encodeURIComponent(query)}&f=live`;
+  return `https://x.com/search?q=${encodeURIComponent(cleanName)}&f=live`;
 }
 
 export function isFavoriteTeam(team) {

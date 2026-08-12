@@ -43,7 +43,7 @@ export default function LongRangeGoalsWidget({
       badge={
         longRangeGoals.length > 0 && (
           <span className="text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full ml-1 font-mono">
-            {longRangeGoals.length} today
+            {longRangeGoals.length}
           </span>
         )
       }
@@ -54,7 +54,7 @@ export default function LongRangeGoalsWidget({
         {longRangeGoals.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-1 py-8">
             <p className="text-[11px] text-primary/50 font-medium">
-              No long range goals yet today
+              No long range goals found for this date
             </p>
             <p className="text-[10px] text-primary/35">
               Goals scored from outside the box show up here

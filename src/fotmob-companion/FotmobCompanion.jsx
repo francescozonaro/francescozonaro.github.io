@@ -5,6 +5,9 @@ import {
   ArrowPathIcon,
   SignalIcon,
   MagnifyingGlassIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CalendarIcon,
 } from "@heroicons/react/24/solid";
 import ThemeToggle from "../components/ThemeToggle";
 import LongRangeGoalsWidget from "./LongRangeGoalsWidget";
@@ -33,14 +36,43 @@ ScrollableFeed.propTypes = {
   children: PropTypes.node,
 };
 
-const getTodayCacheKey = () => {
-  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  return `fotmob_details_cache_v4_${dateStr}`;
-};
+function getLocalDateString(d = new Date()) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
-const loadDetailsCache = () => {
+function shiftDateString(dateStr, days) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+  date.setDate(date.getDate() + days);
+  return getLocalDateString(date);
+}
+
+function formatDateLabel(dateStr) {
+  const todayStr = getLocalDateString(new Date());
+  const yesterdayStr = shiftDateString(todayStr, -1);
+  const tomorrowStr = shiftDateString(todayStr, 1);
+
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const dateObj = new Date(y, m - 1, d);
+  const options = { month: "short", day: "numeric" };
+  const formattedShort = dateObj.toLocaleDateString("en-US", options);
+
+  if (dateStr === todayStr) return `Today, ${formattedShort}`;
+  if (dateStr === yesterdayStr) return `Yesterday, ${formattedShort}`;
+  if (dateStr === tomorrowStr) return `Tomorrow, ${formattedShort}`;
+
+  const dayOfWeek = dateObj.toLocaleDateString("en-US", { weekday: "short" });
+  return `${dayOfWeek}, ${formattedShort}`;
+}
+
+const loadDetailsCache = (dateStr) => {
   try {
-    const raw = sessionStorage.getItem(getTodayCacheKey());
+    const raw = sessionStorage.getItem(
+      `fotmob_details_cache_v4_${dateStr.replace(/-/g, "")}`,
+    );
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     return parsed;
@@ -49,9 +81,12 @@ const loadDetailsCache = () => {
   }
 };
 
-const saveDetailsCache = (cacheObj) => {
+const saveDetailsCache = (dateStr, cacheObj) => {
   try {
-    sessionStorage.setItem(getTodayCacheKey(), JSON.stringify(cacheObj));
+    sessionStorage.setItem(
+      `fotmob_details_cache_v4_${dateStr.replace(/-/g, "")}`,
+      JSON.stringify(cacheObj),
+    );
   } catch {
     // ignore
   }
@@ -215,17 +250,26 @@ function FotmobCompanion() {
     };
   }, []);
 
+  const todayStr = getLocalDateString(new Date());
+  const [selectedDate, setSelectedDate] = useState(todayStr);
+  const isToday = selectedDate === todayStr;
+
   const [matches, setMatches] = useState([]);
-  const [allTodayMatches, setAllTodayMatches] = useState([]);
+  const [allMatchesForDate, setAllMatchesForDate] = useState([]);
   const [showOnlyLive, setShowOnlyLive] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
-  const [matchDetailsMap, setMatchDetailsMap] = useState(loadDetailsCache());
+  const [matchDetailsMap, setMatchDetailsMap] = useState(() =>
+    loadDetailsCache(todayStr),
+  );
   const [collapsedLeagues, setCollapsedLeagues] = useState({});
   const [hiddenScorersLeagues, setHiddenScorersLeagues] = useState({});
+
   const previousScoresRef = useRef({});
-  const fetchedMatchDetailsCacheRef = useRef(loadDetailsCache());
+  const fetchedMatchDetailsCacheRef = useRef(loadDetailsCache(todayStr));
+  const selectedDateRef = useRef(selectedDate);
+  selectedDateRef.current = selectedDate;
 
   const toggleCollapseLeague = (leagueName) => {
     setCollapsedLeagues((prev) => ({
@@ -243,9 +287,10 @@ function FotmobCompanion() {
 
   const updateMatchDetails = useCallback((matchId, details) => {
     if (!details) return;
+    const currentDateStr = selectedDateRef.current;
     const detailsCache = fetchedMatchDetailsCacheRef.current;
     detailsCache[matchId] = details;
-    saveDetailsCache(detailsCache);
+    saveDetailsCache(currentDateStr, detailsCache);
     setMatchDetailsMap((prev) => ({
       ...prev,
       [matchId]: details,
@@ -282,6 +327,7 @@ function FotmobCompanion() {
     (allMatchesList) => {
       const prevScores = previousScoresRef.current;
       const detailsCache = fetchedMatchDetailsCacheRef.current;
+      const currentDateStr = selectedDateRef.current;
 
       allMatchesList.forEach((m) => {
         const totalGoals = m.home.score + m.away.score;
@@ -299,7 +345,7 @@ function FotmobCompanion() {
         // If score decreased (VAR disallowed goal), invalidate cache to force clean re-fetch
         if (scoreDecreased) {
           delete detailsCache[m.id];
-          saveDetailsCache(detailsCache);
+          saveDetailsCache(currentDateStr, detailsCache);
           setMatchDetailsMap((prev) => {
             const next = { ...prev };
             delete next[m.id];
@@ -381,45 +427,73 @@ function FotmobCompanion() {
     return { liveList, allList };
   }
 
-  // Main Live Score Polling
-  const fetchLiveScores = useCallback(async () => {
-    setLoading(true);
-    try {
-      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-      const endpoint = `${SERVERLESS_FIXTURES_WORKER_URL.replace(/\/$/, "")}?date=${dateStr}&_t=${Date.now()}`;
+  // Fetch fixtures for any date
+  const fetchScoresForDate = useCallback(
+    async (targetDateStr) => {
+      setLoading(true);
+      try {
+        const dateParam = targetDateStr.replace(/-/g, "");
+        const endpoint = `${SERVERLESS_FIXTURES_WORKER_URL.replace(/\/$/, "")}?date=${dateParam}&_t=${Date.now()}`;
 
-      const res = await fetch(endpoint, { cache: "no-store" });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.leagues) {
-          const parsed = processFotmobData(data);
-          setMatches(parsed.liveList);
-          setAllTodayMatches(parsed.allList);
-          processGoalEvents(parsed.allList);
+        const res = await fetch(endpoint, { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.leagues) {
+            const parsed = processFotmobData(data);
+            setMatches(parsed.liveList);
+            setAllMatchesForDate(parsed.allList);
+            processGoalEvents(parsed.allList);
 
-          const nowStr = new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          });
-          setLastUpdated(nowStr);
+            const nowStr = new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            });
+            setLastUpdated(nowStr);
+          }
         }
+      } catch (err) {
+        console.error("Fetch error:", err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [processGoalEvents]);
+    },
+    [processGoalEvents],
+  );
+
+  const handleDateChange = useCallback(
+    (newDateStr) => {
+      if (!newDateStr || newDateStr === selectedDateRef.current) return;
+      setSelectedDate(newDateStr);
+      selectedDateRef.current = newDateStr;
+
+      const newCache = loadDetailsCache(newDateStr);
+      fetchedMatchDetailsCacheRef.current = newCache;
+      setMatchDetailsMap(newCache);
+      previousScoresRef.current = {};
+      setMatches([]);
+      setAllMatchesForDate([]);
+
+      fetchScoresForDate(newDateStr);
+    },
+    [fetchScoresForDate],
+  );
 
   useEffect(() => {
-    fetchLiveScores();
-    const timer = setInterval(fetchLiveScores, 60000); // 1 minute auto-refresh
-    return () => clearInterval(timer);
-  }, [fetchLiveScores]);
+    fetchScoresForDate(selectedDate);
+
+    // Auto-refresh only if viewing today's matches
+    if (isToday) {
+      const timer = setInterval(() => {
+        fetchScoresForDate(todayStr);
+      }, 60000);
+      return () => clearInterval(timer);
+    }
+  }, [selectedDate, isToday, fetchScoresForDate, todayStr]);
 
   // Dataset Filtering
-  const activeDataset = showOnlyLive ? matches : allTodayMatches;
+  const effectiveShowOnlyLive = isToday ? showOnlyLive : false;
+  const activeDataset = effectiveShowOnlyLive ? matches : allMatchesForDate;
   let filteredMatches = activeDataset.filter(
     (m) =>
       isMatchInFavoriteLeagues(m.leagueName, m.leagueId) ||
@@ -481,35 +555,95 @@ function FotmobCompanion() {
 
       {/* Main Controls & Search Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 border-[0.5px] border-background-light rounded-xl bg-background-dark/30 shadow-md mb-6 flex-shrink-0">
-        <div className="relative flex-1 max-w-sm min-w-[220px]">
-          <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-4 w-4 text-primary/40" />
-          <input
-            type="text"
-            placeholder="Search teams or leagues..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs rounded-md border border-background-light bg-background-dark/80 text-primary placeholder-primary/40 focus:outline-none focus:border-secondary"
-          />
+        {/* Left Side: Search Bar & Date Selector grouped together */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Search Bar */}
+          <div className="relative w-64 sm:w-72">
+            <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-4 w-4 text-primary/40" />
+            <input
+              type="text"
+              placeholder="Search teams or leagues..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-md border border-background-light bg-background-dark/80 text-primary placeholder-primary/40 focus:outline-none focus:border-secondary"
+            />
+          </div>
+
+          {/* Date Selector (Monochrome) */}
+          <div className="flex items-center space-x-1 border border-background-light/60 bg-background-dark/60 rounded-md p-1">
+            <button
+              onClick={() => handleDateChange(shiftDateString(selectedDate, -1))}
+              className="p-1 rounded text-primary/70 hover:text-primary hover:bg-background-light/40 transition-colors cursor-pointer"
+              title="Previous Day"
+            >
+              <ChevronLeftIcon className="h-4 w-4" />
+            </button>
+
+            <div className="relative flex items-center px-1.5 py-0.5">
+              <CalendarIcon className="h-3.5 w-3.5 text-primary/60 mr-1.5 flex-shrink-0" />
+              <span className="text-xs font-semibold text-primary select-none cursor-pointer whitespace-nowrap">
+                {formatDateLabel(selectedDate)}
+              </span>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) =>
+                  e.target.value && handleDateChange(e.target.value)
+                }
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                title="Click to select date"
+              />
+            </div>
+
+            <button
+              onClick={() => handleDateChange(shiftDateString(selectedDate, 1))}
+              className="p-1 rounded text-primary/70 hover:text-primary hover:bg-background-light/40 transition-colors cursor-pointer"
+              title="Next Day"
+            >
+              <ChevronRightIcon className="h-4 w-4" />
+            </button>
+
+            {!isToday && (
+              <button
+                onClick={() => handleDateChange(todayStr)}
+                className="ml-1 px-2 py-0.5 text-[10px] font-bold text-primary/80 bg-background-light/40 border border-background-light/60 rounded hover:bg-background-light/60 hover:text-primary transition-colors cursor-pointer"
+                title="Jump to Today"
+              >
+                Today
+              </button>
+            )}
+          </div>
         </div>
 
-        <div className="flex items-center space-x-3 mx-auto md:mx-0">
+        {/* Right Side: Live Only & Refresh buttons */}
+        <div className="flex items-center space-x-3">
           <button
-            onClick={() => setShowOnlyLive(!showOnlyLive)}
+            onClick={() => isToday && setShowOnlyLive(!showOnlyLive)}
+            disabled={!isToday}
             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center space-x-1.5 ${
-              showOnlyLive
-                ? "border border-secondary/50 bg-secondary/10 text-secondary"
-                : "cardComponent text-primary"
+              !isToday
+                ? "opacity-40 cursor-not-allowed border border-background-light/40 bg-background-dark/40 text-primary/40"
+                : showOnlyLive
+                  ? "border border-secondary/50 bg-secondary/10 text-secondary cursor-pointer"
+                  : "cardComponent text-primary cursor-pointer"
             }`}
+            title={!isToday ? "Live filtering is only active for today" : ""}
           >
             <SignalIcon className="h-3.5 w-3.5" />
-            <span>{showOnlyLive ? "Live Only" : "All Today"}</span>
+            <span>{effectiveShowOnlyLive ? "Live Only" : "All Matches"}</span>
           </button>
 
           <button
-            onClick={fetchLiveScores}
-            disabled={loading}
-            className="cardComponent smallEnlarge px-3 py-1.5 text-xs font-semibold text-secondary flex items-center space-x-1.5"
-            title="Refresh Live Scores"
+            onClick={() => isToday && fetchScoresForDate(todayStr)}
+            disabled={!isToday || loading}
+            className={`px-3 py-1.5 text-xs font-semibold flex items-center space-x-1.5 ${
+              !isToday
+                ? "opacity-40 cursor-not-allowed border border-background-light/40 bg-background-dark/40 text-primary/40 rounded-md"
+                : "cardComponent smallEnlarge text-secondary cursor-pointer"
+            }`}
+            title={
+              !isToday ? "Live refresh is only active for today" : "Refresh Scores"
+            }
           >
             <ArrowPathIcon
               className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`}
@@ -555,7 +689,7 @@ function FotmobCompanion() {
 
           <ScrollableFeed>
             <LongRangeGoalsWidget
-              allMatches={allTodayMatches}
+              allMatches={allMatchesForDate}
               matchDetailsMap={matchDetailsMap}
               isFavoriteLeague={isMatchInFavoriteLeagues}
             />
