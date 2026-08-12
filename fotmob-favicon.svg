@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="16" fill="#121110" stroke="#262626" stroke-width="1" />
+  <rect width="64" height="64" rx="16" fill="#09090b" stroke="#27272a" stroke-width="1.5" />
   <g transform="translate(32, 32)">
-    <circle r="18" fill="none" stroke="#f5f0eb" stroke-width="2.5" />
-    <polygon points="0,-6 5.7,-1.8 3.5,4.9 -3.5,4.9 -5.7,-1.8" fill="#818cf8" />
-    <line x1="0" y1="-6" x2="0" y2="-18" stroke="#f5f0eb" stroke-width="2" stroke-linecap="round" />
-    <line x1="5.7" y1="-1.8" x2="17.1" y2="-5.5" stroke="#f5f0eb" stroke-width="2" stroke-linecap="round" />
-    <line x1="3.5" y1="4.9" x2="10.6" y2="14.6" stroke="#f5f0eb" stroke-width="2" stroke-linecap="round" />
-    <line x1="-3.5" y1="4.9" x2="-10.6" y2="14.6" stroke="#f5f0eb" stroke-width="2" stroke-linecap="round" />
-    <line x1="-5.7" y1="-1.8" x2="-17.1" y2="-5.5" stroke="#f5f0eb" stroke-width="2" stroke-linecap="round" />
+    <circle r="18" fill="none" stroke="#f4f4f5" stroke-width="2" />
+    <polygon points="0,-6.5 6.18,-2.01 3.82,5.26 -3.82,5.26 -6.18,-2.01" fill="#f4f4f5" />
+    <line x1="0" y1="-6.5" x2="0" y2="-18" stroke="#f4f4f5" stroke-width="1.75" stroke-linecap="round" />
+    <line x1="6.18" y1="-2.01" x2="17.12" y2="-5.56" stroke="#f4f4f5" stroke-width="1.75" stroke-linecap="round" />
+    <line x1="3.82" y1="5.26" x2="10.58" y2="14.56" stroke="#f4f4f5" stroke-width="1.75" stroke-linecap="round" />
+    <line x1="-3.82" y1="5.26" x2="-10.58" y2="14.56" stroke="#f4f4f5" stroke-width="1.75" stroke-linecap="round" />
+    <line x1="-6.18" y1="-2.01" x2="-17.12" y2="-5.56" stroke="#f4f4f5" stroke-width="1.75" stroke-linecap="round" />
   </g>
 </svg>

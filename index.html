@@ -7,6 +7,7 @@
     <meta name="color-scheme" content="light dark" />
     <title>Portfolio</title>
     <style>
+      /* Baseline styles to prevent FOUC (Flash of Unstyled Content) before CSS bundle hydrates */
       html,
       body,
       #root {
@@ -26,6 +27,7 @@
     <script>
       (function () {
         try {
+          // Light-first design: defaults to light theme unless "dark" is explicitly stored.
           var stored = localStorage.getItem("theme");
           var isDark = stored === "dark";
           var root = document.documentElement;
@@ -39,8 +41,8 @@
         } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index-0a4a0d6c.js"></script>
-    <link rel="stylesheet" href="/assets/index-919f9cc2.css">
+    <script type="module" crossorigin src="/assets/index-53b671aa.js"></script>
+    <link rel="stylesheet" href="/assets/index-87733baf.css">
   </head>
   <body>
     <div id="root"></div>
