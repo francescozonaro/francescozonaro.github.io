@@ -178,8 +178,8 @@ export function parseMatchStatus(status = {}, match = {}) {
           hour12: false,
         });
       }
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error("Failed to parse match status timestamp:", e);
     }
   }
 

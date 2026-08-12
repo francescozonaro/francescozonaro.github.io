@@ -11,7 +11,7 @@ function getInitialThemeIsDark() {
     if (stored === "dark") return true;
     if (stored === "light") return false;
   } catch (e) {
-    // Ignore storage access errors
+    console.error("Failed to read theme from localStorage:", e);
   }
   return document.documentElement.classList.contains("dark-theme");
 }

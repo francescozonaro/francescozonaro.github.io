@@ -5,6 +5,61 @@ import CollapsibleCard from "./CollapsibleCard";
 import TeamLogo from "./TeamLogo";
 import { getDisplayGoals, getGoalSearchUrl } from "./commons";
 
+function ScorerRow({ goal, isHome }) {
+  const badge = goal.isLongRangeGoal && (
+    <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
+      LRG
+    </span>
+  );
+  const time = goal.time && (
+    <span className="text-primary/45 font-mono text-[10px]">
+      {goal.time}
+    </span>
+  );
+  const link = (
+    <a
+      href={getGoalSearchUrl(goal.scorer)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
+      title={`Search ${goal.scorer || "goal"} on X`}
+    >
+      {goal.scorer || "Goal"}
+    </a>
+  );
+
+  return (
+    <div
+      className={`flex items-center space-x-1.5 flex-wrap ${
+        isHome ? "justify-end" : "justify-start"
+      }`}
+    >
+      {isHome ? (
+        <>
+          {badge}
+          {link}
+          {time}
+        </>
+      ) : (
+        <>
+          {time}
+          {link}
+          {badge}
+        </>
+      )}
+    </div>
+  );
+}
+
+ScorerRow.propTypes = {
+  goal: PropTypes.shape({
+    scorer: PropTypes.string,
+    time: PropTypes.string,
+    isLongRangeGoal: PropTypes.bool,
+  }).isRequired,
+  isHome: PropTypes.bool.isRequired,
+};
+
 export default function LeagueFixturesWidget({
   groupedLeagues = {},
   collapsedLeagues = {},
@@ -148,30 +203,7 @@ export default function LeagueFixturesWidget({
                         {/* Home Team Scorers (Right Aligned) */}
                         <div className="flex-1 text-right space-y-1">
                           {homeGoals.map((g, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-center justify-end space-x-1.5 flex-wrap"
-                            >
-                              {g.isLongRangeGoal && (
-                                <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
-                                  LRG
-                                </span>
-                              )}
-                              <a
-                                href={getGoalSearchUrl(g.scorer)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
-                                title={`Search ${g.scorer || "goal"} on X`}
-                              >
-                                {g.scorer || "Goal"}
-                              </a>
-                              {g.time && (
-                                <span className="text-primary/45 font-mono text-[10px]">
-                                  {g.time}
-                                </span>
-                              )}
-                            </div>
+                            <ScorerRow key={idx} goal={g} isHome />
                           ))}
                         </div>
 
@@ -181,30 +213,7 @@ export default function LeagueFixturesWidget({
                         {/* Away Team Scorers (Left Aligned) */}
                         <div className="flex-1 text-left space-y-1">
                           {awayGoals.map((g, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-center justify-start space-x-1.5 flex-wrap"
-                            >
-                              {g.time && (
-                                <span className="text-primary/45 font-mono text-[10px]">
-                                  {g.time}
-                                </span>
-                              )}
-                              <a
-                                href={getGoalSearchUrl(g.scorer)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary/70 hover:text-secondary hover:underline cursor-pointer transition-colors font-medium"
-                                title={`Search ${g.scorer || "goal"} on X`}
-                              >
-                                {g.scorer || "Goal"}
-                              </a>
-                              {g.isLongRangeGoal && (
-                                <span className="text-[9px] font-bold text-secondary bg-secondary/15 px-1 py-0.5 rounded uppercase tracking-wider">
-                                  LRG
-                                </span>
-                              )}
-                            </div>
+                            <ScorerRow key={idx} goal={g} isHome={false} />
                           ))}
                         </div>
                       </div>

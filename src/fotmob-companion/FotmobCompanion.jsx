@@ -23,6 +23,10 @@ import {
   transformFotmobMatch,
 } from "./commons";
 
+const DETAILS_CACHE_KEY_PREFIX = "fotmob_details_cache_v4_";
+const LIVE_REFRESH_INTERVAL_MS = 60000;
+const SHOT_MINUTE_MATCH_TOLERANCE = 10;
+
 // Modular Sub-Components
 function ScrollableFeed({ children }) {
   return (
@@ -71,12 +75,13 @@ function formatDateLabel(dateStr) {
 const loadDetailsCache = (dateStr) => {
   try {
     const raw = sessionStorage.getItem(
-      `fotmob_details_cache_v4_${dateStr.replace(/-/g, "")}`,
+      `${DETAILS_CACHE_KEY_PREFIX}${dateStr.replace(/-/g, "")}`,
     );
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     return parsed;
-  } catch {
+  } catch (e) {
+    console.error("Failed to load details cache from sessionStorage:", e);
     return {};
   }
 };
@@ -84,11 +89,11 @@ const loadDetailsCache = (dateStr) => {
 const saveDetailsCache = (dateStr, cacheObj) => {
   try {
     sessionStorage.setItem(
-      `fotmob_details_cache_v4_${dateStr.replace(/-/g, "")}`,
+      `${DETAILS_CACHE_KEY_PREFIX}${dateStr.replace(/-/g, "")}`,
       JSON.stringify(cacheObj),
     );
-  } catch {
-    // ignore
+  } catch (e) {
+    console.error("Failed to save details cache to sessionStorage:", e);
   }
 };
 
@@ -185,7 +190,8 @@ function findMatchingShot(eg, goalShots) {
   const scorerParts = cleanScorer.split(/\s+/);
   const lastScorerPart = scorerParts[scorerParts.length - 1] || "";
 
-  const minuteMatches = (s) => Math.abs(shotMinute(s) - eg.minuteRaw) <= 10;
+  const minuteMatches = (s) =>
+    Math.abs(shotMinute(s) - eg.minuteRaw) <= SHOT_MINUTE_MATCH_TOLERANCE;
   const teamMatches = (s) =>
     eg.teamId != null && s.teamId != null && s.teamId === eg.teamId;
   const nameMatches = (s) => {
@@ -215,9 +221,10 @@ function findMatchingShot(eg, goalShots) {
 
 function enrichGoalWithTelemetry(eg, goalShots) {
   const matchingShot = findMatchingShot(eg, goalShots);
-  delete eg.rawEvent;
-  delete eg.teamId;
-  Object.assign(eg, evaluateShot(matchingShot, eg));
+  const rest = { ...eg };
+  delete rest.rawEvent;
+  delete rest.teamId;
+  return { ...rest, ...evaluateShot(matchingShot, eg) };
 }
 
 function FotmobCompanion() {
@@ -321,10 +328,13 @@ function FotmobCompanion() {
       );
 
       const goalShots = findGoalShots(data);
-      extractedGoals.forEach((eg) => enrichGoalWithTelemetry(eg, goalShots));
+      const enrichedGoals = extractedGoals.map((eg) =>
+        enrichGoalWithTelemetry(eg, goalShots),
+      );
 
-      return extractedGoals.sort((a, b) => a.minuteRaw - b.minuteRaw);
-    } catch {
+      return enrichedGoals.sort((a, b) => a.minuteRaw - b.minuteRaw);
+    } catch (e) {
+      console.error("Failed to fetch match details:", e);
       return null;
     }
   }, []);
@@ -485,7 +495,7 @@ function FotmobCompanion() {
     if (isToday) {
       const timer = setInterval(() => {
         fetchScoresForDate(todayStr);
-      }, 60000);
+      }, LIVE_REFRESH_INTERVAL_MS);
       return () => clearInterval(timer);
     }
   }, [selectedDate, isToday, fetchScoresForDate, todayStr]);
