@@ -12,7 +12,7 @@ import PageHeader from "../components/PageHeader";
 import LongRangeGoalsWidget from "./LongRangeGoalsWidget";
 import LeagueFixturesWidget from "./LeagueFixturesWidget";
 import {
-  SERVERLESS_WORKER_URL,
+  SERVERLESS_DETAILS_WORKER_URL,
   SERVERLESS_FIXTURES_WORKER_URL,
   isFavoriteTeam,
   isMatchInFavoriteLeagues,
@@ -135,10 +135,7 @@ function extractPlayerName(obj) {
 }
 
 function buildExtractedGoal(rawEvent, homeTeamId, awayTeamId) {
-  const scorer = formatScorerName(
-    extractPlayerName(rawEvent),
-    rawEvent.type,
-  );
+  const scorer = formatScorerName(extractPlayerName(rawEvent), rawEvent.type);
   const assist = formatAssistName(
     rawEvent.assistInput || rawEvent.assistStr || rawEvent.assistPlayer?.name,
   );
@@ -294,28 +291,25 @@ function FotmobCompanion() {
     }));
   };
 
-  const updateMatchDetails = useCallback(
-    (matchId, details, targetDateStr) => {
-      if (!details) return;
-      const currentDateStr = targetDateStr || selectedDateRef.current;
-      if (currentDateStr !== selectedDateRef.current) return;
-      const detailsCache = fetchedMatchDetailsCacheRef.current;
-      detailsCache[matchId] = details;
-      saveDetailsCache(currentDateStr, detailsCache);
-      setMatchDetailsMap((prev) => ({
-        ...prev,
-        [matchId]: details,
-      }));
-    },
-    [],
-  );
+  const updateMatchDetails = useCallback((matchId, details, targetDateStr) => {
+    if (!details) return;
+    const currentDateStr = targetDateStr || selectedDateRef.current;
+    if (currentDateStr !== selectedDateRef.current) return;
+    const detailsCache = fetchedMatchDetailsCacheRef.current;
+    detailsCache[matchId] = details;
+    saveDetailsCache(currentDateStr, detailsCache);
+    setMatchDetailsMap((prev) => ({
+      ...prev,
+      [matchId]: details,
+    }));
+  }, []);
 
   // Fetch detailed telemetry (events & shotmap xG) for a match
   const fetchMatchDetails = useCallback(async (matchId) => {
-    if (!SERVERLESS_WORKER_URL) return null;
+    if (!SERVERLESS_DETAILS_WORKER_URL) return null;
 
     try {
-      const endpoint = `${SERVERLESS_WORKER_URL.replace(/\/$/, "")}?matchId=${matchId}&_t=${Date.now()}`;
+      const endpoint = `${SERVERLESS_DETAILS_WORKER_URL.replace(/\/$/, "")}?matchId=${matchId}&_t=${Date.now()}`;
       const res = await fetch(endpoint, { cache: "no-store" });
       if (!res.ok) return null;
 
@@ -362,7 +356,7 @@ function FotmobCompanion() {
 
       allMatchesList.forEach((m) => {
         const totalGoals = m.home.score + m.away.score;
-        if (totalGoals === 0 || !SERVERLESS_WORKER_URL) {
+        if (totalGoals === 0 || !SERVERLESS_DETAILS_WORKER_URL) {
           prevScores[m.id] = totalGoals;
           return;
         }
