@@ -10,8 +10,10 @@ export const HARDCODED_FAVORITES_TEAMS = [
 
 export const HARDCODED_FAVORITES_LEAGUES = [
   55, // Serie A (Italy)
-  47, // Premier League (England)
   86, // Serie B (Italy)
+  141, // Coppa Italia (Italy)
+  47, // Premier League (England)
+  48, // Championship (England)
   57, // Eredivisie
   40, // Belgian Pro League
   74, // UEFA Super Cup
