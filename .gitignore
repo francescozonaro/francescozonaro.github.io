@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 *.md
+
+# Old fotmob-companion implementation, kept locally for reference only
+src/fotmob-companion-old/
