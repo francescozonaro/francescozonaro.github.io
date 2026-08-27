@@ -18,14 +18,13 @@ export function useMatchesForDate(dateStr) {
     let cancelled = false;
 
     async function load() {
-      const parsedMatches = [];
       fetchFixtures(dateStr)
         .then((data) => {
+          if (cancelled) return;
+          const parsedMatches = [];
           data.leagues.forEach((league) => {
             league.matches.forEach((match) => {
-              const parsedMatch = transformFotmobMatch(match, league);
-              if (cancelled) return;
-              parsedMatches.push(parsedMatch);
+              parsedMatches.push(transformFotmobMatch(match, league));
             });
           });
           setMatches(parsedMatches);

@@ -1,5 +1,5 @@
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { HiHome } from "react-icons/hi2";
 import ThemeToggle from "./ThemeToggle";
 
 export default function PageHeader({ title, children, className = "" }) {
@@ -10,10 +10,11 @@ export default function PageHeader({ title, children, className = "" }) {
       className={`flex justify-between items-center flex-shrink-0 pt-1 px-1 ${className}`}
     >
       <button
-        className="cardComponent smallEnlarge origin-left text-xs text-secondary px-3 py-1.5 cursor-pointer"
+        className="cardComponent smallEnlarge iconButton origin-left text-secondary"
         onClick={() => navigate("/")}
       >
-        ← Portfolio
+        <HiHome className="h-4 w-4" />
+        <span className="hidden sm:inline">Home</span>
       </button>
 
       <div className="flex items-center justify-center space-x-2 text-2xl font-bold tracking-tight">
@@ -24,9 +25,3 @@ export default function PageHeader({ title, children, className = "" }) {
     </div>
   );
 }
-
-PageHeader.propTypes = {
-  title: PropTypes.node,
-  children: PropTypes.node,
-  className: PropTypes.string,
-};

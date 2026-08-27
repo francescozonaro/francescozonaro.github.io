@@ -1,6 +1,5 @@
 import { useState } from "react";
-import PropTypes from "prop-types";
-import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
+import { HiSun, HiMoon } from "react-icons/hi2";
 
 // Default to light theme ("light-first" design).
 // Check localStorage explicitly first, falling back to the DOM class list.
@@ -57,14 +56,14 @@ export default function ThemeToggle({ className = "" }) {
         role="radio"
         aria-checked={!isDark}
         onClick={() => setThemeMode(false)}
-        className={`relative z-10 px-2.5 py-1 rounded-full flex items-center space-x-1.5 text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
+        className={`relative z-10 px-2 sm:px-2.5 py-1 rounded-full flex items-center space-x-0 sm:space-x-1.5 text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
           !isDark ? "text-primary" : "text-primary/50 hover:text-primary/80"
         }`}
       >
-        <SunIcon
+        <HiSun
           className={`h-3.5 w-3.5 transition-transform duration-200 ${!isDark ? "text-secondary scale-110" : ""}`}
         />
-        <span>Light</span>
+        <span className="hidden sm:inline">Light</span>
       </button>
 
       <button
@@ -72,14 +71,14 @@ export default function ThemeToggle({ className = "" }) {
         role="radio"
         aria-checked={isDark}
         onClick={() => setThemeMode(true)}
-        className={`relative z-10 px-2.5 py-1 rounded-full flex items-center space-x-1.5 text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
+        className={`relative z-10 px-2 sm:px-2.5 py-1 rounded-full flex items-center space-x-0 sm:space-x-1.5 text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
           isDark ? "text-primary" : "text-primary/50 hover:text-primary/80"
         }`}
       >
-        <MoonIcon
+        <HiMoon
           className={`h-3.5 w-3.5 transition-transform duration-200 ${isDark ? "text-secondary scale-110" : ""}`}
         />
-        <span>Dark</span>
+        <span className="hidden sm:inline">Dark</span>
       </button>
 
       <div
@@ -90,7 +89,3 @@ export default function ThemeToggle({ className = "" }) {
     </div>
   );
 }
-
-ThemeToggle.propTypes = {
-  className: PropTypes.string,
-};

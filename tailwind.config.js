@@ -43,6 +43,18 @@ export default {
         ".smallEnlarge": {
           "@apply transition-transform duration-200 hover:scale-110": {},
         },
+        ".iconButton": {
+          "@apply flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md cursor-pointer":
+            {},
+        },
+        ".accentButton": {
+          "@apply border border-secondary/50 bg-secondary/10 text-secondary":
+            {},
+        },
+        ".inputField": {
+          "@apply rounded-md border border-background-dark bg-background-dark/80 text-primary placeholder-primary/40 focus:outline-none focus:border-secondary":
+            {},
+        },
       });
     },
   ],

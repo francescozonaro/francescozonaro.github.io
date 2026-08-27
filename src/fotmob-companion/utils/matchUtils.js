@@ -51,3 +51,37 @@ export function transformFotmobMatch(match, league) {
     awayLogo: awayId ? `${FOTMOB_IMAGE_LOCATION}${awayId}.png` : null,
   };
 }
+
+export function isMatchActive(match) {
+  return !match.finished && !match.cancelled && !!match.liveTimeShort;
+}
+
+export function getMatchMinuteLabel(match) {
+  if (match.finished) return "FT";
+  if (match.cancelled) return "Cancelled";
+  if (match.liveTimeShort) {
+    return /^\d+(\+\d+)?$/.test(match.liveTimeShort)
+      ? `${match.liveTimeShort}′`
+      : match.liveTimeShort;
+  }
+  return match.utcTime;
+}
+
+// Pads a match's extracted goals up to its actual score, so a scoreline that
+// changed before scorer details finished fetching still shows placeholder
+// entries instead of silently under-counting.
+export function getDisplayGoals(goalsArr, teamScore, isHomeGoal) {
+  if (teamScore <= 0) return [];
+  const result = [...goalsArr];
+  while (result.length < teamScore) {
+    result.push({
+      scorer: "Goal",
+      timeStr: "",
+      isHomeGoal,
+      isLongRange: false,
+      distance: null,
+      isPlaceholder: true,
+    });
+  }
+  return result;
+}

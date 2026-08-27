@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  LinkIcon,
-  CodeBracketIcon,
-  DocumentIcon,
-} from "@heroicons/react/24/solid";
+import { HiLink, HiCodeBracket, HiDocument } from "react-icons/hi2";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import "./App.css";
 import ThemeToggle from "./components/ThemeToggle";
 
@@ -20,10 +17,9 @@ function App() {
       );
   }, []);
 
-  const linkBtnClass =
-    "cardComponent smallEnlarge align-middle justify-center flex p-1";
+  const linkBtnClass = "cardComponent smallEnlarge iconButton";
 
-  const renderLinkButton = (url, IconComponent) => {
+  const renderLinkButton = (url, IconComponent, label) => {
     const isInternal = url.startsWith("/#/") || url.startsWith("#/");
     if (isInternal) {
       const targetPath = url.replace(/^(\/#|#)/, "");
@@ -32,7 +28,8 @@ function App() {
           to={targetPath}
           className={`${linkBtnClass} text-secondary`}
         >
-          <IconComponent className="h-5 w-5" />
+          <IconComponent className="h-4 w-4" />
+          <span>{label}</span>
         </Link>
       );
     }
@@ -43,20 +40,21 @@ function App() {
         rel="noopener noreferrer"
         className={linkBtnClass}
       >
-        <IconComponent className="h-5 w-5" />
+        <IconComponent className="h-4 w-4" />
+        <span>{label}</span>
       </a>
     );
   };
 
   const linkIcons = {
-    code: (url) => renderLinkButton(url, CodeBracketIcon),
-    link: (url) => renderLinkButton(url, LinkIcon),
-    pdf: (url) => renderLinkButton(url, DocumentIcon),
+    code: (url) => renderLinkButton(url, HiCodeBracket, "Code"),
+    link: (url) => renderLinkButton(url, HiLink, "Link"),
+    pdf: (url) => renderLinkButton(url, HiDocument, "Docs"),
   };
 
   return (
     <div className="App">
-      <div className="grid gap-x-12 mt-12 md:grid-cols-1 gap-y-4 lg:grid-cols-2 mb-12">
+      <div className="grid gap-x-12 mt-12 grid-cols-1 gap-y-4 mb-12">
         <div className="flex flex-col justify-center align-middle">
           <h1 className="text-3xl font-normal">
             <strong>Francesco</strong> Zonaro
@@ -67,22 +65,24 @@ function App() {
             href="https://github.com/francescozonaro"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm cardComponent smallEnlarge p-2"
+            className={linkBtnClass}
           >
-            Github
+            <FaGithub className="h-4 w-4" />
+            <span>Github</span>
           </a>
           <a
             href="https://www.linkedin.com/in/francesco-zonaro-211234248/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm cardComponent smallEnlarge p-2"
+            className={linkBtnClass}
           >
-            Linkedin
+            <FaLinkedin className="h-4 w-4" />
+            <span>Linkedin</span>
           </a>
           <ThemeToggle />
         </div>
 
-        <div className="mt-12 text-left">
+        <div className="mt-12 text-left min-w-0">
           <h2 className="font-bold mt-4 text-center text-2xl">Projects</h2>
 
           {data.projects.map((project, index) => (
@@ -94,7 +94,7 @@ function App() {
           ))}
         </div>
 
-        <div className="mt-12 text-left">
+        <div className="mt-12 text-left min-w-0">
           <h2 className="font-bold mt-4 text-center text-2xl">Reports</h2>
 
           {data.reports.map((report, index) => (

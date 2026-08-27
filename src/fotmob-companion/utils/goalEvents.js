@@ -1,17 +1,6 @@
 const PITCH_LENGTH_M = 105;
 const PITCH_WIDTH_M = 68;
 const LONG_RANGE_THRESHOLD_M = 20;
-const KNOWN_SHOT_OUTCOMES = ["Goal", "AttemptSaved", "Miss", "Post"];
-const KNOWN_SHOT_SITUATIONS = [
-  "RegularPlay",
-  "FromCorner",
-  "FastBreak",
-  "SetPiece",
-  "FreeKick",
-  "Penalty",
-  "ThrowInSetPiece",
-  "IndividualPlay",
-];
 
 function shotDistanceFromGoal(x, y) {
   const dx = x - PITCH_LENGTH_M;
@@ -36,26 +25,6 @@ function formatScorer(shot) {
 
 function getPlayerName(shot) {
   return shot.playerName;
-}
-
-function getPlayerId(shot) {
-  return shot.playerId;
-}
-
-function getShotOutcome(shot) {
-  const outcome = shot.eventType;
-  if (!KNOWN_SHOT_OUTCOMES.includes(outcome)) {
-    console.error(`Unexpected shot eventType: "${outcome}"`, shot);
-  }
-  return outcome;
-}
-
-function getShotSituation(shot) {
-  const situation = shot.situation;
-  if (!KNOWN_SHOT_SITUATIONS.includes(situation)) {
-    console.error(`Unexpected shot situation: "${situation}"`, shot);
-  }
-  return situation;
 }
 
 function isOwnGoalShot(shot) {
@@ -119,7 +88,13 @@ function buildGoalEvent(shot, homeTeamId, awayTeamId) {
   };
 }
 
-function extractGoalEvents(data) {
+export function getGoalSearchUrl(scorerName) {
+  if (!scorerName) return "#";
+  const cleanName = scorerName.replace(/\s*\((?:OG|P|\d+′?)\)/gi, "").trim();
+  return `https://x.com/search?q=${encodeURIComponent(cleanName)}&f=live`;
+}
+
+export function extractGoalEvents(data) {
   const goalShots = findGoalShots(data);
   const homeId = data?.general?.homeTeam?.id;
   const awayId = data?.general?.awayTeam?.id;
