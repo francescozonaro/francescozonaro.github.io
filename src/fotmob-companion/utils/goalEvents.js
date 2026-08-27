@@ -94,11 +94,67 @@ export function getGoalSearchUrl(scorerName) {
   return `https://x.com/search?q=${encodeURIComponent(cleanName)}&f=live`;
 }
 
+// Some competitions don't get shotmap coverage from FotMob at all (shots
+// list is empty even for a finished match) - fall back to the goal list
+// from the match header, which has no distance/xG telemetry to offer but
+// does have the scorer.
+function findHeaderGoalEvents(data) {
+  const homeGoalsObj = data?.header?.events?.homeTeamGoals || {};
+  const awayGoalsObj = data?.header?.events?.awayTeamGoals || {};
+  const events = [];
+  for (const arr of [
+    ...Object.values(homeGoalsObj),
+    ...Object.values(awayGoalsObj),
+  ]) {
+    if (Array.isArray(arr)) events.push(...arr);
+  }
+  return events;
+}
+
+function buildGoalEventFromHeader(event, homeTeamId, awayTeamId) {
+  const isOwnGoal = !!event.ownGoal;
+  const isPenalty = event.goalDescriptionKey === "penalty";
+  const isHomeGoal = !!event.isHome;
+  const teamId = isHomeGoal ? homeTeamId : awayTeamId;
+
+  let scorer = sanitizeScorer(event.player?.name || event.nameStr);
+  if (scorer) {
+    if (isOwnGoal) scorer = `${scorer} (OG)`;
+    else if (isPenalty) scorer = `${scorer} (P)`;
+  }
+
+  const time = (event.time ?? 0) + (event.overloadTime ?? 0);
+  const timeStr = event.overloadTime
+    ? `${event.time}+${event.overloadTime}`
+    : `${event.time}`;
+
+  return {
+    scorer,
+    teamId,
+    time,
+    timeStr,
+    isOwnGoal,
+    isHomeGoal,
+    isLongRange: false,
+    isPenalty,
+    distance: null,
+    x: null,
+    y: null,
+  };
+}
+
 export function extractGoalEvents(data) {
-  const goalShots = findGoalShots(data);
   const homeId = data?.general?.homeTeam?.id;
   const awayId = data?.general?.awayTeam?.id;
-  const goals = goalShots.map((shot) => buildGoalEvent(shot, homeId, awayId));
+
+  const goalShots = findGoalShots(data);
+  const goals =
+    goalShots.length > 0
+      ? goalShots.map((shot) => buildGoalEvent(shot, homeId, awayId))
+      : findHeaderGoalEvents(data).map((event) =>
+          buildGoalEventFromHeader(event, homeId, awayId),
+        );
+
   const sorted = goals.sort((a, b) => a.time - b.time);
 
   let homeScore = 0;

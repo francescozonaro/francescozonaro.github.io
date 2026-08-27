@@ -20,7 +20,14 @@ export function useMatchDetails(matches) {
         .then((data) => {
           const goals = extractGoalEvents(data);
           setDetailsMap((prev) => ({ ...prev, [match.id]: goals }));
-          lastScoreRef.current[match.id] = totalGoals;
+
+          // FotMob sometimes hasn't backfilled a scorer's name onto the
+          // shotmap yet - only stop retrying once every goal has one, or
+          // the match is over (nothing more will change).
+          const isComplete = goals.every((g) => g.scorer);
+          if (isComplete || match.finished) {
+            lastScoreRef.current[match.id] = totalGoals;
+          }
         })
         .catch((err) => {
           console.error(err);
