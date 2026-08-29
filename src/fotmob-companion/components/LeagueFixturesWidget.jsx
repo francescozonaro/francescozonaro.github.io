@@ -16,7 +16,7 @@ function ScorerRow({ goal, isHome }) {
     </span>
   );
   const time = goal.timeStr && (
-    <span className="text-primary/45 font-mono text-[10px]">
+    <span className="text-primary/45 font-mono text-[10px] flex-shrink-0">
       {goal.timeStr}′
     </span>
   );
@@ -31,24 +31,38 @@ function ScorerRow({ goal, isHome }) {
       {goal.scorer || "Goal"}
     </a>
   );
-
-  return (
-    <div
-      className={`flex items-center space-x-1.5 flex-wrap ${
-        isHome ? "justify-end" : "justify-start"
-      }`}
+  const name = (
+    // text-right/left aligns wrapped 2nd-line text toward the minute's edge, not the outer edge
+    <span
+      className={`min-w-0 flex-1 space-x-1.5 ${isHome ? "text-right" : "text-left"}`}
     >
       {isHome ? (
         <>
           {badge}
           {link}
+        </>
+      ) : (
+        <>
+          {link}
+          {badge}
+        </>
+      )}
+    </span>
+  );
+
+  return (
+    <div
+      className={`flex items-baseline space-x-1.5 ${isHome ? "justify-end" : "justify-start"}`}
+    >
+      {isHome ? (
+        <>
+          {name}
           {time}
         </>
       ) : (
         <>
           {time}
-          {link}
-          {badge}
+          {name}
         </>
       )}
     </div>
@@ -150,10 +164,10 @@ export function LeagueFixturesWidget({
                     key={m.id}
                     className="p-3.5 hover:bg-background-darker transition-colors flex flex-col gap-2"
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="w-14 flex-shrink-0 flex items-center justify-start">
+                    <div className="flex items-center justify-between gap-1 sm:gap-2">
+                      <div className="w-10 sm:w-14 flex-shrink-0 flex items-center justify-start">
                         <span
-                          className={`text-[11px] font-semibold px-2 py-0.5 rounded font-mono ${
+                          className={`text-[9px] sm:text-[11px] font-semibold px-1 sm:px-2 py-0.5 rounded font-mono ${
                             active
                               ? "bg-secondary/15 text-secondary animate-pulse font-bold"
                               : "text-primary/60 bg-background-dark/40"
@@ -163,16 +177,19 @@ export function LeagueFixturesWidget({
                         </span>
                       </div>
 
-                      <div className="flex-1 flex items-center justify-end space-x-2 text-right">
-                        <span className="font-semibold text-sm line-clamp-1">
+                      <div className="flex-1 min-w-0 flex items-center justify-end space-x-1 sm:space-x-2 text-right">
+                        <span className="font-semibold text-xs sm:text-sm truncate">
                           {m.home.name}
                         </span>
-                        <TeamLogo url={m.homeLogo} />
+                        <TeamLogo
+                          url={m.homeLogo}
+                          customCss="w-4 h-4 sm:w-6 sm:h-6 flex-shrink-0"
+                        />
                       </div>
 
-                      <div className="px-3 min-w-[75px] text-center flex-shrink-0">
+                      <div className="mx-1 sm:mx-0 px-0.5 sm:px-3 min-w-[42px] sm:min-w-[75px] text-center flex-shrink-0">
                         <div
-                          className={`font-mono text-base font-extrabold tracking-wider px-2 py-0.5 rounded transition-colors ${
+                          className={`font-mono text-xs sm:text-base font-extrabold tracking-wider px-1 sm:px-2 py-0.5 rounded transition-colors ${
                             active
                               ? "bg-secondary/10 text-secondary border border-secondary/20"
                               : "bg-background-dark text-primary/70 border border-transparent"
@@ -184,9 +201,12 @@ export function LeagueFixturesWidget({
                         </div>
                       </div>
 
-                      <div className="flex-1 flex items-center justify-start space-x-2 text-left">
-                        <TeamLogo url={m.awayLogo} />
-                        <span className="font-semibold text-sm line-clamp-1">
+                      <div className="flex-1 min-w-0 flex items-center justify-start space-x-1 sm:space-x-2 text-left">
+                        <TeamLogo
+                          url={m.awayLogo}
+                          customCss="w-4 h-4 sm:w-6 sm:h-6 flex-shrink-0"
+                        />
+                        <span className="font-semibold text-xs sm:text-sm truncate">
                           {m.away.name}
                         </span>
                       </div>

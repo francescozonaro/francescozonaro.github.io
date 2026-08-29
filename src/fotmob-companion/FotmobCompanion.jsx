@@ -10,7 +10,7 @@ import { LongRangeGoalsWidget } from "./components/LongRangeGoalsWidget";
 import { useMatchesForDate } from "./hooks/useMatchesForDate";
 import { useMatchDetails } from "./hooks/useMatchDetails";
 import { getLocalDateString, shiftDateString, formatDateLabel } from "./utils/date";
-import { isFavoriteMatch } from "./utils/favorites";
+import { isFavoriteMatch, isMatchInFavoriteLeagues } from "./utils/favorites";
 import { isMatchActive } from "./utils/matchUtils";
 
 export default function FotmobCompanion() {
@@ -59,12 +59,22 @@ export default function FotmobCompanion() {
   }
 
   const groupedLeagues = {};
-  filteredMatches.forEach((m) => {
-    if (!groupedLeagues[m.leagueName]) {
-      groupedLeagues[m.leagueName] = { name: m.leagueName, matches: [] };
-    }
-    groupedLeagues[m.leagueName].matches.push(m);
-  });
+
+  const favoriteTeamMatches = filteredMatches.filter(
+    (m) => !isMatchInFavoriteLeagues(m.leagueId),
+  );
+  if (favoriteTeamMatches.length > 0) {
+    groupedLeagues["Favorites"] = { name: "Favorites", matches: favoriteTeamMatches };
+  }
+
+  filteredMatches
+    .filter((m) => isMatchInFavoriteLeagues(m.leagueId))
+    .forEach((m) => {
+      if (!groupedLeagues[m.leagueName]) {
+        groupedLeagues[m.leagueName] = { name: m.leagueName, matches: [] };
+      }
+      groupedLeagues[m.leagueName].matches.push(m);
+    });
 
   return (
     <div className="w-11/12 xl:w-5/6 mx-auto font-sans py-6 h-screen flex flex-col overflow-hidden">
