@@ -2,6 +2,10 @@ export const FAVORITE_TEAMS = [
   8634, // "Barcelona"
   10003, // "Swansea"
   189481, // "Brescia"
+  8686, // "Roma"
+  130394, // "Seattle Sounders FC"
+  8204, // "Italy"
+  6659, // "Italy U21"
 ];
 
 export const FAVORITE_LEAGUES = [
@@ -15,6 +19,10 @@ export const FAVORITE_LEAGUES = [
   74, // UEFA Super Cup
   10611, // Champions League Qualifiers
   10043, // Leagues Cup (USA)
+  87, // LaLiga (Spain)
+  54, // Bundesliga (Germany)
+  53, // Ligue 1 (France)
+  64, // Scottish Premiership
 ];
 
 export function isFavoriteTeam(teamId) {
