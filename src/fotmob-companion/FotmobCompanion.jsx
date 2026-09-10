@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   HiMagnifyingGlass,
   HiChevronLeft,
@@ -47,6 +47,17 @@ export default function FotmobCompanion() {
   if (effectiveShowOnlyLive) {
     filteredMatches = filteredMatches.filter(isMatchActive);
   }
+
+  useEffect(() => {
+    if (
+      effectiveShowOnlyLive &&
+      matches.length > 0 &&
+      favoriteMatches.filter(isMatchActive).length === 0
+    ) {
+      setShowOnlyLive(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matches, effectiveShowOnlyLive]);
 
   if (searchQuery.trim() !== "") {
     const q = searchQuery.trim().toLowerCase();
