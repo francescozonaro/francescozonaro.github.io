@@ -13,6 +13,7 @@ export const FAVORITE_LEAGUES = [
   86, // Serie B (Italy)
   141, // Coppa Italia (Italy)
   47, // Premier League (England)
+  42, // Champions League
   48, // Championship (England)
   57, // Eredivisie
   40, // Belgian Pro League
