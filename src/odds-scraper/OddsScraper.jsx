@@ -9,11 +9,6 @@ const TIME_WINDOWS = [
   { label: "All", hours: null },
 ];
 
-const SHOW_MODES = [
-  { label: "All odds", onlyInRange: false },
-  { label: "In-range only", onlyInRange: true },
-];
-
 const STEP = 0.05;
 const DNB_MARGIN = 1.05;
 const ONE_X_TWO_LABELS = { 1: "Home", X: "Draw", 2: "Away" };
@@ -50,7 +45,7 @@ function Stepper({ value, onChange }) {
         step={STEP}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-14 border-x border-background-dark bg-transparent px-1 py-1.5 text-center text-xs font-semibold text-primary focus:outline-none"
+        className="no-spinner w-14 border-x border-background-dark bg-transparent px-1 py-1.5 text-center text-xs font-semibold text-primary focus:outline-none"
       />
       <button
         onClick={() => onChange(round(value + STEP))}
@@ -68,8 +63,7 @@ export default function OddsScraper() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [min, setMin] = useState(1.5);
-  const [max, setMax] = useState(99);
-  const [onlyInRange, setOnlyInRange] = useState(true);
+  const [max, setMax] = useState(1.95);
   const [competitionFilter, setCompetitionFilter] = useState("all");
   const [windowHours, setWindowHours] = useState(24);
   const [collapsedGroups, setCollapsedGroups] = useState({});
@@ -124,13 +118,8 @@ export default function OddsScraper() {
     if (competitionFilter !== "all") {
       matches = matches.filter((m) => m.competition === competitionFilter);
     }
-    if (onlyInRange) {
-      matches = matches.filter((m) =>
-        m.markets.some((mk) => mk.selections.some((s) => inRange(s.odds))),
-      );
-    }
     return [...matches].sort((a, b) => a.kickoff.localeCompare(b.kickoff));
-  }, [data, onlyInRange, competitionFilter, windowHours, min, max]);
+  }, [data, competitionFilter, windowHours]);
 
   const groupedCompetitions = useMemo(() => {
     const groups = {};
@@ -179,18 +168,6 @@ export default function OddsScraper() {
               ))}
             </div>
 
-            <div className="flex items-center gap-1.5">
-              {SHOW_MODES.map((m) => (
-                <button
-                  key={m.label}
-                  onClick={() => setOnlyInRange(m.onlyInRange)}
-                  className={toggleClass(onlyInRange === m.onlyInRange)}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-
             <select
               value={competitionFilter}
               onChange={(e) => setCompetitionFilter(e.target.value)}
@@ -212,7 +189,7 @@ export default function OddsScraper() {
             )}
           </div>
 
-          <div className="mt-4 flex-1 min-h-0 overflow-y-auto no-scrollbar space-y-3 pr-1">
+          <div className="mt-4 flex-1 min-h-0 overflow-y-auto no-scrollbar pr-1">
             {!data && (
               <div className="cardComponent p-8 text-center text-xs text-primary/40">
                 Loading...
@@ -233,74 +210,73 @@ export default function OddsScraper() {
               </CollapsibleCard>
             )}
 
-            {groupedCompetitions.map((group) => {
-              const isCollapsed = !!collapsedGroups[group.name];
+            <div className="columns-1 lg:columns-2 gap-4">
+              {groupedCompetitions.map((group) => {
+                const isCollapsed = !!collapsedGroups[group.name];
 
-              return (
-                <CollapsibleCard
-                  key={group.name}
-                  title={group.name}
-                  badge={
-                    <span className="text-xs text-primary/50 font-mono">
-                      ({group.matches.length})
-                    </span>
-                  }
-                  isCollapsed={isCollapsed}
-                  onToggleCollapse={() => toggleCollapseGroup(group.name)}
-                >
-                  <div className="divide-y divide-background-light/30">
-                    {group.matches.map((match) => {
-                      const rows = onlyInRange
-                        ? match.markets.filter((mk) =>
-                            mk.selections.some((s) => inRange(s.odds)),
-                          )
-                        : match.markets;
+                return (
+                  <CollapsibleCard
+                    key={group.name}
+                    customClasses="break-inside-avoid mb-4"
+                    title={group.name}
+                    badge={
+                      <span className="text-xs text-primary/50 font-mono">
+                        ({group.matches.length})
+                      </span>
+                    }
+                    isCollapsed={isCollapsed}
+                    onToggleCollapse={() => toggleCollapseGroup(group.name)}
+                  >
+                    <div className="divide-y divide-background-light/30">
+                      {group.matches.map((match) => {
+                        const rows = match.markets;
 
-                      return (
-                        <div
-                          key={match.id}
-                          className="p-3.5 hover:bg-background-darker transition-colors flex flex-col gap-2"
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="font-semibold text-xs sm:text-sm truncate">
-                              {match.homeTeam} vs {match.awayTeam}
-                            </span>
-                            <span className="text-[9px] sm:text-[11px] font-semibold px-1 sm:px-2 py-0.5 rounded font-mono text-primary/60 bg-background-dark/40 whitespace-nowrap">
-                              {new Date(match.kickoff).toLocaleString()}
-                            </span>
-                          </div>
+                        return (
+                          <div
+                            key={match.id}
+                            className="p-3.5 hover:bg-background-darker transition-colors flex flex-col gap-2"
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="font-semibold text-xs sm:text-sm truncate">
+                                {match.homeTeam} vs {match.awayTeam}
+                              </span>
+                              <span className="text-[9px] sm:text-[11px] font-semibold px-1 sm:px-2 py-0.5 rounded font-mono text-primary/60 bg-background-dark/40 whitespace-nowrap">
+                                {new Date(match.kickoff).toLocaleString()}
+                              </span>
+                            </div>
 
-                          <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                            {rows.map((mk, i) => (
-                              <div key={i} className="flex items-center gap-2">
-                                <span className="w-16 shrink-0 text-[11px] text-primary/40">
-                                  {marketLabel(mk)}
-                                </span>
-                                <div className="flex flex-wrap gap-1">
-                                  {mk.selections.map((s, j) => (
-                                    <span
-                                      key={j}
-                                      className={
-                                        "inline-flex justify-center min-w-[64px] rounded px-1.5 py-0.5 text-xs " +
-                                        (inRange(s.odds)
-                                          ? "bg-secondary/15 text-secondary font-semibold"
-                                          : "bg-background-dark/40 text-primary/60")
-                                      }
-                                    >
-                                      {selectionLabel(mk, s.name)} {s.odds}
-                                    </span>
-                                  ))}
+                            <div className="flex flex-col gap-2 mt-4">
+                              {rows.map((mk, i) => (
+                                <div key={i} className="flex items-center gap-2">
+                                  <span className="w-16 shrink-0 text-[11px] font-bold text-primary/40">
+                                    {marketLabel(mk)}
+                                  </span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {mk.selections.map((s, j) => (
+                                      <span
+                                        key={j}
+                                        className={
+                                          "inline-flex justify-center min-w-[84px] rounded px-1.5 py-0.5 text-xs font-normal " +
+                                          (inRange(s.odds)
+                                            ? "bg-secondary/15 text-secondary"
+                                            : "bg-background-dark/40 text-primary/60")
+                                        }
+                                      >
+                                        {selectionLabel(mk, s.name)} {s.odds}
+                                      </span>
+                                    ))}
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CollapsibleCard>
-              );
-            })}
+                        );
+                      })}
+                    </div>
+                  </CollapsibleCard>
+                );
+              })}
+            </div>
           </div>
         </>
       )}

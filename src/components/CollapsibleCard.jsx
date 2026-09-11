@@ -8,9 +8,12 @@ export function CollapsibleCard({
   isCollapsed,
   onToggleCollapse,
   children,
+  customClasses = "",
 }) {
   return (
-    <div className="border-[0.5px] border-background-dark rounded-xl overflow-hidden bg-background-dark/20 shadow-md transition-all">
+    <div
+      className={`border-[0.5px] border-background-dark rounded-xl overflow-hidden bg-background-dark/20 shadow-md transition-all ${customClasses}`}
+    >
       <div
         className={`px-4 py-2.5 bg-background-dark/60 flex justify-between items-center ${
           !isCollapsed ? "border-b border-background-dark/50" : ""

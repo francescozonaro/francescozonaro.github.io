@@ -95,4 +95,15 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  /* Hide native number input spinner arrows */
+  .no-spinner {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }

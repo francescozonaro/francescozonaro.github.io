@@ -1,5 +1,5 @@
 export const DEFAULT_ICON = "/favicon.ico";
-export const DEFAULT_APPLE_ICON = "/default-icon.png";
+export const DEFAULT_APPLE_ICON = "/img/main/apple-touch-icon.png";
 
 export const APP_ICONS = {
   "fotmob-companion": {
