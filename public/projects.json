@@ -11,6 +11,16 @@
       ]
     },
     {
+      "title": "Odds Scraper",
+      "description": "A live odds dashboard siphoning Bet365 lines via SofaScore's public API, with filterable markets across upcoming fixtures in ~20 competitions.",
+      "links": [
+        {
+          "type": "link",
+          "url": "/#/odds-scraper"
+        }
+      ]
+    },
+    {
       "title": "StatsbombPlot",
       "description": "Developing visualization techniques for Statsbomb event data analysis, focusing on enhancing interpretability and actionable insights.",
       "links": [

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { HiEye, HiEyeSlash } from "react-icons/hi2";
-import { CollapsibleCard } from "./CollapsibleCard";
+import { CollapsibleCard } from "../../components/CollapsibleCard";
 import { TeamLogo } from "./TeamLogo";
 import {
   getDisplayGoals,

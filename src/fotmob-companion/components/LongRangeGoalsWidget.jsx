@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { CollapsibleCard } from "./CollapsibleCard";
+import { CollapsibleCard } from "../../components/CollapsibleCard";
 import { getGoalSearchUrl } from "../utils/goalEvents";
 
 export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
