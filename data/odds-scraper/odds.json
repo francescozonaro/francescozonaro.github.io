@@ -1,0 +1,3306 @@
+{
+  "generatedAt": "2026-09-11T07:45:48.856058+00:00",
+  "source": "SofaScore (Bet365)",
+  "matches": [
+    {
+      "id": 16363264,
+      "competition": "Premier League",
+      "homeTeam": "Liverpool FC",
+      "awayTeam": "Fulham",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.42
+            },
+            {
+              "name": "X",
+              "odds": 5.0
+            },
+            {
+              "name": "2",
+              "odds": 6.25
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.62
+            },
+            {
+              "name": "No",
+              "odds": 2.2
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.44
+            },
+            {
+              "name": "Under",
+              "odds": 2.75
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16363641,
+      "competition": "Premier League",
+      "homeTeam": "Chelsea",
+      "awayTeam": "Hull City",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.22
+            },
+            {
+              "name": "X",
+              "odds": 6.5
+            },
+            {
+              "name": "2",
+              "odds": 11.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.91
+            },
+            {
+              "name": "No",
+              "odds": 1.91
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.4
+            },
+            {
+              "name": "Under",
+              "odds": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16363639,
+      "competition": "Premier League",
+      "homeTeam": "Aston Villa",
+      "awayTeam": "Nottingham Forest",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.25
+            },
+            {
+              "name": "X",
+              "odds": 3.4
+            },
+            {
+              "name": "2",
+              "odds": 3.2
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.75
+            },
+            {
+              "name": "No",
+              "odds": 2.0
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16363643,
+      "competition": "Premier League",
+      "homeTeam": "Crystal Palace",
+      "awayTeam": "Ipswich Town",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.85
+            },
+            {
+              "name": "X",
+              "odds": 3.8
+            },
+            {
+              "name": "2",
+              "odds": 3.9
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.7
+            },
+            {
+              "name": "No",
+              "odds": 2.05
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.8
+            },
+            {
+              "name": "Under",
+              "odds": 2.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16363640,
+      "competition": "Premier League",
+      "homeTeam": "Bournemouth",
+      "awayTeam": "Brentford",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.5
+            },
+            {
+              "name": "X",
+              "odds": 3.6
+            },
+            {
+              "name": "2",
+              "odds": 2.75
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.5
+            },
+            {
+              "name": "No",
+              "odds": 2.5
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.62
+            },
+            {
+              "name": "Under",
+              "odds": 2.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16363647,
+      "competition": "Premier League",
+      "homeTeam": "Tottenham Hotspur",
+      "awayTeam": "Everton",
+      "kickoff": "2026-09-12T16:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.0
+            },
+            {
+              "name": "X",
+              "odds": 3.6
+            },
+            {
+              "name": "2",
+              "odds": 3.6
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.75
+            },
+            {
+              "name": "No",
+              "odds": 2.0
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16363646,
+      "competition": "Premier League",
+      "homeTeam": "Sunderland",
+      "awayTeam": "Arsenal",
+      "kickoff": "2026-09-12T19:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 7.5
+            },
+            {
+              "name": "X",
+              "odds": 4.1
+            },
+            {
+              "name": "2",
+              "odds": 1.48
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 2.2
+            },
+            {
+              "name": "No",
+              "odds": 1.62
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.1
+            },
+            {
+              "name": "Under",
+              "odds": 1.73
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16416330,
+      "competition": "LaLiga",
+      "homeTeam": "Sevilla",
+      "awayTeam": "Valencia",
+      "kickoff": "2026-09-11T19:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.0
+            },
+            {
+              "name": "X",
+              "odds": 3.4
+            },
+            {
+              "name": "2",
+              "odds": 4.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 2.0
+            },
+            {
+              "name": "No",
+              "odds": 1.75
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.3
+            },
+            {
+              "name": "Under",
+              "odds": 1.62
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16416328,
+      "competition": "LaLiga",
+      "homeTeam": "Real Racing Club",
+      "awayTeam": "Deportivo Alav\u00e9s",
+      "kickoff": "2026-09-12T12:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.45
+            },
+            {
+              "name": "X",
+              "odds": 3.5
+            },
+            {
+              "name": "2",
+              "odds": 2.75
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.57
+            },
+            {
+              "name": "No",
+              "odds": 2.25
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.73
+            },
+            {
+              "name": "Under",
+              "odds": 2.1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16416327,
+      "competition": "LaLiga",
+      "homeTeam": "Osasuna",
+      "awayTeam": "Espanyol",
+      "kickoff": "2026-09-12T14:15:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.15
+            },
+            {
+              "name": "X",
+              "odds": 3.1
+            },
+            {
+              "name": "2",
+              "odds": 3.75
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.95
+            },
+            {
+              "name": "No",
+              "odds": 1.8
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.2
+            },
+            {
+              "name": "Under",
+              "odds": 1.67
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16416322,
+      "competition": "LaLiga",
+      "homeTeam": "Athletic Club",
+      "awayTeam": "Elche",
+      "kickoff": "2026-09-12T16:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.4
+            },
+            {
+              "name": "X",
+              "odds": 4.75
+            },
+            {
+              "name": "2",
+              "odds": 7.5
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.95
+            },
+            {
+              "name": "No",
+              "odds": 1.8
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.67
+            },
+            {
+              "name": "Under",
+              "odds": 2.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16416331,
+      "competition": "LaLiga",
+      "homeTeam": "Real Madrid",
+      "awayTeam": "Rayo Vallecano",
+      "kickoff": "2026-09-12T19:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.13
+            },
+            {
+              "name": "X",
+              "odds": 9.5
+            },
+            {
+              "name": "2",
+              "odds": 19.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.95
+            },
+            {
+              "name": "No",
+              "odds": 1.8
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.29
+            },
+            {
+              "name": "Under",
+              "odds": 3.75
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16285024,
+      "competition": "Serie A",
+      "homeTeam": "Venezia",
+      "awayTeam": "Fiorentina",
+      "kickoff": "2026-09-11T18:45:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.75
+            },
+            {
+              "name": "X",
+              "odds": 3.3
+            },
+            {
+              "name": "2",
+              "odds": 2.55
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.57
+            },
+            {
+              "name": "No",
+              "odds": 2.25
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.73
+            },
+            {
+              "name": "Under",
+              "odds": 2.1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16285007,
+      "competition": "Serie A",
+      "homeTeam": "Genoa",
+      "awayTeam": "Frosinone",
+      "kickoff": "2026-09-12T13:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.1
+            },
+            {
+              "name": "X",
+              "odds": 3.3
+            },
+            {
+              "name": "2",
+              "odds": 3.6
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.7
+            },
+            {
+              "name": "No",
+              "odds": 2.05
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16285012,
+      "competition": "Serie A",
+      "homeTeam": "Lazio",
+      "awayTeam": "AC Milan",
+      "kickoff": "2026-09-12T16:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 3.4
+            },
+            {
+              "name": "X",
+              "odds": 3.2
+            },
+            {
+              "name": "2",
+              "odds": 2.25
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.95
+            },
+            {
+              "name": "No",
+              "odds": 1.8
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.2
+            },
+            {
+              "name": "Under",
+              "odds": 1.67
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16285010,
+      "competition": "Serie A",
+      "homeTeam": "Atalanta",
+      "awayTeam": "Cagliari",
+      "kickoff": "2026-09-12T18:45:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.57
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 6.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.95
+            },
+            {
+              "name": "No",
+              "odds": 1.8
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16607580,
+      "competition": "Serie B",
+      "homeTeam": "Empoli",
+      "awayTeam": "Arezzo",
+      "kickoff": "2026-09-11T17:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.96
+            },
+            {
+              "name": "X",
+              "odds": 3.25
+            },
+            {
+              "name": "2",
+              "odds": 3.9
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.91
+            },
+            {
+              "name": "No",
+              "odds": 1.91
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.05
+            },
+            {
+              "name": "Under",
+              "odds": 1.75
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16607577,
+      "competition": "Serie B",
+      "homeTeam": "Benevento",
+      "awayTeam": "Hellas Verona",
+      "kickoff": "2026-09-11T19:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.75
+            },
+            {
+              "name": "X",
+              "odds": 3.2
+            },
+            {
+              "name": "2",
+              "odds": 2.45
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.8
+            },
+            {
+              "name": "No",
+              "odds": 1.95
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.05
+            },
+            {
+              "name": "Under",
+              "odds": 1.75
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16607584,
+      "competition": "Serie B",
+      "homeTeam": "Pisa",
+      "awayTeam": "Virtus Entella",
+      "kickoff": "2026-09-11T19:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.71
+            },
+            {
+              "name": "X",
+              "odds": 3.25
+            },
+            {
+              "name": "2",
+              "odds": 5.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 2.05
+            },
+            {
+              "name": "No",
+              "odds": 1.7
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.2
+            },
+            {
+              "name": "Under",
+              "odds": 1.65
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16607585,
+      "competition": "Serie B",
+      "homeTeam": "S\u00fcdtirol",
+      "awayTeam": "Modena",
+      "kickoff": "2026-09-12T13:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 3.2
+            },
+            {
+              "name": "X",
+              "odds": 3.0
+            },
+            {
+              "name": "2",
+              "odds": 2.35
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.95
+            },
+            {
+              "name": "No",
+              "odds": 1.8
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.3
+            },
+            {
+              "name": "Under",
+              "odds": 1.6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16607581,
+      "competition": "Serie B",
+      "homeTeam": "L.R. Vicenza",
+      "awayTeam": "Juve Stabia",
+      "kickoff": "2026-09-12T13:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.96
+            },
+            {
+              "name": "X",
+              "odds": 3.1
+            },
+            {
+              "name": "2",
+              "odds": 4.1
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.95
+            },
+            {
+              "name": "No",
+              "odds": 1.8
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.15
+            },
+            {
+              "name": "Under",
+              "odds": 1.67
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16607583,
+      "competition": "Serie B",
+      "homeTeam": "Padova",
+      "awayTeam": "Ascoli",
+      "kickoff": "2026-09-12T13:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.1
+            },
+            {
+              "name": "X",
+              "odds": 3.4
+            },
+            {
+              "name": "2",
+              "odds": 3.2
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.91
+            },
+            {
+              "name": "No",
+              "odds": 1.91
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.05
+            },
+            {
+              "name": "Under",
+              "odds": 1.75
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16607578,
+      "competition": "Serie B",
+      "homeTeam": "Catanzaro",
+      "awayTeam": "Carrarese",
+      "kickoff": "2026-09-12T15:15:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.96
+            },
+            {
+              "name": "X",
+              "odds": 3.1
+            },
+            {
+              "name": "2",
+              "odds": 4.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.8
+            },
+            {
+              "name": "No",
+              "odds": 1.95
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.08
+            },
+            {
+              "name": "Under",
+              "odds": 1.73
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16607579,
+      "competition": "Serie B",
+      "homeTeam": "Cesena",
+      "awayTeam": "Cremonese",
+      "kickoff": "2026-09-12T17:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 3.25
+            },
+            {
+              "name": "X",
+              "odds": 3.1
+            },
+            {
+              "name": "2",
+              "odds": 2.2
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.75
+            },
+            {
+              "name": "No",
+              "odds": 2.0
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.0
+            },
+            {
+              "name": "Under",
+              "odds": 1.8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16434045,
+      "competition": "Bundesliga",
+      "homeTeam": "1. FC Union Berlin",
+      "awayTeam": "FC Schalke 04",
+      "kickoff": "2026-09-11T18:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.45
+            },
+            {
+              "name": "X",
+              "odds": 3.5
+            },
+            {
+              "name": "2",
+              "odds": 2.8
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.53
+            },
+            {
+              "name": "No",
+              "odds": 2.38
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.67
+            },
+            {
+              "name": "Under",
+              "odds": 2.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16434037,
+      "competition": "Bundesliga",
+      "homeTeam": "Borussia Dortmund",
+      "awayTeam": "SC Paderborn 07",
+      "kickoff": "2026-09-12T13:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.25
+            },
+            {
+              "name": "X",
+              "odds": 6.5
+            },
+            {
+              "name": "2",
+              "odds": 10.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.7
+            },
+            {
+              "name": "No",
+              "odds": 2.05
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.36
+            },
+            {
+              "name": "Under",
+              "odds": 3.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16434031,
+      "competition": "Bundesliga",
+      "homeTeam": "FC Augsburg",
+      "awayTeam": "Bayer 04 Leverkusen",
+      "kickoff": "2026-09-12T13:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 4.1
+            },
+            {
+              "name": "X",
+              "odds": 4.1
+            },
+            {
+              "name": "2",
+              "odds": 1.8
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.4
+            },
+            {
+              "name": "No",
+              "odds": 2.75
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.4
+            },
+            {
+              "name": "Under",
+              "odds": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16434035,
+      "competition": "Bundesliga",
+      "homeTeam": "TSG Hoffenheim",
+      "awayTeam": "VfB Stuttgart",
+      "kickoff": "2026-09-12T13:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.35
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 2.63
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.33
+            },
+            {
+              "name": "No",
+              "odds": 3.25
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.36
+            },
+            {
+              "name": "Under",
+              "odds": 3.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16434018,
+      "competition": "Bundesliga",
+      "homeTeam": "1. FSV Mainz 05",
+      "awayTeam": "Eintracht Frankfurt",
+      "kickoff": "2026-09-12T13:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.95
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 3.4
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.44
+            },
+            {
+              "name": "No",
+              "odds": 2.62
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.5
+            },
+            {
+              "name": "Under",
+              "odds": 2.62
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16434040,
+      "competition": "Bundesliga",
+      "homeTeam": "SC Freiburg",
+      "awayTeam": "Borussia M'gladbach",
+      "kickoff": "2026-09-12T13:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.67
+            },
+            {
+              "name": "X",
+              "odds": 4.33
+            },
+            {
+              "name": "2",
+              "odds": 4.5
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.57
+            },
+            {
+              "name": "No",
+              "odds": 2.25
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.53
+            },
+            {
+              "name": "Under",
+              "odds": 2.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16434027,
+      "competition": "Bundesliga",
+      "homeTeam": "1. FC K\u00f6ln",
+      "awayTeam": "SV Werder Bremen",
+      "kickoff": "2026-09-12T16:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.05
+            },
+            {
+              "name": "X",
+              "odds": 3.8
+            },
+            {
+              "name": "2",
+              "odds": 3.3
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.5
+            },
+            {
+              "name": "No",
+              "odds": 2.5
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.53
+            },
+            {
+              "name": "Under",
+              "odds": 2.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16310954,
+      "competition": "Ligue 1",
+      "homeTeam": "Stade Rennais",
+      "awayTeam": "Olympique de Marseille",
+      "kickoff": "2026-09-11T18:45:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.0
+            },
+            {
+              "name": "X",
+              "odds": 3.9
+            },
+            {
+              "name": "2",
+              "odds": 3.3
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.44
+            },
+            {
+              "name": "No",
+              "odds": 2.62
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.5
+            },
+            {
+              "name": "Under",
+              "odds": 2.62
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16310955,
+      "competition": "Ligue 1",
+      "homeTeam": "RC Strasbourg",
+      "awayTeam": "AS Monaco",
+      "kickoff": "2026-09-12T15:15:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 3.1
+            },
+            {
+              "name": "X",
+              "odds": 3.75
+            },
+            {
+              "name": "2",
+              "odds": 2.15
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.5
+            },
+            {
+              "name": "No",
+              "odds": 2.5
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.57
+            },
+            {
+              "name": "Under",
+              "odds": 2.38
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16310953,
+      "competition": "Ligue 1",
+      "homeTeam": "Paris FC",
+      "awayTeam": "Olympique Lyonnais",
+      "kickoff": "2026-09-12T18:45:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.55
+            },
+            {
+              "name": "X",
+              "odds": 3.6
+            },
+            {
+              "name": "2",
+              "odds": 2.55
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.57
+            },
+            {
+              "name": "No",
+              "odds": 2.25
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.67
+            },
+            {
+              "name": "Under",
+              "odds": 2.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16310947,
+      "competition": "Ligue 1",
+      "homeTeam": "Auxerre",
+      "awayTeam": "Nice",
+      "kickoff": "2026-09-12T18:45:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.63
+            },
+            {
+              "name": "X",
+              "odds": 3.3
+            },
+            {
+              "name": "2",
+              "odds": 2.75
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.7
+            },
+            {
+              "name": "No",
+              "odds": 2.05
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16310952,
+      "competition": "Ligue 1",
+      "homeTeam": "Lorient",
+      "awayTeam": "Toulouse",
+      "kickoff": "2026-09-12T18:45:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.63
+            },
+            {
+              "name": "X",
+              "odds": 3.25
+            },
+            {
+              "name": "2",
+              "odds": 2.75
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.7
+            },
+            {
+              "name": "No",
+              "odds": 2.05
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16310949,
+      "competition": "Ligue 1",
+      "homeTeam": "Le Havre",
+      "awayTeam": "Angers",
+      "kickoff": "2026-09-12T18:45:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.55
+            },
+            {
+              "name": "X",
+              "odds": 3.2
+            },
+            {
+              "name": "2",
+              "odds": 2.88
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.8
+            },
+            {
+              "name": "No",
+              "odds": 1.95
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.1
+            },
+            {
+              "name": "Under",
+              "odds": 1.73
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168386,
+      "competition": "MLS",
+      "homeTeam": "Inter Miami CF",
+      "awayTeam": "Nashville SC",
+      "kickoff": "2026-09-12T23:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.76
+            },
+            {
+              "name": "X",
+              "odds": 4.2
+            },
+            {
+              "name": "2",
+              "odds": 3.8
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.4
+            },
+            {
+              "name": "No",
+              "odds": 2.75
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.36
+            },
+            {
+              "name": "Under",
+              "odds": 3.1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168384,
+      "competition": "MLS",
+      "homeTeam": "Columbus Crew",
+      "awayTeam": "New York Red Bulls",
+      "kickoff": "2026-09-12T23:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.68
+            },
+            {
+              "name": "X",
+              "odds": 4.2
+            },
+            {
+              "name": "2",
+              "odds": 4.2
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.44
+            },
+            {
+              "name": "No",
+              "odds": 2.62
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.4
+            },
+            {
+              "name": "Under",
+              "odds": 2.88
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168387,
+      "competition": "MLS",
+      "homeTeam": "Orlando City SC",
+      "awayTeam": "Toronto FC",
+      "kickoff": "2026-09-12T23:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.81
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 3.8
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.4
+            },
+            {
+              "name": "No",
+              "odds": 2.75
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.4
+            },
+            {
+              "name": "Under",
+              "odds": 2.88
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168382,
+      "competition": "MLS",
+      "homeTeam": "FC Cincinnati",
+      "awayTeam": "Charlotte FC",
+      "kickoff": "2026-09-12T23:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.81
+            },
+            {
+              "name": "X",
+              "odds": 4.33
+            },
+            {
+              "name": "2",
+              "odds": 3.6
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.36
+            },
+            {
+              "name": "No",
+              "odds": 3.0
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.36
+            },
+            {
+              "name": "Under",
+              "odds": 3.1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168383,
+      "competition": "MLS",
+      "homeTeam": "DC United",
+      "awayTeam": "Atlanta United",
+      "kickoff": "2026-09-12T23:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.15
+            },
+            {
+              "name": "X",
+              "odds": 3.75
+            },
+            {
+              "name": "2",
+              "odds": 3.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.5
+            },
+            {
+              "name": "No",
+              "odds": 2.5
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.6
+            },
+            {
+              "name": "Under",
+              "odds": 2.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168418,
+      "competition": "MLS",
+      "homeTeam": "Sporting Kansas City",
+      "awayTeam": "Los Angeles FC",
+      "kickoff": "2026-09-13T00:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 5.0
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 1.62
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.53
+            },
+            {
+              "name": "No",
+              "odds": 2.38
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.5
+            },
+            {
+              "name": "Under",
+              "odds": 2.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168385,
+      "competition": "MLS",
+      "homeTeam": "FC Dallas",
+      "awayTeam": "Portland Timbers",
+      "kickoff": "2026-09-13T00:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.76
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 4.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.4
+            },
+            {
+              "name": "No",
+              "odds": 2.75
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.4
+            },
+            {
+              "name": "Under",
+              "odds": 2.88
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168389,
+      "competition": "MLS",
+      "homeTeam": "St.Louis City",
+      "awayTeam": "Minnesota United",
+      "kickoff": "2026-09-13T00:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.05
+            },
+            {
+              "name": "X",
+              "odds": 3.75
+            },
+            {
+              "name": "2",
+              "odds": 3.25
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.5
+            },
+            {
+              "name": "No",
+              "odds": 2.5
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.53
+            },
+            {
+              "name": "Under",
+              "odds": 2.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168394,
+      "competition": "MLS",
+      "homeTeam": "Real Salt Lake",
+      "awayTeam": "New York City FC",
+      "kickoff": "2026-09-13T01:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.86
+            },
+            {
+              "name": "X",
+              "odds": 3.75
+            },
+            {
+              "name": "2",
+              "odds": 3.8
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.57
+            },
+            {
+              "name": "No",
+              "odds": 2.25
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.65
+            },
+            {
+              "name": "Under",
+              "odds": 2.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168388,
+      "competition": "MLS",
+      "homeTeam": "Colorado Rapids",
+      "awayTeam": "CF Montr\u00e9al",
+      "kickoff": "2026-09-13T01:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.68
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 4.5
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.67
+            },
+            {
+              "name": "No",
+              "odds": 2.1
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.67
+            },
+            {
+              "name": "Under",
+              "odds": 2.15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168398,
+      "competition": "MLS",
+      "homeTeam": "LA Galaxy",
+      "awayTeam": "Seattle Sounders FC",
+      "kickoff": "2026-09-13T02:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.15
+            },
+            {
+              "name": "X",
+              "odds": 3.75
+            },
+            {
+              "name": "2",
+              "odds": 3.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.5
+            },
+            {
+              "name": "No",
+              "odds": 2.5
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.53
+            },
+            {
+              "name": "Under",
+              "odds": 2.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168392,
+      "competition": "MLS",
+      "homeTeam": "San Jose Earthquakes",
+      "awayTeam": "Houston Dynamo",
+      "kickoff": "2026-09-13T02:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.32
+            },
+            {
+              "name": "X",
+              "odds": 3.5
+            },
+            {
+              "name": "2",
+              "odds": 2.85
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.53
+            },
+            {
+              "name": "No",
+              "odds": 2.38
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.67
+            },
+            {
+              "name": "Under",
+              "odds": 2.15
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391682,
+      "competition": "Championship",
+      "homeTeam": "West Ham United",
+      "awayTeam": "Wrexham",
+      "kickoff": "2026-09-11T19:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.53
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 5.5
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.73
+            },
+            {
+              "name": "No",
+              "odds": 2.0
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.67
+            },
+            {
+              "name": "Under",
+              "odds": 2.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391673,
+      "competition": "Championship",
+      "homeTeam": "Derby County",
+      "awayTeam": "Birmingham City",
+      "kickoff": "2026-09-12T11:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 3.4
+            },
+            {
+              "name": "X",
+              "odds": 3.3
+            },
+            {
+              "name": "2",
+              "odds": 2.1
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.83
+            },
+            {
+              "name": "No",
+              "odds": 1.83
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.1
+            },
+            {
+              "name": "Under",
+              "odds": 1.73
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391681,
+      "competition": "Championship",
+      "homeTeam": "West Bromwich Albion",
+      "awayTeam": "Queens Park Rangers",
+      "kickoff": "2026-09-12T11:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.01
+            },
+            {
+              "name": "X",
+              "odds": 3.3
+            },
+            {
+              "name": "2",
+              "odds": 3.6
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.67
+            },
+            {
+              "name": "No",
+              "odds": 2.1
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.8
+            },
+            {
+              "name": "Under",
+              "odds": 2.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391671,
+      "competition": "Championship",
+      "homeTeam": "Bolton Wanderers",
+      "awayTeam": "Cardiff City",
+      "kickoff": "2026-09-12T11:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.57
+            },
+            {
+              "name": "X",
+              "odds": 3.4
+            },
+            {
+              "name": "2",
+              "odds": 2.5
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.5
+            },
+            {
+              "name": "No",
+              "odds": 2.5
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.62
+            },
+            {
+              "name": "Under",
+              "odds": 2.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391679,
+      "competition": "Championship",
+      "homeTeam": "Swansea City",
+      "awayTeam": "Burnley",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.1
+            },
+            {
+              "name": "X",
+              "odds": 3.4
+            },
+            {
+              "name": "2",
+              "odds": 3.3
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.67
+            },
+            {
+              "name": "No",
+              "odds": 2.1
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391678,
+      "competition": "Championship",
+      "homeTeam": "Southampton",
+      "awayTeam": "Bristol City",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.66
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 4.75
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.57
+            },
+            {
+              "name": "No",
+              "odds": 2.25
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.62
+            },
+            {
+              "name": "Under",
+              "odds": 2.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391674,
+      "competition": "Championship",
+      "homeTeam": "Middlesbrough",
+      "awayTeam": "Norwich City",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.79
+            },
+            {
+              "name": "X",
+              "odds": 3.9
+            },
+            {
+              "name": "2",
+              "odds": 3.8
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.53
+            },
+            {
+              "name": "No",
+              "odds": 2.38
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.57
+            },
+            {
+              "name": "Under",
+              "odds": 2.38
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391680,
+      "competition": "Championship",
+      "homeTeam": "Watford",
+      "awayTeam": "Stoke City",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.25
+            },
+            {
+              "name": "X",
+              "odds": 3.3
+            },
+            {
+              "name": "2",
+              "odds": 3.1
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.67
+            },
+            {
+              "name": "No",
+              "odds": 2.1
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391670,
+      "competition": "Championship",
+      "homeTeam": "Blackburn Rovers",
+      "awayTeam": "Millwall",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.7
+            },
+            {
+              "name": "X",
+              "odds": 3.2
+            },
+            {
+              "name": "2",
+              "odds": 2.57
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.67
+            },
+            {
+              "name": "No",
+              "odds": 2.1
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391675,
+      "competition": "Championship",
+      "homeTeam": "Preston North End",
+      "awayTeam": "Lincoln City",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.25
+            },
+            {
+              "name": "X",
+              "odds": 3.4
+            },
+            {
+              "name": "2",
+              "odds": 3.0
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.67
+            },
+            {
+              "name": "No",
+              "odds": 2.1
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.91
+            },
+            {
+              "name": "Under",
+              "odds": 1.91
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16391672,
+      "competition": "Championship",
+      "homeTeam": "Charlton Athletic",
+      "awayTeam": "Portsmouth",
+      "kickoff": "2026-09-12T14:00:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.7
+            },
+            {
+              "name": "X",
+              "odds": 3.1
+            },
+            {
+              "name": "2",
+              "odds": 2.57
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.83
+            },
+            {
+              "name": "No",
+              "odds": 1.83
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 2.2
+            },
+            {
+              "name": "Under",
+              "odds": 1.67
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
