@@ -165,12 +165,12 @@ export default function OddsScraper() {
                 <Stepper value={max} onChange={setMax} />
               </div>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 flex-1">
                 {TIME_WINDOWS.map((w) => (
                   <button
                     key={w.label}
                     onClick={() => setWindowHours(w.hours)}
-                    className={toggleClass(windowHours === w.hours)}
+                    className={`${toggleClass(windowHours === w.hours)} flex-1`}
                   >
                     {w.label}
                   </button>
