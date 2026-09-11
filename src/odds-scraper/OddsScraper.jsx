@@ -97,7 +97,8 @@ export default function OddsScraper() {
     return Array.from(new Set(data.matches.map((m) => m.competition))).sort();
   }, [data]);
 
-  const inRange = (odds) => odds >= min && odds <= max;
+  const [rangeLo, rangeHi] = min <= max ? [min, max] : [max, min];
+  const inRange = (odds) => odds >= Math.max(rangeLo, 1) && odds <= rangeHi;
 
   const visibleMatches = useMemo(() => {
     if (!data) return [];
@@ -122,8 +123,12 @@ export default function OddsScraper() {
     });
 
     if (windowHours !== null) {
-      const cutoff = Date.now() + windowHours * 3600_000;
-      matches = matches.filter((m) => new Date(m.kickoff).getTime() <= cutoff);
+      const now = Date.now();
+      const cutoff = now + windowHours * 3600_000;
+      matches = matches.filter((m) => {
+        const t = new Date(m.kickoff).getTime();
+        return t >= now && t <= cutoff;
+      });
     }
     if (competitionFilter !== "all") {
       matches = matches.filter((m) => m.competition === competitionFilter);

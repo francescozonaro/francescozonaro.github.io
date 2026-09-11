@@ -78,6 +78,7 @@ def get(url: str) -> dict | None:
                 time.sleep(wait)
                 continue
             print(f"  [{type(e).__name__}] giving up on {url} after {MAX_RETRIES} retries")
+            time.sleep(random.uniform(*REQUEST_DELAY_RANGE))
             return None
 
         if r.status_code == 200:
