@@ -179,20 +179,24 @@ def main() -> None:
         print(f"[{name}] {len(events)} fixtures within {DAYS_AHEAD} days")
 
         for e in events:
-            eid = e["id"]
-            markets = fetch_odds_for_event(eid)
-            if not markets:
+            try:
+                eid = e["id"]
+                markets = fetch_odds_for_event(eid)
+                if not markets:
+                    continue
+                all_matches.append(
+                    {
+                        "id": eid,
+                        "competition": name,
+                        "homeTeam": e["homeTeam"]["name"],
+                        "awayTeam": e["awayTeam"]["name"],
+                        "kickoff": datetime.fromtimestamp(e["startTimestamp"], tz=timezone.utc).isoformat(),
+                        "markets": markets,
+                    }
+                )
+            except (KeyError, TypeError) as err:
+                print(f"[{name}] skipping malformed event: {err}")
                 continue
-            all_matches.append(
-                {
-                    "id": eid,
-                    "competition": name,
-                    "homeTeam": e["homeTeam"]["name"],
-                    "awayTeam": e["awayTeam"]["name"],
-                    "kickoff": datetime.fromtimestamp(e["startTimestamp"], tz=timezone.utc).isoformat(),
-                    "markets": markets,
-                }
-            )
 
     output = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),

@@ -44,7 +44,10 @@ function Stepper({ value, onChange }) {
         type="number"
         step={STEP}
         value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(e) => {
+          const v = Number(e.target.value);
+          if (!Number.isNaN(v)) onChange(round(v));
+        }}
         className="no-spinner w-14 border-x border-background-dark bg-transparent px-1 py-1.5 text-center text-xs font-semibold text-primary focus:outline-none"
       />
       <button
@@ -69,13 +72,20 @@ export default function OddsScraper() {
   const [collapsedGroups, setCollapsedGroups] = useState({});
 
   useEffect(() => {
-    fetch("/data/odds-scraper/odds.json")
+    const controller = new AbortController();
+    fetch("/data/odds-scraper/odds.json", { signal: controller.signal })
       .then((r) => {
         if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
         return r.json();
       })
-      .then(setData)
-      .catch((e) => setError(String(e)));
+      .then((json) => {
+        if (!Array.isArray(json?.matches)) throw new Error("Malformed odds payload");
+        setData(json);
+      })
+      .catch((e) => {
+        if (e.name !== "AbortError") setError(String(e));
+      });
+    return () => controller.abort();
   }, []);
 
   function toggleCollapseGroup(name) {
@@ -148,24 +158,24 @@ export default function OddsScraper() {
       {!error && (
         <>
           <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 flex-shrink-0">
-            <div>
+            <div className="flex items-center gap-2">
               <div className="flex items-center gap-3">
                 <Stepper value={min} onChange={setMin} />
                 <span className="text-xs text-primary/40">to</span>
                 <Stepper value={max} onChange={setMax} />
               </div>
-            </div>
 
-            <div className="flex items-center gap-1.5">
-              {TIME_WINDOWS.map((w) => (
-                <button
-                  key={w.label}
-                  onClick={() => setWindowHours(w.hours)}
-                  className={toggleClass(windowHours === w.hours)}
-                >
-                  {w.label}
-                </button>
-              ))}
+              <div className="flex items-center gap-1.5">
+                {TIME_WINDOWS.map((w) => (
+                  <button
+                    key={w.label}
+                    onClick={() => setWindowHours(w.hours)}
+                    className={toggleClass(windowHours === w.hours)}
+                  >
+                    {w.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <select
@@ -236,11 +246,11 @@ export default function OddsScraper() {
                             key={match.id}
                             className="p-3.5 hover:bg-background-darker transition-colors flex flex-col gap-2"
                           >
-                            <div className="flex items-center justify-between gap-2">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                               <span className="font-semibold text-xs sm:text-sm truncate">
                                 {match.homeTeam} vs {match.awayTeam}
                               </span>
-                              <span className="text-[9px] sm:text-[11px] font-semibold px-1 sm:px-2 py-0.5 rounded font-mono text-primary/60 bg-background-dark/40 whitespace-nowrap">
+                              <span className="self-start sm:self-auto text-[9px] sm:text-[11px] font-semibold px-1 sm:px-2 py-0.5 rounded font-mono text-primary/60 bg-background-dark/40 whitespace-nowrap">
                                 {new Date(match.kickoff).toLocaleString()}
                               </span>
                             </div>
