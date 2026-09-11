@@ -5,6 +5,8 @@ import {
   HiChevronRight,
 } from "react-icons/hi2";
 import PageHeader from "../components/PageHeader";
+import { usePageIcon } from "../hooks/usePageIcon";
+import { getAppIcon } from "../config/appIcons";
 import { LeagueFixturesWidget } from "./components/LeagueFixturesWidget";
 import { LongRangeGoalsWidget } from "./components/LongRangeGoalsWidget";
 import { useMatchesForDate } from "./hooks/useMatchesForDate";
@@ -14,6 +16,8 @@ import { isFavoriteMatch, isMatchInFavoriteLeagues } from "./utils/favorites";
 import { isMatchActive } from "./utils/matchUtils";
 
 export default function FotmobCompanion() {
+  usePageIcon(getAppIcon("fotmob-companion"));
+
   const todayStr = getLocalDateString();
   const [selectedDate, setSelectedDate] = useState(todayStr);
   const [searchQuery, setSearchQuery] = useState("");
