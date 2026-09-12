@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T22:04:06.300593+00:00",
+  "generatedAt": "2026-09-12T12:21:51.211167+00:00",
   "source": "SofaScore (Bet365)",
   "matches": [
     {
@@ -15,15 +15,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.42
+              "odds": 1.5
             },
             {
               "name": "X",
-              "odds": 5.0
+              "odds": 4.75
             },
             {
               "name": "2",
-              "odds": 6.25
+              "odds": 5.5
             }
           ]
         },
@@ -33,11 +33,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.62
+              "odds": 1.57
             },
             {
               "name": "No",
-              "odds": 2.2
+              "odds": 2.25
             }
           ]
         },
@@ -70,15 +70,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.22
+              "odds": 1.2
             },
             {
               "name": "X",
-              "odds": 6.5
+              "odds": 7.0
             },
             {
               "name": "2",
-              "odds": 11.0
+              "odds": 12.0
             }
           ]
         },
@@ -102,11 +102,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.4
+              "odds": 1.36
             },
             {
               "name": "Under",
-              "odds": 3.0
+              "odds": 3.2
             }
           ]
         }
@@ -125,7 +125,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.25
+              "odds": 2.2
             },
             {
               "name": "X",
@@ -133,7 +133,7 @@
             },
             {
               "name": "2",
-              "odds": 3.2
+              "odds": 3.3
             }
           ]
         },
@@ -143,11 +143,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.75
+              "odds": 1.7
             },
             {
               "name": "No",
-              "odds": 2.0
+              "odds": 2.05
             }
           ]
         },
@@ -180,7 +180,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.85
+              "odds": 1.91
             },
             {
               "name": "X",
@@ -188,7 +188,7 @@
             },
             {
               "name": "2",
-              "odds": 3.9
+              "odds": 3.7
             }
           ]
         },
@@ -198,11 +198,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.7
+              "odds": 1.62
             },
             {
               "name": "No",
-              "odds": 2.05
+              "odds": 2.2
             }
           ]
         },
@@ -212,11 +212,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.8
+              "odds": 1.73
             },
             {
               "name": "Under",
-              "odds": 2.0
+              "odds": 2.1
             }
           ]
         }
@@ -235,7 +235,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.5
+              "odds": 2.45
             },
             {
               "name": "X",
@@ -243,7 +243,7 @@
             },
             {
               "name": "2",
-              "odds": 2.75
+              "odds": 2.8
             }
           ]
         },
@@ -267,11 +267,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.62
+              "odds": 1.57
             },
             {
               "name": "Under",
-              "odds": 2.3
+              "odds": 2.38
             }
           ]
         }
@@ -294,11 +294,11 @@
             },
             {
               "name": "X",
-              "odds": 3.6
+              "odds": 3.8
             },
             {
               "name": "2",
-              "odds": 3.6
+              "odds": 3.5
             }
           ]
         },
@@ -308,11 +308,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.75
+              "odds": 1.62
             },
             {
               "name": "No",
-              "odds": 2.0
+              "odds": 2.2
             }
           ]
         },
@@ -322,11 +322,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.91
+              "odds": 1.67
             },
             {
               "name": "Under",
-              "odds": 1.91
+              "odds": 2.2
             }
           ]
         }
@@ -345,15 +345,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 7.5
+              "odds": 6.0
             },
             {
               "name": "X",
-              "odds": 4.1
+              "odds": 3.8
             },
             {
               "name": "2",
-              "odds": 1.48
+              "odds": 1.6
             }
           ]
         },
@@ -363,11 +363,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 2.1
+              "odds": 2.05
             },
             {
               "name": "No",
-              "odds": 1.67
+              "odds": 1.7
             }
           ]
         },
@@ -377,11 +377,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 2.0
+              "odds": 2.1
             },
             {
               "name": "Under",
-              "odds": 1.8
+              "odds": 1.73
             }
           ]
         }
@@ -400,7 +400,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 3.8
+              "odds": 3.75
             },
             {
               "name": "X",
@@ -408,7 +408,7 @@
             },
             {
               "name": "2",
-              "odds": 1.9
+              "odds": 1.91
             }
           ]
         },
@@ -455,11 +455,11 @@
           "selections": [
             {
               "name": "1",
-              "odds": 3.25
+              "odds": 3.2
             },
             {
               "name": "X",
-              "odds": 3.8
+              "odds": 3.9
             },
             {
               "name": "2",
@@ -487,66 +487,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.53
+              "odds": 1.5
             },
             {
               "name": "Under",
-              "odds": 2.5
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 16416328,
-      "competition": "LaLiga",
-      "homeTeam": "Real Racing Club",
-      "awayTeam": "Deportivo Alav\u00e9s",
-      "kickoff": "2026-09-12T12:00:00+00:00",
-      "markets": [
-        {
-          "market": "1X2",
-          "line": null,
-          "selections": [
-            {
-              "name": "1",
-              "odds": 2.4
-            },
-            {
-              "name": "X",
-              "odds": 3.5
-            },
-            {
-              "name": "2",
-              "odds": 2.8
-            }
-          ]
-        },
-        {
-          "market": "Both teams to score",
-          "line": null,
-          "selections": [
-            {
-              "name": "Yes",
-              "odds": 1.57
-            },
-            {
-              "name": "No",
-              "odds": 2.25
-            }
-          ]
-        },
-        {
-          "market": "Match goals",
-          "line": "2.5",
-          "selections": [
-            {
-              "name": "Over",
-              "odds": 1.73
-            },
-            {
-              "name": "Under",
-              "odds": 2.1
+              "odds": 2.62
             }
           ]
         }
@@ -565,15 +510,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.15
+              "odds": 2.3
             },
             {
               "name": "X",
-              "odds": 3.2
+              "odds": 3.1
             },
             {
               "name": "2",
-              "odds": 3.6
+              "odds": 3.3
             }
           ]
         },
@@ -583,11 +528,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.95
+              "odds": 1.91
             },
             {
               "name": "No",
-              "odds": 1.8
+              "odds": 1.91
             }
           ]
         },
@@ -620,7 +565,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.42
+              "odds": 1.4
             },
             {
               "name": "X",
@@ -628,7 +573,7 @@
             },
             {
               "name": "2",
-              "odds": 7.5
+              "odds": 8.0
             }
           ]
         },
@@ -675,15 +620,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.11
+              "odds": 1.13
             },
             {
               "name": "X",
-              "odds": 9.5
+              "odds": 8.5
             },
             {
               "name": "2",
-              "odds": 19.0
+              "odds": 17.0
             }
           ]
         },
@@ -693,11 +638,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 2.0
+              "odds": 1.95
             },
             {
               "name": "No",
-              "odds": 1.75
+              "odds": 1.8
             }
           ]
         },
@@ -707,11 +652,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.29
+              "odds": 1.25
             },
             {
               "name": "Under",
-              "odds": 3.75
+              "odds": 4.0
             }
           ]
         }
@@ -840,7 +785,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.4
+              "odds": 2.38
             },
             {
               "name": "X",
@@ -950,15 +895,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.15
+              "odds": 2.25
             },
             {
               "name": "X",
-              "odds": 3.3
+              "odds": 3.4
             },
             {
               "name": "2",
-              "odds": 3.5
+              "odds": 3.2
             }
           ]
         },
@@ -968,11 +913,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.7
+              "odds": 1.62
             },
             {
               "name": "No",
-              "odds": 2.05
+              "odds": 2.2
             }
           ]
         },
@@ -982,11 +927,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.91
+              "odds": 1.8
             },
             {
               "name": "Under",
-              "odds": 1.91
+              "odds": 2.0
             }
           ]
         }
@@ -1005,15 +950,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 3.4
+              "odds": 3.8
             },
             {
               "name": "X",
-              "odds": 3.2
+              "odds": 3.3
             },
             {
               "name": "2",
-              "odds": 2.25
+              "odds": 2.05
             }
           ]
         },
@@ -1060,15 +1005,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.62
+              "odds": 1.7
             },
             {
               "name": "X",
-              "odds": 3.9
+              "odds": 3.75
             },
             {
               "name": "2",
-              "odds": 5.5
+              "odds": 5.0
             }
           ]
         },
@@ -1280,7 +1225,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 3.2
+              "odds": 3.5
             },
             {
               "name": "X",
@@ -1288,7 +1233,7 @@
             },
             {
               "name": "2",
-              "odds": 2.35
+              "odds": 2.1
             }
           ]
         },
@@ -1298,66 +1243,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.95
+              "odds": 1.91
             },
             {
               "name": "No",
-              "odds": 1.8
-            }
-          ]
-        },
-        {
-          "market": "Match goals",
-          "line": "2.5",
-          "selections": [
-            {
-              "name": "Over",
-              "odds": 2.25
-            },
-            {
-              "name": "Under",
-              "odds": 1.62
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 16607581,
-      "competition": "Serie B",
-      "homeTeam": "L.R. Vicenza",
-      "awayTeam": "Juve Stabia",
-      "kickoff": "2026-09-12T13:00:00+00:00",
-      "markets": [
-        {
-          "market": "1X2",
-          "line": null,
-          "selections": [
-            {
-              "name": "1",
-              "odds": 1.96
-            },
-            {
-              "name": "X",
-              "odds": 3.1
-            },
-            {
-              "name": "2",
-              "odds": 4.1
-            }
-          ]
-        },
-        {
-          "market": "Both teams to score",
-          "line": null,
-          "selections": [
-            {
-              "name": "Yes",
-              "odds": 1.95
-            },
-            {
-              "name": "No",
-              "odds": 1.8
+              "odds": 1.91
             }
           ]
         },
@@ -1378,10 +1268,10 @@
       ]
     },
     {
-      "id": 16607583,
+      "id": 16607581,
       "competition": "Serie B",
-      "homeTeam": "Padova",
-      "awayTeam": "Ascoli",
+      "homeTeam": "L.R. Vicenza",
+      "awayTeam": "Juve Stabia",
       "kickoff": "2026-09-12T13:00:00+00:00",
       "markets": [
         {
@@ -1390,15 +1280,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.1
+              "odds": 2.05
             },
             {
               "name": "X",
-              "odds": 3.4
+              "odds": 3.1
             },
             {
               "name": "2",
-              "odds": 3.2
+              "odds": 3.75
             }
           ]
         },
@@ -1422,22 +1312,22 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 2.0
+              "odds": 1.85
             },
             {
               "name": "Under",
-              "odds": 1.8
+              "odds": 1.95
             }
           ]
         }
       ]
     },
     {
-      "id": 16607578,
+      "id": 16607583,
       "competition": "Serie B",
-      "homeTeam": "Catanzaro",
-      "awayTeam": "Carrarese",
-      "kickoff": "2026-09-12T15:15:00+00:00",
+      "homeTeam": "Padova",
+      "awayTeam": "Ascoli",
+      "kickoff": "2026-09-12T13:00:00+00:00",
       "markets": [
         {
           "market": "1X2",
@@ -1445,15 +1335,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.96
+              "odds": 2.15
             },
             {
               "name": "X",
-              "odds": 3.1
+              "odds": 3.25
             },
             {
               "name": "2",
-              "odds": 4.0
+              "odds": 3.2
             }
           ]
         },
@@ -1477,22 +1367,22 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 2.08
+              "odds": 2.05
             },
             {
               "name": "Under",
-              "odds": 1.73
+              "odds": 1.75
             }
           ]
         }
       ]
     },
     {
-      "id": 16607579,
+      "id": 16607578,
       "competition": "Serie B",
-      "homeTeam": "Cesena",
-      "awayTeam": "Cremonese",
-      "kickoff": "2026-09-12T17:30:00+00:00",
+      "homeTeam": "Catanzaro",
+      "awayTeam": "Carrarese",
+      "kickoff": "2026-09-12T15:15:00+00:00",
       "markets": [
         {
           "market": "1X2",
@@ -1500,15 +1390,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 3.25
+              "odds": 1.76
             },
             {
               "name": "X",
-              "odds": 3.1
+              "odds": 3.4
             },
             {
               "name": "2",
-              "odds": 2.2
+              "odds": 4.5
             }
           ]
         },
@@ -1532,11 +1422,66 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 2.0
+              "odds": 1.85
             },
             {
               "name": "Under",
-              "odds": 1.8
+              "odds": 1.95
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16607579,
+      "competition": "Serie B",
+      "homeTeam": "Cesena",
+      "awayTeam": "Cremonese",
+      "kickoff": "2026-09-12T17:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 3.2
+            },
+            {
+              "name": "X",
+              "odds": 3.1
+            },
+            {
+              "name": "2",
+              "odds": 2.3
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.75
+            },
+            {
+              "name": "No",
+              "odds": 2.0
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.9
+            },
+            {
+              "name": "Under",
+              "odds": 1.9
             }
           ]
         }
@@ -1610,7 +1555,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.1
+              "odds": 2.15
             },
             {
               "name": "X",
@@ -1618,7 +1563,7 @@
             },
             {
               "name": "2",
-              "odds": 3.6
+              "odds": 3.5
             }
           ]
         },
@@ -1935,15 +1880,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.25
+              "odds": 1.27
             },
             {
               "name": "X",
-              "odds": 7.0
+              "odds": 6.5
             },
             {
               "name": "2",
-              "odds": 9.5
+              "odds": 9.0
             }
           ]
         },
@@ -1990,15 +1935,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 4.0
+              "odds": 3.6
             },
             {
               "name": "X",
-              "odds": 4.1
+              "odds": 4.0
             },
             {
               "name": "2",
-              "odds": 1.8
+              "odds": 1.9
             }
           ]
         },
@@ -2022,11 +1967,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.4
+              "odds": 1.36
             },
             {
               "name": "Under",
-              "odds": 3.0
+              "odds": 3.2
             }
           ]
         }
@@ -2045,15 +1990,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.35
+              "odds": 2.2
             },
             {
               "name": "X",
-              "odds": 4.0
+              "odds": 4.1
             },
             {
               "name": "2",
-              "odds": 2.63
+              "odds": 2.8
             }
           ]
         },
@@ -2063,11 +2008,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.33
+              "odds": 1.29
             },
             {
               "name": "No",
-              "odds": 3.25
+              "odds": 3.5
             }
           ]
         },
@@ -2077,11 +2022,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.33
+              "odds": 1.3
             },
             {
               "name": "Under",
-              "odds": 3.4
+              "odds": 3.5
             }
           ]
         }
@@ -2100,15 +2045,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.0
+              "odds": 1.75
             },
             {
               "name": "X",
-              "odds": 4.0
+              "odds": 4.2
             },
             {
               "name": "2",
-              "odds": 3.3
+              "odds": 4.0
             }
           ]
         },
@@ -2132,11 +2077,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.5
+              "odds": 1.4
             },
             {
               "name": "Under",
-              "odds": 2.62
+              "odds": 3.0
             }
           ]
         }
@@ -2155,15 +2100,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.7
+              "odds": 1.67
             },
             {
               "name": "X",
-              "odds": 4.33
+              "odds": 4.1
             },
             {
               "name": "2",
-              "odds": 4.33
+              "odds": 4.75
             }
           ]
         },
@@ -2173,11 +2118,66 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.57
+              "odds": 1.53
             },
             {
               "name": "No",
-              "odds": 2.25
+              "odds": 2.38
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.5
+            },
+            {
+              "name": "Under",
+              "odds": 2.62
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16434027,
+      "competition": "Bundesliga",
+      "homeTeam": "1. FC K\u00f6ln",
+      "awayTeam": "SV Werder Bremen",
+      "kickoff": "2026-09-12T16:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 2.0
+            },
+            {
+              "name": "X",
+              "odds": 3.8
+            },
+            {
+              "name": "2",
+              "odds": 3.4
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.5
+            },
+            {
+              "name": "No",
+              "odds": 2.5
             }
           ]
         },
@@ -2198,61 +2198,6 @@
       ]
     },
     {
-      "id": 16434027,
-      "competition": "Bundesliga",
-      "homeTeam": "1. FC K\u00f6ln",
-      "awayTeam": "SV Werder Bremen",
-      "kickoff": "2026-09-12T16:30:00+00:00",
-      "markets": [
-        {
-          "market": "1X2",
-          "line": null,
-          "selections": [
-            {
-              "name": "1",
-              "odds": 2.05
-            },
-            {
-              "name": "X",
-              "odds": 3.8
-            },
-            {
-              "name": "2",
-              "odds": 3.3
-            }
-          ]
-        },
-        {
-          "market": "Both teams to score",
-          "line": null,
-          "selections": [
-            {
-              "name": "Yes",
-              "odds": 1.5
-            },
-            {
-              "name": "No",
-              "odds": 2.5
-            }
-          ]
-        },
-        {
-          "market": "Match goals",
-          "line": "2.5",
-          "selections": [
-            {
-              "name": "Over",
-              "odds": 1.57
-            },
-            {
-              "name": "Under",
-              "odds": 2.38
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": 16434043,
       "competition": "Bundesliga",
       "homeTeam": "RB Leipzig",
@@ -2265,15 +2210,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.36
+              "odds": 1.33
             },
             {
               "name": "X",
-              "odds": 5.0
+              "odds": 5.25
             },
             {
               "name": "2",
-              "odds": 8.0
+              "odds": 8.5
             }
           ]
         },
@@ -2328,7 +2273,7 @@
             },
             {
               "name": "2",
-              "odds": 1.17
+              "odds": 1.14
             }
           ]
         },
@@ -2338,11 +2283,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.53
+              "odds": 1.57
             },
             {
               "name": "No",
-              "odds": 2.38
+              "odds": 2.25
             }
           ]
         },
@@ -2375,7 +2320,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 3.2
+              "odds": 3.1
             },
             {
               "name": "X",
@@ -2383,7 +2328,7 @@
             },
             {
               "name": "2",
-              "odds": 2.1
+              "odds": 2.15
             }
           ]
         },
@@ -2434,7 +2379,7 @@
             },
             {
               "name": "X",
-              "odds": 3.6
+              "odds": 3.7
             },
             {
               "name": "2",
@@ -2448,11 +2393,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.57
+              "odds": 1.5
             },
             {
               "name": "No",
-              "odds": 2.25
+              "odds": 2.5
             }
           ]
         },
@@ -2462,11 +2407,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.67
+              "odds": 1.57
             },
             {
               "name": "Under",
-              "odds": 2.2
+              "odds": 2.38
             }
           ]
         }
@@ -2485,7 +2430,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.63
+              "odds": 2.8
             },
             {
               "name": "X",
@@ -2493,7 +2438,7 @@
             },
             {
               "name": "2",
-              "odds": 2.75
+              "odds": 2.55
             }
           ]
         },
@@ -2540,15 +2485,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.55
+              "odds": 2.35
             },
             {
               "name": "X",
-              "odds": 3.25
+              "odds": 3.3
             },
             {
               "name": "2",
-              "odds": 2.8
+              "odds": 3.1
             }
           ]
         },
@@ -2558,11 +2503,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.7
+              "odds": 1.67
             },
             {
               "name": "No",
-              "odds": 2.05
+              "odds": 2.1
             }
           ]
         },
@@ -2599,11 +2544,11 @@
             },
             {
               "name": "X",
-              "odds": 3.2
+              "odds": 3.3
             },
             {
               "name": "2",
-              "odds": 2.8
+              "odds": 2.7
             }
           ]
         },
@@ -2613,11 +2558,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.8
+              "odds": 1.7
             },
             {
               "name": "No",
-              "odds": 1.95
+              "odds": 2.05
             }
           ]
         },
@@ -2627,11 +2572,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 2.1
+              "odds": 1.91
             },
             {
               "name": "Under",
-              "odds": 1.73
+              "odds": 1.91
             }
           ]
         }
@@ -2709,11 +2654,11 @@
             },
             {
               "name": "X",
-              "odds": 4.2
+              "odds": 4.1
             },
             {
               "name": "2",
-              "odds": 1.65
+              "odds": 1.67
             }
           ]
         },
@@ -2723,11 +2668,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.7
+              "odds": 1.67
             },
             {
               "name": "No",
-              "odds": 2.05
+              "odds": 2.1
             }
           ]
         },
@@ -2815,7 +2760,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.96
+              "odds": 2.01
             },
             {
               "name": "X",
@@ -2823,7 +2768,7 @@
             },
             {
               "name": "2",
-              "odds": 3.3
+              "odds": 3.1
             }
           ]
         },
@@ -2838,6 +2783,61 @@
             {
               "name": "No",
               "odds": 3.0
+            }
+          ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.36
+            },
+            {
+              "name": "Under",
+              "odds": 3.1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15168387,
+      "competition": "MLS",
+      "homeTeam": "Orlando City SC",
+      "awayTeam": "Toronto FC",
+      "kickoff": "2026-09-12T23:30:00+00:00",
+      "markets": [
+        {
+          "market": "1X2",
+          "line": null,
+          "selections": [
+            {
+              "name": "1",
+              "odds": 1.81
+            },
+            {
+              "name": "X",
+              "odds": 4.0
+            },
+            {
+              "name": "2",
+              "odds": 3.8
+            }
+          ]
+        },
+        {
+          "market": "Both teams to score",
+          "line": null,
+          "selections": [
+            {
+              "name": "Yes",
+              "odds": 1.4
+            },
+            {
+              "name": "No",
+              "odds": 2.75
             }
           ]
         },
@@ -2907,61 +2907,6 @@
             {
               "name": "Under",
               "odds": 2.7
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 15168387,
-      "competition": "MLS",
-      "homeTeam": "Orlando City SC",
-      "awayTeam": "Toronto FC",
-      "kickoff": "2026-09-12T23:30:00+00:00",
-      "markets": [
-        {
-          "market": "1X2",
-          "line": null,
-          "selections": [
-            {
-              "name": "1",
-              "odds": 1.81
-            },
-            {
-              "name": "X",
-              "odds": 4.0
-            },
-            {
-              "name": "2",
-              "odds": 3.8
-            }
-          ]
-        },
-        {
-          "market": "Both teams to score",
-          "line": null,
-          "selections": [
-            {
-              "name": "Yes",
-              "odds": 1.4
-            },
-            {
-              "name": "No",
-              "odds": 2.75
-            }
-          ]
-        },
-        {
-          "market": "Match goals",
-          "line": "2.5",
-          "selections": [
-            {
-              "name": "Over",
-              "odds": 1.4
-            },
-            {
-              "name": "Under",
-              "odds": 2.88
             }
           ]
         }
@@ -3053,11 +2998,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.5
+              "odds": 1.53
             },
             {
               "name": "No",
-              "odds": 2.5
+              "odds": 2.38
             }
           ]
         },
@@ -3094,11 +3039,11 @@
             },
             {
               "name": "X",
-              "odds": 4.0
+              "odds": 3.9
             },
             {
               "name": "2",
-              "odds": 1.62
+              "odds": 1.66
             }
           ]
         },
@@ -3108,11 +3053,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.53
+              "odds": 1.57
             },
             {
               "name": "No",
-              "odds": 2.38
+              "odds": 2.25
             }
           ]
         },
@@ -3122,11 +3067,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.5
+              "odds": 1.57
             },
             {
               "name": "Under",
-              "odds": 2.5
+              "odds": 2.35
             }
           ]
         }
@@ -3177,11 +3122,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.4
+              "odds": 1.36
             },
             {
               "name": "Under",
-              "odds": 2.88
+              "odds": 3.1
             }
           ]
         }
@@ -3200,7 +3145,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.01
+              "odds": 1.96
             },
             {
               "name": "X",
@@ -3208,7 +3153,7 @@
             },
             {
               "name": "2",
-              "odds": 3.4
+              "odds": 3.5
             }
           ]
         },
@@ -3232,11 +3177,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.53
+              "odds": 1.5
             },
             {
               "name": "Under",
-              "odds": 2.4
+              "odds": 2.5
             }
           ]
         }
@@ -3255,7 +3200,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.86
+              "odds": 1.91
             },
             {
               "name": "X",
@@ -3263,7 +3208,7 @@
             },
             {
               "name": "2",
-              "odds": 3.8
+              "odds": 3.6
             }
           ]
         },
@@ -3273,11 +3218,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.57
+              "odds": 1.53
             },
             {
               "name": "No",
-              "odds": 2.25
+              "odds": 2.38
             }
           ]
         },
@@ -3310,7 +3255,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.62
+              "odds": 1.61
             },
             {
               "name": "X",
@@ -3318,7 +3263,7 @@
             },
             {
               "name": "2",
-              "odds": 4.75
+              "odds": 5.0
             }
           ]
         },
@@ -3342,11 +3287,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.67
+              "odds": 1.62
             },
             {
               "name": "Under",
-              "odds": 2.15
+              "odds": 2.25
             }
           ]
         }
@@ -3383,11 +3328,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.5
+              "odds": 1.44
             },
             {
               "name": "No",
-              "odds": 2.5
+              "odds": 2.62
             }
           ]
         },
@@ -3397,11 +3342,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.53
+              "odds": 1.5
             },
             {
               "name": "Under",
-              "odds": 2.4
+              "odds": 2.5
             }
           ]
         }
@@ -3420,7 +3365,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.4
+              "odds": 2.32
             },
             {
               "name": "X",
@@ -3428,7 +3373,7 @@
             },
             {
               "name": "2",
-              "odds": 2.75
+              "odds": 2.85
             }
           ]
         },
@@ -3452,11 +3397,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.67
+              "odds": 1.65
             },
             {
               "name": "Under",
-              "odds": 2.15
+              "odds": 2.2
             }
           ]
         }
@@ -3475,7 +3420,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.79
+              "odds": 1.81
             },
             {
               "name": "X",
@@ -3483,7 +3428,7 @@
             },
             {
               "name": "2",
-              "odds": 4.0
+              "odds": 3.8
             }
           ]
         },
@@ -3518,11 +3463,11 @@
       ]
     },
     {
-      "id": 16391673,
-      "competition": "Championship",
-      "homeTeam": "Derby County",
-      "awayTeam": "Birmingham City",
-      "kickoff": "2026-09-12T11:30:00+00:00",
+      "id": 15168401,
+      "competition": "MLS",
+      "homeTeam": "Vancouver Whitecaps",
+      "awayTeam": "Austin FC",
+      "kickoff": "2026-09-13T22:30:00+00:00",
       "markets": [
         {
           "market": "1X2",
@@ -3530,15 +3475,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 3.5
+              "odds": 1.25
             },
             {
               "name": "X",
-              "odds": 3.3
+              "odds": 6.25
             },
             {
               "name": "2",
-              "odds": 2.05
+              "odds": 8.5
             }
           ]
         },
@@ -3548,91 +3493,36 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.83
+              "odds": 1.75
             },
             {
               "name": "No",
-              "odds": 1.83
-            }
-          ]
-        },
-        {
-          "market": "Match goals",
-          "line": "2.5",
-          "selections": [
-            {
-              "name": "Over",
-              "odds": 2.1
-            },
-            {
-              "name": "Under",
-              "odds": 1.73
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 16391681,
-      "competition": "Championship",
-      "homeTeam": "West Bromwich Albion",
-      "awayTeam": "Queens Park Rangers",
-      "kickoff": "2026-09-12T11:30:00+00:00",
-      "markets": [
-        {
-          "market": "1X2",
-          "line": null,
-          "selections": [
-            {
-              "name": "1",
-              "odds": 2.1
-            },
-            {
-              "name": "X",
-              "odds": 3.3
-            },
-            {
-              "name": "2",
-              "odds": 3.4
-            }
-          ]
-        },
-        {
-          "market": "Both teams to score",
-          "line": null,
-          "selections": [
-            {
-              "name": "Yes",
-              "odds": 1.67
-            },
-            {
-              "name": "No",
-              "odds": 2.1
-            }
-          ]
-        },
-        {
-          "market": "Match goals",
-          "line": "2.5",
-          "selections": [
-            {
-              "name": "Over",
-              "odds": 1.8
-            },
-            {
-              "name": "Under",
               "odds": 2.0
             }
           ]
+        },
+        {
+          "market": "Match goals",
+          "line": "2.5",
+          "selections": [
+            {
+              "name": "Over",
+              "odds": 1.4
+            },
+            {
+              "name": "Under",
+              "odds": 2.88
+            }
+          ]
         }
       ]
     },
     {
-      "id": 16391671,
-      "competition": "Championship",
-      "homeTeam": "Bolton Wanderers",
-      "awayTeam": "Cardiff City",
-      "kickoff": "2026-09-12T11:30:00+00:00",
+      "id": 15168391,
+      "competition": "MLS",
+      "homeTeam": "San Diego FC",
+      "awayTeam": "Philadelphia Union",
+      "kickoff": "2026-09-14T01:00:00+00:00",
       "markets": [
         {
           "market": "1X2",
@@ -3644,11 +3534,11 @@
             },
             {
               "name": "X",
-              "odds": 3.4
+              "odds": 3.75
             },
             {
               "name": "2",
-              "odds": 2.45
+              "odds": 2.35
             }
           ]
         },
@@ -3658,11 +3548,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.5
+              "odds": 1.44
             },
             {
               "name": "No",
-              "odds": 2.5
+              "odds": 2.62
             }
           ]
         },
@@ -3672,11 +3562,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.57
+              "odds": 1.48
             },
             {
               "name": "Under",
-              "odds": 2.38
+              "odds": 2.6
             }
           ]
         }
@@ -3699,7 +3589,7 @@
             },
             {
               "name": "X",
-              "odds": 3.4
+              "odds": 3.5
             },
             {
               "name": "2",
@@ -3750,7 +3640,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.62
+              "odds": 1.66
             },
             {
               "name": "X",
@@ -3758,7 +3648,7 @@
             },
             {
               "name": "2",
-              "odds": 4.75
+              "odds": 4.5
             }
           ]
         },
@@ -3768,11 +3658,11 @@
           "selections": [
             {
               "name": "Yes",
-              "odds": 1.62
+              "odds": 1.57
             },
             {
               "name": "No",
-              "odds": 2.2
+              "odds": 2.25
             }
           ]
         },
@@ -3805,7 +3695,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 1.79
+              "odds": 1.81
             },
             {
               "name": "X",
@@ -3813,7 +3703,7 @@
             },
             {
               "name": "2",
-              "odds": 3.8
+              "odds": 3.7
             }
           ]
         },
@@ -3837,11 +3727,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.57
+              "odds": 1.62
             },
             {
               "name": "Under",
-              "odds": 2.38
+              "odds": 2.3
             }
           ]
         }
@@ -3915,15 +3805,15 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.82
+              "odds": 2.65
             },
             {
               "name": "X",
-              "odds": 3.25
+              "odds": 3.2
             },
             {
               "name": "2",
-              "odds": 2.45
+              "odds": 2.65
             }
           ]
         },
@@ -3970,7 +3860,7 @@
           "selections": [
             {
               "name": "1",
-              "odds": 2.85
+              "odds": 2.65
             },
             {
               "name": "X",
@@ -3978,7 +3868,7 @@
             },
             {
               "name": "2",
-              "odds": 2.45
+              "odds": 2.65
             }
           ]
         },
@@ -4057,11 +3947,11 @@
           "selections": [
             {
               "name": "Over",
-              "odds": 1.91
+              "odds": 1.8
             },
             {
               "name": "Under",
-              "odds": 1.91
+              "odds": 2.0
             }
           ]
         }
