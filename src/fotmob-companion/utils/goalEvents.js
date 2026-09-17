@@ -1,6 +1,8 @@
 const PITCH_LENGTH_M = 105;
 const PITCH_WIDTH_M = 68;
 const LONG_RANGE_THRESHOLD_M = 20;
+const DELTA_THRESHOLD = 0.4;
+const GREAT_FINISH_MAX_XG = 0.06;
 
 function shotDistanceFromGoal(x, y) {
   const dx = x - PITCH_LENGTH_M;
@@ -48,6 +50,10 @@ function getShotTelemetry(shot) {
       distance: null,
       x: null,
       y: null,
+      xg: null,
+      xgot: null,
+      delta: null,
+      isGreatFinish: false,
     };
   }
 
@@ -55,6 +61,10 @@ function getShotTelemetry(shot) {
   const distance = shotDistanceFromGoal(x, y);
   const isPenalty = isPenaltyShot(shot);
   const isOwnGoal = isOwnGoalShot(shot);
+  const xg = typeof shot.expectedGoals === "number" ? shot.expectedGoals : null;
+  const xgot =
+    typeof shot.expectedGoalsOnTarget === "number" ? shot.expectedGoalsOnTarget : null;
+  const delta = xg !== null && xgot !== null ? xgot - xg : null;
 
   return {
     isLongRange: isOwnGoal ? false : distance >= LONG_RANGE_THRESHOLD_M,
@@ -62,6 +72,16 @@ function getShotTelemetry(shot) {
     distance,
     x,
     y,
+    xg,
+    xgot,
+    delta,
+    isGreatFinish:
+      !isOwnGoal &&
+      !isPenalty &&
+      delta !== null &&
+      delta >= DELTA_THRESHOLD &&
+      xg !== null &&
+      xg < GREAT_FINISH_MAX_XG,
   };
 }
 
@@ -88,10 +108,14 @@ function buildGoalEvent(shot, homeTeamId, awayTeamId) {
   };
 }
 
-export function getGoalSearchUrl(scorerName) {
+function cleanScorerName(scorerName) {
+  return scorerName.replace(/\s*\((?:OG|P|\d+′?)\)/gi, "").trim();
+}
+
+export function getRedditSearchUrl(scorerName) {
   if (!scorerName) return "#";
-  const cleanName = scorerName.replace(/\s*\((?:OG|P|\d+′?)\)/gi, "").trim();
-  return `https://x.com/search?q=${encodeURIComponent(cleanName)}&f=live`;
+  const cleanName = cleanScorerName(scorerName);
+  return `https://www.reddit.com/r/soccer/search/?q=${encodeURIComponent(cleanName)}&restrict_sr=1&sort=new`;
 }
 
 // Some competitions don't get shotmap coverage from FotMob at all (shots
@@ -140,12 +164,17 @@ function buildGoalEventFromHeader(event, homeTeamId, awayTeamId) {
     distance: null,
     x: null,
     y: null,
+    xg: null,
+    xgot: null,
+    delta: null,
+    isGreatFinish: false,
   };
 }
 
 export function extractGoalEvents(data) {
   const homeId = data?.general?.homeTeam?.id;
   const awayId = data?.general?.awayTeam?.id;
+  const coverageLevel = data?.general?.coverageLevel ?? null;
 
   const goalShots = findGoalShots(data);
   const goals =
@@ -162,6 +191,6 @@ export function extractGoalEvents(data) {
   return sorted.map((goal) => {
     if (goal.isHomeGoal) homeScore += 1;
     else awayScore += 1;
-    return { ...goal, homeScore, awayScore };
+    return { ...goal, homeScore, awayScore, coverageLevel };
   });
 }

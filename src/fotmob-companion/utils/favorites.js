@@ -14,16 +14,13 @@ export const FAVORITE_LEAGUES = [
   141, // Coppa Italia (Italy)
   47, // Premier League (England)
   42, // Champions League
+  73, // Europa League
   48, // Championship (England)
-  57, // Eredivisie
-  40, // Belgian Pro League
   74, // UEFA Super Cup
   10611, // Champions League Qualifiers
-  10043, // Leagues Cup (USA)
   87, // LaLiga (Spain)
   54, // Bundesliga (Germany)
   53, // Ligue 1 (France)
-  64, // Scottish Premiership
 ];
 
 export function isFavoriteTeam(teamId) {
@@ -41,4 +38,9 @@ export function isFavoriteMatch(match) {
     isFavoriteTeam(match.home.id) ||
     isFavoriteTeam(match.away.id)
   );
+}
+
+export function isFavoriteTeamMatch(match) {
+  if (!match) return false;
+  return isFavoriteTeam(match.home.id) || isFavoriteTeam(match.away.id);
 }

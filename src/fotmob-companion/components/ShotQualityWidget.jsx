@@ -2,10 +2,10 @@ import { useMemo, useState } from "react";
 import { CollapsibleCard } from "../../components/CollapsibleCard";
 import { getRedditSearchUrl } from "../utils/goalEvents";
 
-export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
+export function ShotQualityWidget({ matches = [], matchDetailsMap = {} }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const longRangeGoals = useMemo(() => {
+  const greatFinishes = useMemo(() => {
     const list = [];
 
     matches.forEach((m) => {
@@ -13,7 +13,7 @@ export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
       if (!Array.isArray(goals)) return;
 
       goals.forEach((g) => {
-        if (!g.isLongRange) return;
+        if (!g.isGreatFinish) return;
         const team = g.isHomeGoal ? m.home.name : m.away.name;
         const opponent = g.isHomeGoal ? m.away.name : m.home.name;
 
@@ -24,21 +24,21 @@ export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
           opponent,
           leagueName: m.leagueName,
           timeStr: g.timeStr,
-          distance: g.distance,
+          delta: g.delta,
         });
       });
     });
 
-    return list.sort((a, b) => (b.distance ?? 0) - (a.distance ?? 0));
+    return list.sort((a, b) => (b.delta ?? 0) - (a.delta ?? 0));
   }, [matches, matchDetailsMap]);
 
   return (
     <CollapsibleCard
-      title="Long Range Goals"
+      title="Shot Quality"
       badge={
-        longRangeGoals.length > 0 && (
+        greatFinishes.length > 0 && (
           <span className="text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full ml-1 font-mono">
-            {longRangeGoals.length}
+            {greatFinishes.length}
           </span>
         )
       }
@@ -46,18 +46,18 @@ export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
       onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
     >
       <div className="p-3.5 min-h-[220px] flex flex-col justify-between">
-        {longRangeGoals.length === 0 ? (
+        {greatFinishes.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-1 py-8">
             <p className="text-[11px] text-primary/50 font-medium">
-              No long range goals found for this date
+              No standout finishes found for this date
             </p>
             <p className="text-[10px] text-primary/35">
-              Goals scored from outside the box show up here
+              Goals where the finish beat the chance quality show up here
             </p>
           </div>
         ) : (
           <ul className="space-y-2 min-h-[160px] max-h-72 overflow-y-auto no-scrollbar">
-            {longRangeGoals.map((g) => (
+            {greatFinishes.map((g) => (
               <li
                 key={g.id}
                 className="flex items-center justify-between gap-2 text-[11px] border-b border-background-dark/20 pb-1.5 last:border-0 last:pb-0"
@@ -73,9 +73,9 @@ export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
                     >
                       {g.scorer}
                     </a>
-                    {g.distance !== null && g.distance !== undefined && (
+                    {g.delta !== null && g.delta !== undefined && (
                       <span className="text-secondary font-mono text-[10px] font-bold">
-                        ({Math.round(g.distance)}m)
+                        (Δ {g.delta.toFixed(2)})
                       </span>
                     )}
                   </div>

@@ -66,22 +66,3 @@ export function getMatchMinuteLabel(match) {
   }
   return match.utcTime;
 }
-
-// Pads a match's extracted goals up to its actual score, so a scoreline that
-// changed before scorer details finished fetching still shows placeholder
-// entries instead of silently under-counting.
-export function getDisplayGoals(goalsArr, teamScore, isHomeGoal) {
-  if (teamScore <= 0) return [];
-  const result = [...goalsArr];
-  while (result.length < teamScore) {
-    result.push({
-      scorer: "Goal",
-      timeStr: "",
-      isHomeGoal,
-      isLongRange: false,
-      distance: null,
-      isPlaceholder: true,
-    });
-  }
-  return result;
-}
