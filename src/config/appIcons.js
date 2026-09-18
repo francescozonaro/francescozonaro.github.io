@@ -7,10 +7,10 @@ export const APP_ICONS = {
     icon: "/img/fotmob-companion/apple-touch-icon.png",
     appleIcon: "/img/fotmob-companion/apple-touch-icon.png",
   },
-  "odds-scraper": {
-    title: "Odds Scraper",
-    icon: "/img/odds-scraper/apple-touch-icon.png",
-    appleIcon: "/img/odds-scraper/apple-touch-icon.png",
+  "betting-notebook": {
+    title: "Betting Notebook",
+    icon: "/img/fotmob-companion/apple-touch-icon.png",
+    appleIcon: "/img/fotmob-companion/apple-touch-icon.png",
   },
 };
 

@@ -1,12 +1,12 @@
 {
   "projects": [
     {
-      "title": "Odds Scraper",
-      "description": "A live odds dashboard siphoning Bet365 lines via SofaScore's public API, with filterable markets across upcoming fixtures in ~20 competitions.",
+      "title": "Betting Notebook",
+      "description": "A league-grouped match picker built on the FotMob siphon, for clicking together a 1X2 / double chance / no-draw / GG-NG multi bet before copying it into a betting site.",
       "links": [
         {
           "type": "link",
-          "url": "/#/odds-scraper"
+          "url": "/#/betting-notebook"
         }
       ]
     },

@@ -8,8 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "refresh-odds": "uv run --with curl_cffi python3 -u src/odds-scraper/scripts/fetch_odds.py && git add public/data/odds-scraper/odds.json && (git diff --staged --quiet && echo 'No changes to odds.json' || (git commit -m \"chore: refresh odds data\" && git push))"
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^18.2.0",
