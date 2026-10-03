@@ -21,6 +21,10 @@ export const FAVORITE_LEAGUES = [
   87, // LaLiga (Spain)
   54, // Bundesliga (Germany)
   53, // Ligue 1 (France)
+  9806, // UEFA Nations League A
+  9807, // UEFA Nations League B
+  9808, // UEFA Nations League C
+  9809, // UEFA Nations League D
 ];
 
 export function isFavoriteTeam(teamId) {

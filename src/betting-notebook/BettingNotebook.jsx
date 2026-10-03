@@ -21,7 +21,8 @@ import {
 const STORAGE_KEY = "betting-notebook-picks";
 
 // FotMob league ids (see fotmob-companion/utils/favorites.js) for the
-// top-5 European leagues plus Serie B, Serie C and the Championship.
+// top-5 European leagues plus Serie B, Serie C, the Championship and the
+// UEFA Nations League.
 const ALLOWED_LEAGUE_IDS = new Set([
   47, // Premier League (England)
   87, // LaLiga (Spain)
@@ -31,6 +32,10 @@ const ALLOWED_LEAGUE_IDS = new Set([
   86, // Serie B (Italy)
   147, // Serie C (Italy) - shared id across all groups
   48, // Championship (England)
+  9806, // UEFA Nations League A
+  9807, // UEFA Nations League B
+  9808, // UEFA Nations League C
+  9809, // UEFA Nations League D
 ]);
 
 function loadPicks() {
