@@ -229,14 +229,19 @@ export default function BettingNotebook() {
                           key={match.id}
                           className="p-3 hover:bg-background-darker transition-colors flex items-center justify-between gap-2"
                         >
-                          <div className="min-w-0">
+                          <a
+                            href={`https://www.fotmob.com/match/${match.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="min-w-0 hover:underline"
+                          >
                             <p className="text-xs font-semibold truncate">
                               {match.home.name} vs {match.away.name}
                             </p>
                             <p className="text-[10px] font-mono text-primary/50">
                               {match.utcTime}
                             </p>
-                          </div>
+                          </a>
                           <button
                             onClick={() => addPick(match)}
                             disabled={added}
