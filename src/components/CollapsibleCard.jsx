@@ -15,8 +15,8 @@ export function CollapsibleCard({
       className={`border-[0.5px] border-background-dark rounded-xl overflow-hidden bg-background-dark/20 shadow-md transition-all ${customClasses}`}
     >
       <div
-        className={`px-4 py-2.5 bg-background-dark/60 flex justify-between items-center ${
-          !isCollapsed ? "border-b border-background-dark/50" : ""
+        className={`px-4 py-2.5 bg-background-dark/60 flex justify-between items-center border-b transition-colors duration-300 ${
+          !isCollapsed ? "border-background-dark/50" : "border-transparent"
         }`}
       >
         <div className="flex items-center space-x-2">
@@ -41,7 +41,15 @@ export function CollapsibleCard({
         </div>
       </div>
 
-      {!isCollapsed && children}
+      <div
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
+          isCollapsed ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100"
+        }`}
+        aria-hidden={isCollapsed}
+        inert={isCollapsed ? "" : undefined}
+      >
+        <div className="min-h-0 overflow-hidden">{children}</div>
+      </div>
     </div>
   );
 }

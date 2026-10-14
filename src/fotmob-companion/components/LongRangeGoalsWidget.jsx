@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { CollapsibleCard } from "../../components/CollapsibleCard";
-import { getRedditSearchUrl } from "../utils/goalEvents";
+import { getRedditSearchUrl, getXSearchUrl } from "../utils/goalEvents";
 
 export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -64,20 +64,35 @@ export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center space-x-1.5 flex-wrap">
-                    <a
-                      href={getRedditSearchUrl(g.scorer)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold text-primary hover:text-secondary hover:underline transition-colors"
-                      title={`Search ${g.scorer} on r/soccer`}
-                    >
+                    <span className="font-semibold text-primary">
                       {g.scorer}
-                    </a>
+                    </span>
                     {g.distance !== null && g.distance !== undefined && (
                       <span className="text-secondary font-mono text-[10px] font-bold">
                         ({Math.round(g.distance)}m)
                       </span>
                     )}
+                    <span className="flex items-center space-x-1 text-[10px] text-primary/45">
+                      <a
+                        href={getRedditSearchUrl(g.scorer)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary/45 hover:text-secondary hover:underline transition-colors"
+                        title={`Search ${g.scorer} on r/soccer`}
+                      >
+                        Reddit
+                      </a>
+                      <span className="text-primary/25">·</span>
+                      <a
+                        href={getXSearchUrl(g.scorer)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary/45 hover:text-secondary hover:underline transition-colors"
+                        title={`Search ${g.scorer} on Twitter`}
+                      >
+                        Twitter
+                      </a>
+                    </span>
                   </div>
                   <p className="text-[10px] text-primary/50 truncate">
                     {g.team} vs {g.opponent} · {g.leagueName}

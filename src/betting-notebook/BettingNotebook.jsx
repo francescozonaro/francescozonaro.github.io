@@ -21,22 +21,27 @@ import {
 const STORAGE_KEY = "betting-notebook-picks";
 
 // FotMob league ids (see fotmob-companion/utils/favorites.js) for the
-// top-5 European leagues plus Serie B, Serie C, the Championship and the
-// UEFA Nations League.
-const ALLOWED_LEAGUE_IDS = new Set([
-  47, // Premier League (England)
-  87, // LaLiga (Spain)
+// top-5 European leagues plus Serie B, Serie C, the Championship, the
+// UEFA Nations League and the Champions/Europa/Conference League.
+// The order here is the order the league cards are displayed in.
+const LEAGUE_ORDER = [
+  42, // Champions League
   55, // Serie A (Italy)
-  54, // Bundesliga (Germany)
-  53, // Ligue 1 (France)
   86, // Serie B (Italy)
   147, // Serie C (Italy) - shared id across all groups
+  47, // Premier League (England)
+  73, // Europa League
+  10216, // Conference League
+  87, // LaLiga (Spain)
+  54, // Bundesliga (Germany)
+  53, // Ligue 1 (France)
   48, // Championship (England)
   9806, // UEFA Nations League A
   9807, // UEFA Nations League B
   9808, // UEFA Nations League C
   9809, // UEFA Nations League D
-]);
+];
+const ALLOWED_LEAGUE_IDS = new Set(LEAGUE_ORDER);
 
 function loadPicks() {
   try {
@@ -55,6 +60,7 @@ export default function BettingNotebook() {
   const [searchQuery, setSearchQuery] = useState("");
   const [picks, setPicks] = useState(loadPicks);
   const [collapsedGroups, setCollapsedGroups] = useState({});
+  const [slipCollapsed, setSlipCollapsed] = useState(false);
 
   const { matches: allMatches } = useMatchesForDate(selectedDate);
   const matches = useMemo(
@@ -78,6 +84,7 @@ export default function BettingNotebook() {
           leagueName: match.leagueName,
           utcTime: match.utcTime,
           note: "",
+          addedAt: Date.now(),
         },
       };
     });
@@ -104,8 +111,8 @@ export default function BettingNotebook() {
 
   const pickList = useMemo(
     () =>
-      Object.values(picks).sort((a, b) =>
-        a.leagueName.localeCompare(b.leagueName),
+      Object.values(picks).sort(
+        (a, b) => (a.addedAt ?? 0) - (b.addedAt ?? 0),
       ),
     [picks],
   );
@@ -139,11 +146,19 @@ export default function BettingNotebook() {
     const groups = {};
     filteredMatches.forEach((m) => {
       if (!groups[m.leagueName]) {
-        groups[m.leagueName] = { name: m.leagueName, matches: [] };
+        groups[m.leagueName] = {
+          name: m.leagueName,
+          leagueId: m.leagueId,
+          matches: [],
+        };
       }
       groups[m.leagueName].matches.push(m);
     });
-    return Object.values(groups).sort((a, b) => a.name.localeCompare(b.name));
+    return Object.values(groups).sort(
+      (a, b) =>
+        LEAGUE_ORDER.indexOf(a.leagueId) - LEAGUE_ORDER.indexOf(b.leagueId) ||
+        a.name.localeCompare(b.name),
+    );
   }, [filteredMatches]);
 
   function toggleCollapseGroup(name) {
@@ -294,8 +309,8 @@ export default function BettingNotebook() {
                 </>
               )
             }
-            isCollapsed={false}
-            onToggleCollapse={() => {}}
+            isCollapsed={slipCollapsed}
+            onToggleCollapse={() => setSlipCollapsed((c) => !c)}
           >
             <div className="flex-1 overflow-y-auto no-scrollbar">
               {pickList.length === 0 ? (

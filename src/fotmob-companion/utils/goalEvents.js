@@ -118,6 +118,12 @@ export function getRedditSearchUrl(scorerName) {
   return `https://www.reddit.com/r/soccer/search/?q=${encodeURIComponent(cleanName)}&restrict_sr=1&sort=new`;
 }
 
+export function getXSearchUrl(scorerName) {
+  if (!scorerName) return "#";
+  const cleanName = cleanScorerName(scorerName);
+  return `https://x.com/search?q=${encodeURIComponent(cleanName)}&f=live`;
+}
+
 // Some competitions don't get shotmap coverage from FotMob at all (shots
 // list is empty even for a finished match) - fall back to the goal list
 // from the match header, which has no distance/xG telemetry to offer but
