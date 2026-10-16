@@ -20,7 +20,9 @@ async function fetchJson(url, errorLabel, timeoutMs = 10000) {
     return await res.json();
   } catch (err) {
     if (err.name === "AbortError") {
-      throw new Error(`${errorLabel} request timed out after ${timeoutMs}ms`);
+      throw new Error(`${errorLabel} request timed out after ${timeoutMs}ms`, {
+        cause: err,
+      });
     }
     throw err;
   } finally {
