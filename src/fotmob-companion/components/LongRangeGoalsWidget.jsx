@@ -43,11 +43,6 @@ export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
         <LinkRow key={g.id} links={g.links}>
           <div className="flex items-baseline flex-wrap gap-x-1.5 text-[11px]">
             <span className="font-semibold text-primary">{g.scorer}</span>
-            {g.timeStr && (
-              <span className="text-primary/45 font-mono text-[10px]">
-                {g.timeStr}′
-              </span>
-            )}
             {g.distance != null && (
               <span className="text-secondary font-mono text-[10px] font-bold">
                 ({Math.round(g.distance)}m)
@@ -55,6 +50,11 @@ export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
             )}
           </div>
           <p className="text-[10px] text-primary/50 truncate">
+            {g.timeStr && (
+              <span className="text-primary/45 font-mono mr-1.5">
+                {g.timeStr}′
+              </span>
+            )}
             {g.team} vs {g.opponent} · {g.leagueName}
           </p>
         </LinkRow>
