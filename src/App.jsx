@@ -70,7 +70,7 @@ function App() {
 }
 
 function CardItem({ item }) {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <CollapsibleCard
