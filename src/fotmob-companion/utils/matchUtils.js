@@ -1,7 +1,7 @@
 const FOTMOB_IMAGE_LOCATION =
   "https://images.fotmob.com/image_resources/logo/teamlogo/";
 
-export function formatLiveMinute(liveTimeShort) {
+function formatLiveMinute(liveTimeShort) {
   return liveTimeShort.replace(/[^a-zA-Z0-9]/g, "");
 }
 
@@ -15,10 +15,6 @@ export function formatKickoffTime(utcTime) {
 }
 
 export function transformFotmobMatch(match, league) {
-  if (!match) {
-    return {};
-  }
-
   const status = match.status;
   const homeId = match.home.id;
   const homeName = match.home.name;

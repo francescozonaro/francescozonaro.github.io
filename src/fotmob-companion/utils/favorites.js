@@ -27,11 +27,11 @@ export const FAVORITE_LEAGUES = [
   9809, // UEFA Nations League D
 ];
 
-export function isFavoriteTeam(teamId) {
+function isFavoriteTeam(teamId) {
   return FAVORITE_TEAMS.some((id) => id === teamId);
 }
 
-export function isMatchInFavoriteLeagues(leagueId) {
+function isMatchInFavoriteLeagues(leagueId) {
   return FAVORITE_LEAGUES.some((id) => id === leagueId);
 }
 
