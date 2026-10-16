@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
 import { HiLink, HiCodeBracket, HiDocument } from "react-icons/hi2";
+import { FaReddit } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const LINK_TYPES = {
   code: { icon: HiCodeBracket, label: "Code" },
   link: { icon: HiLink, label: "Link" },
   pdf: { icon: HiDocument, label: "Docs" },
+  reddit: { icon: FaReddit, label: "Reddit" },
+  x: { icon: FaXTwitter, label: "X" },
 };
 
 const buttonClass = "cardComponent smallEnlarge iconButton font-semibold";
@@ -13,12 +17,7 @@ export function LinkButton({ type, url }) {
   const { icon: Icon, label } = LINK_TYPES[type] || {};
   if (!Icon) return null;
 
-  const content = (
-    <>
-      <Icon className="h-4 w-4" />
-      <span>{label}</span>
-    </>
-  );
+  const content = <Icon className="h-4 w-4" />;
 
   const isInternal = url.startsWith("/#/") || url.startsWith("#/");
   if (isInternal) {
@@ -26,6 +25,8 @@ export function LinkButton({ type, url }) {
       <Link
         to={url.replace(/^(\/#|#)/, "")}
         className={`${buttonClass} text-secondary`}
+        aria-label={label}
+        title={label}
       >
         {content}
       </Link>
@@ -37,6 +38,8 @@ export function LinkButton({ type, url }) {
       target="_blank"
       rel="noopener noreferrer"
       className={buttonClass}
+      aria-label={label}
+      title={label}
     >
       {content}
     </a>

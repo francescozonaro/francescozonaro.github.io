@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   extractGoalEvents,
+  getGoalSearchLinks,
   getRedditSearchUrl,
   getXSearchUrl,
 } from "./goalEvents";
@@ -166,5 +167,13 @@ describe("search urls", () => {
   it("returns a harmless link when there is no scorer", () => {
     expect(getRedditSearchUrl(null)).toBe("#");
     expect(getXSearchUrl(null)).toBe("#");
+  });
+
+  it("builds reddit and x links for a scorer, and none without one", () => {
+    expect(getGoalSearchLinks("Rossi (P)").map((l) => l.type)).toEqual([
+      "reddit",
+      "x",
+    ]);
+    expect(getGoalSearchLinks(null)).toEqual([]);
   });
 });

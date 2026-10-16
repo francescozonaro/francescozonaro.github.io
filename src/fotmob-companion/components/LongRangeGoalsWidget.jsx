@@ -1,10 +1,9 @@
-import { useMemo, useState } from "react";
-import { CollapsibleCard } from "../../components/CollapsibleCard";
-import { getRedditSearchUrl, getXSearchUrl } from "../utils/goalEvents";
+import { useMemo } from "react";
+import { ListCard } from "../../components/ListCard";
+import { LinkRow } from "../../components/LinkRow";
+import { getGoalSearchLinks } from "../utils/goalEvents";
 
 export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
   const longRangeGoals = useMemo(() => {
     const list = [];
 
@@ -20,6 +19,7 @@ export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
         list.push({
           id: `${m.id}-${g.time}-${g.scorer}`,
           scorer: g.scorer || "Goal",
+          links: getGoalSearchLinks(g.scorer),
           team,
           opponent,
           leagueName: m.leagueName,
@@ -33,83 +33,32 @@ export function LongRangeGoalsWidget({ matches = [], matchDetailsMap = {} }) {
   }, [matches, matchDetailsMap]);
 
   return (
-    <CollapsibleCard
+    <ListCard
       title="Long Range Goals"
-      badge={
-        longRangeGoals.length > 0 && (
-          <span className="text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full ml-1 font-mono">
-            {longRangeGoals.length}
-          </span>
-        )
-      }
-      isCollapsed={isCollapsed}
-      onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+      count={longRangeGoals.length}
+      emptyTitle="No long range goals found for this date"
+      emptyHint="Goals scored from outside the box show up here"
     >
-      <div className="p-3.5 min-h-[220px] flex flex-col justify-between">
-        {longRangeGoals.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center gap-1 py-8">
-            <p className="text-[11px] text-primary/50 font-medium">
-              No long range goals found for this date
-            </p>
-            <p className="text-[10px] text-primary/35">
-              Goals scored from outside the box show up here
-            </p>
+      {longRangeGoals.map((g) => (
+        <LinkRow key={g.id} links={g.links}>
+          <div className="flex items-baseline flex-wrap gap-x-1.5 text-[11px]">
+            <span className="font-semibold text-primary">{g.scorer}</span>
+            {g.timeStr && (
+              <span className="text-primary/45 font-mono text-[10px]">
+                {g.timeStr}′
+              </span>
+            )}
+            {g.distance != null && (
+              <span className="text-secondary font-mono text-[10px] font-bold">
+                ({Math.round(g.distance)}m)
+              </span>
+            )}
           </div>
-        ) : (
-          <ul className="space-y-2 min-h-[160px] max-h-72 overflow-y-auto no-scrollbar">
-            {longRangeGoals.map((g) => (
-              <li
-                key={g.id}
-                className="flex items-center justify-between gap-2 text-[11px] border-b border-background-dark/20 pb-1.5 last:border-0 last:pb-0"
-              >
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center space-x-1.5 flex-wrap">
-                    <span className="font-semibold text-primary">
-                      {g.scorer}
-                    </span>
-                    {g.distance !== null && g.distance !== undefined && (
-                      <span className="text-secondary font-mono text-[10px] font-bold">
-                        ({Math.round(g.distance)}m)
-                      </span>
-                    )}
-                    <span className="flex items-center space-x-1 text-[10px] text-primary/45">
-                      <a
-                        href={getRedditSearchUrl(g.scorer)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary/45 hover:text-secondary hover:underline transition-colors"
-                        title={`Search ${g.scorer} on r/soccer`}
-                      >
-                        Reddit
-                      </a>
-                      <span className="text-primary/25">·</span>
-                      <a
-                        href={getXSearchUrl(g.scorer)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary/45 hover:text-secondary hover:underline transition-colors"
-                        title={`Search ${g.scorer} on Twitter`}
-                      >
-                        Twitter
-                      </a>
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-primary/50 truncate">
-                    {g.team} vs {g.opponent} · {g.leagueName}
-                  </p>
-                </div>
-                <div className="flex-shrink-0 text-right">
-                  {g.timeStr && (
-                    <span className="text-primary/45 font-mono text-[10px] block">
-                      {g.timeStr}′
-                    </span>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </CollapsibleCard>
+          <p className="text-[10px] text-primary/50 truncate">
+            {g.team} vs {g.opponent} · {g.leagueName}
+          </p>
+        </LinkRow>
+      ))}
+    </ListCard>
   );
 }
