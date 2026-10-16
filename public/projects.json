@@ -2,7 +2,7 @@
   "projects": [
     {
       "title": "Betting Notebook",
-      "description": "A league-grouped match picker built on the FotMob siphon, for clicking together a 1X2 / double chance / no-draw / GG-NG multi bet before copying it into a betting site.",
+      "description": "Match pickerand betting utility built around FotMob data.",
       "links": [
         {
           "type": "link",
@@ -12,7 +12,7 @@
     },
     {
       "title": "FotMob Companion",
-      "description": "A real-time live score tracker siphoning public FotMob API data, with automatic live updates.",
+      "description": "Daily football tracker siphoning public FotMob API data, with automatic events detection.",
       "links": [
         {
           "type": "link",
