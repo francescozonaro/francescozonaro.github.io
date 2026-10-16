@@ -42,18 +42,7 @@ const LEAGUE_ORDER = [
   9808, // UEFA Nations League C
   9809, // UEFA Nations League D
 ];
-const BET_OPTIONS = [
-  "1",
-  "X",
-  "2",
-  "1X",
-  "X2",
-  "12",
-  "GG",
-  "NG",
-  "O2.5",
-  "O1.5",
-];
+const BET_OPTIONS = ["1X2", "DC", "GG/NG", "O/U", "DNB"];
 const ALLOWED_LEAGUE_IDS = new Set(LEAGUE_ORDER);
 
 function loadPicks() {
@@ -368,7 +357,7 @@ export default function BettingNotebook() {
                           <HiXMark className="h-4 w-4" />
                         </button>
                       </div>
-                      <div className="flex flex-wrap items-center gap-1.5">
+                      <div className="flex flex-wrap items-center gap-2">
                         {BET_OPTIONS.map((option) => {
                           const selected = (p.options ?? []).includes(option);
                           return (
@@ -376,7 +365,7 @@ export default function BettingNotebook() {
                               key={option}
                               onClick={() => toggleOption(p.matchId, option)}
                               aria-pressed={selected}
-                              className={`iconButton ${
+                              className={`iconButton w-18 ${
                                 selected ? "accentButton" : "defaultButton"
                               }`}
                             >
