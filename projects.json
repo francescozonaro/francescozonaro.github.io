@@ -2,7 +2,7 @@
   "projects": [
     {
       "title": "Betting Notebook",
-      "description": "Match pickerand betting utility built around FotMob data.",
+      "description": "Match picker betting utility built around FotMob data.",
       "links": [
         {
           "type": "link",
