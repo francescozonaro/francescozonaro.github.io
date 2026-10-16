@@ -93,10 +93,7 @@ function StatsbombShowcase() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img
-              src="img/statsbomb-showcase/shotmap.png"
-              alt="Shotmap Image"
-            />
+            <img src="img/statsbomb-showcase/shotmap.png" alt="Shotmap Image" />
           </a>
         </div>
       </div>
