@@ -47,8 +47,10 @@ const ALLOWED_LEAGUE_IDS = new Set(LEAGUE_ORDER);
 
 function loadPicks() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : {};
   } catch {
     return {};
   }
