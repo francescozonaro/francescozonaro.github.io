@@ -10,7 +10,7 @@ export default function PageHeader({ title, children, className = "" }) {
       className={`flex justify-between items-center flex-shrink-0 pt-1 px-1 ${className}`}
     >
       <button
-        className="cardComponent smallEnlarge iconButton origin-left text-secondary"
+        className="cardComponent smallEnlarge iconButton origin-left text-secondary font-semibold"
         onClick={() => navigate("/")}
       >
         <HiHome className="h-4 w-4" />

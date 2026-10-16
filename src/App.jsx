@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { HiLink, HiCodeBracket, HiDocument } from "react-icons/hi2";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import "./App.css";
 import ThemeToggle from "./components/ThemeToggle";
+import { CollapsibleCard } from "./components/CollapsibleCard";
+import { LinkRow } from "./components/LinkRow";
 
 function App() {
   const [data, setData] = useState({ projects: [], reports: [] });
@@ -17,40 +17,7 @@ function App() {
       );
   }, []);
 
-  const linkBtnClass = "cardComponent smallEnlarge iconButton";
-
-  const renderLinkButton = (url, IconComponent, label) => {
-    const isInternal = url.startsWith("/#/") || url.startsWith("#/");
-    if (isInternal) {
-      const targetPath = url.replace(/^(\/#|#)/, "");
-      return (
-        <Link
-          to={targetPath}
-          className={`${linkBtnClass} text-secondary`}
-        >
-          <IconComponent className="h-4 w-4" />
-          <span>{label}</span>
-        </Link>
-      );
-    }
-    return (
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={linkBtnClass}
-      >
-        <IconComponent className="h-4 w-4" />
-        <span>{label}</span>
-      </a>
-    );
-  };
-
-  const linkIcons = {
-    code: (url) => renderLinkButton(url, HiCodeBracket, "Code"),
-    link: (url) => renderLinkButton(url, HiLink, "Link"),
-    pdf: (url) => renderLinkButton(url, HiDocument, "Docs"),
-  };
+  const linkBtnClass = "cardComponent smallEnlarge iconButton font-semibold";
 
   return (
     <div className="App">
@@ -86,11 +53,7 @@ function App() {
           <h2 className="font-bold mt-4 text-center text-2xl">Projects</h2>
 
           {data.projects.map((project, index) => (
-            <CardItem
-              key={project.title || index}
-              item={project}
-              linkIcons={linkIcons}
-            />
+            <CardItem key={project.title || index} item={project} />
           ))}
         </div>
 
@@ -98,11 +61,7 @@ function App() {
           <h2 className="font-bold mt-4 text-center text-2xl">Reports</h2>
 
           {data.reports.map((report, index) => (
-            <CardItem
-              key={report.title || index}
-              item={report}
-              linkIcons={linkIcons}
-            />
+            <CardItem key={report.title || index} item={report} />
           ))}
         </div>
       </div>
@@ -110,17 +69,18 @@ function App() {
   );
 }
 
-function CardItem({ item, linkIcons }) {
+function CardItem({ item }) {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
   return (
-    <div className="mt-8 border-[0.5px] rounded-xl p-6 border-background-dark shadow-xl">
-      <div className="font-bold">{item.title}</div>
-      <div className="mt-2 text-sm text-justify">{item.description}</div>
-      <div className="flex justify-center space-x-6 mt-6">
-        {item.links.map((link, lIdx) => (
-          <span key={lIdx}>{linkIcons[link.type]?.(link.url) || null}</span>
-        ))}
-      </div>
-    </div>
+    <CollapsibleCard
+      title={item.title}
+      isCollapsed={isCollapsed}
+      onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+      customClasses="mt-8"
+    >
+      <LinkRow links={item.links}>{item.description}</LinkRow>
+    </CollapsibleCard>
   );
 }
 

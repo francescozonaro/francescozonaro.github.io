@@ -9,6 +9,7 @@ import {
 } from "react-icons/hi2";
 import PageHeader from "../components/PageHeader";
 import { CollapsibleCard } from "../components/CollapsibleCard";
+import { LinkRow } from "../components/LinkRow";
 import { usePageIcon } from "../hooks/usePageIcon";
 import { getAppIcon } from "../config/appIcons";
 import { useMatchesForDate } from "../fotmob-companion/hooks/useMatchesForDate";
@@ -40,6 +41,18 @@ const LEAGUE_ORDER = [
   9807, // UEFA Nations League B
   9808, // UEFA Nations League C
   9809, // UEFA Nations League D
+];
+const BET_OPTIONS = [
+  "1",
+  "X",
+  "2",
+  "1X",
+  "X2",
+  "12",
+  "GG",
+  "NG",
+  "O2.5",
+  "O1.5",
 ];
 const ALLOWED_LEAGUE_IDS = new Set(LEAGUE_ORDER);
 
@@ -83,6 +96,7 @@ export default function BettingNotebook() {
           awayName: match.away.name,
           leagueName: match.leagueName,
           utcTime: match.utcTime,
+          options: [],
           note: "",
           addedAt: Date.now(),
         },
@@ -105,24 +119,34 @@ export default function BettingNotebook() {
     }));
   }
 
+  function toggleOption(matchId, option) {
+    setPicks((prev) => {
+      const current = prev[matchId].options ?? [];
+      const options = current.includes(option)
+        ? current.filter((o) => o !== option)
+        : BET_OPTIONS.filter((o) => o === option || current.includes(o));
+      return { ...prev, [matchId]: { ...prev[matchId], options } };
+    });
+  }
+
   function clearPicks() {
     setPicks({});
   }
 
   const pickList = useMemo(
     () =>
-      Object.values(picks).sort(
-        (a, b) => (a.addedAt ?? 0) - (b.addedAt ?? 0),
-      ),
+      Object.values(picks).sort((a, b) => (a.addedAt ?? 0) - (b.addedAt ?? 0)),
     [picks],
   );
 
   async function copySlip() {
     const text = pickList
-      .map(
-        (p) =>
-          `${p.homeName} vs ${p.awayName}` + (p.note ? ` — ${p.note}` : ""),
-      )
+      .map((p) => {
+        const detail = [...(p.options ?? []), p.note].filter(Boolean).join(" ");
+        return (
+          `${p.homeName} vs ${p.awayName}` + (detail ? ` — ${detail}` : "")
+        );
+      })
       .join("\n");
     try {
       await navigator.clipboard.writeText(text);
@@ -240,40 +264,44 @@ export default function BettingNotebook() {
                     {group.matches.map((match) => {
                       const added = !!picks[match.id];
                       return (
-                        <div
+                        <LinkRow
                           key={match.id}
-                          className="p-3 hover:bg-background-darker transition-colors flex items-center justify-between gap-2"
-                        >
-                          <div className="min-w-0">
-                            <a
-                              href={`https://www.fotmob.com/match/${match.id}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs font-semibold truncate text-current hover:underline"
+                          className="hover:bg-background-darker transition-colors !gap-2"
+                          actions={
+                            <button
+                              onClick={() => addPick(match)}
+                              disabled={added}
+                              className={`iconButton font-semibold ${
+                                added
+                                  ? "accentButton cursor-default"
+                                  : "cardComponent cursor-pointer"
+                              }`}
+                              title={
+                                added
+                                  ? "Already in bet slip"
+                                  : "Add to bet slip"
+                              }
                             >
-                              {match.home.name} vs {match.away.name}
-                            </a>
-                            <p className="text-[10px] font-mono text-primary/50">
-                              {match.utcTime}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => addPick(match)}
-                            disabled={added}
-                            className={`iconButton !p-1.5 flex-shrink-0 ${
-                              added
-                                ? "accentButton cursor-default"
-                                : "cardComponent cursor-pointer"
-                            }`}
-                            title={added ? "Already in bet slip" : "Add to bet slip"}
+                              {added ? (
+                                <HiCheck className="h-3.5 w-3.5" />
+                              ) : (
+                                <HiPlus className="h-3.5 w-3.5" />
+                              )}
+                            </button>
+                          }
+                        >
+                          <a
+                            href={`https://www.fotmob.com/match/${match.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-semibold truncate block text-current hover:underline"
                           >
-                            {added ? (
-                              <HiCheck className="h-3.5 w-3.5" />
-                            ) : (
-                              <HiPlus className="h-3.5 w-3.5" />
-                            )}
-                          </button>
-                        </div>
+                            {match.home.name} vs {match.away.name}
+                          </a>
+                          <p className="text-[10px] font-mono text-primary/50">
+                            {match.utcTime}
+                          </p>
+                        </LinkRow>
                       );
                     })}
                   </div>
@@ -316,8 +344,8 @@ export default function BettingNotebook() {
               {pickList.length === 0 ? (
                 <div className="p-8 text-center">
                   <p className="text-[11px] text-primary/50 font-medium">
-                    No matches added yet. Use the + button on a match to add
-                    it here.
+                    No matches added yet. Use the + button on a match to add it
+                    here.
                   </p>
                 </div>
               ) : (
@@ -340,13 +368,32 @@ export default function BettingNotebook() {
                           <HiXMark className="h-4 w-4" />
                         </button>
                       </div>
-                      <input
-                        type="text"
-                        value={p.note}
-                        onChange={(e) => updateNote(p.matchId, e.target.value)}
-                        placeholder="Add a note (e.g. 1X2: 1, Over 2.5)..."
-                        className="inputField w-full px-2.5 py-1.5 text-xs"
-                      />
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {BET_OPTIONS.map((option) => {
+                          const selected = (p.options ?? []).includes(option);
+                          return (
+                            <button
+                              key={option}
+                              onClick={() => toggleOption(p.matchId, option)}
+                              aria-pressed={selected}
+                              className={`iconButton ${
+                                selected ? "accentButton" : "defaultButton"
+                              }`}
+                            >
+                              {option}
+                            </button>
+                          );
+                        })}
+                        <input
+                          type="text"
+                          value={p.note}
+                          onChange={(e) =>
+                            updateNote(p.matchId, e.target.value)
+                          }
+                          placeholder="Note"
+                          className="inputField flex-1 min-w-[4rem] h-7 px-2 text-[10px]"
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>

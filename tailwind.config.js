@@ -44,11 +44,15 @@ export default {
           "@apply transition-transform duration-200 hover:scale-110": {},
         },
         ".iconButton": {
-          "@apply flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md cursor-pointer":
+          "@apply flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md cursor-pointer":
             {},
         },
         ".accentButton": {
           "@apply border border-secondary/50 bg-secondary/10 text-secondary":
+            {},
+        },
+        ".defaultButton": {
+          "@apply border rounded-md border-[0.5px] border-background-dark bg-background-dark hover:bg-background-darker hover:bg-opacity-50":
             {},
         },
         ".inputField": {
