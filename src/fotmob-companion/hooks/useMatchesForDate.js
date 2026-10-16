@@ -4,6 +4,7 @@ import { getLocalDateString } from "../utils/date";
 import { transformFotmobMatch } from "../utils/matchUtils";
 
 const POLLING_INTERVAL = 60000;
+const NO_MATCHES = [];
 
 export function useMatchesForDate(dateStr) {
   const [loaded, setLoaded] = useState({ dateStr: null, matches: [] });
@@ -15,12 +16,12 @@ export function useMatchesForDate(dateStr) {
   }
 
   useEffect(() => {
-    let cancelled = false;
+    const controller = new AbortController();
 
     async function load() {
-      fetchFixtures(dateStr)
+      fetchFixtures(dateStr, controller.signal)
         .then((data) => {
-          if (cancelled) return;
+          if (controller.signal.aborted) return;
           const parsedMatches = [];
           data.leagues.forEach((league) => {
             league.matches.forEach((match) => {
@@ -31,6 +32,7 @@ export function useMatchesForDate(dateStr) {
           setLastUpdated(new Date());
         })
         .catch((err) => {
+          if (controller.signal.aborted) return;
           console.error(err);
         });
     }
@@ -42,18 +44,18 @@ export function useMatchesForDate(dateStr) {
       }, POLLING_INTERVAL);
       return () => {
         clearInterval(polling);
-        cancelled = true;
+        controller.abort();
       };
     } else {
       return () => {
-        cancelled = true;
+        controller.abort();
       };
     }
   }, [dateStr, refreshNonce]);
 
   return {
     // Hide matches loaded for another date if this date's fetch failed.
-    matches: loaded.dateStr === dateStr ? loaded.matches : [],
+    matches: loaded.dateStr === dateStr ? loaded.matches : NO_MATCHES,
     lastUpdated,
     refetch,
   };

@@ -3,8 +3,9 @@ export const SERVERLESS_FIXTURES_WORKER_URL =
 export const SERVERLESS_DETAILS_WORKER_URL =
   "https://fotmob-details.turtleunderablanket.workers.dev";
 
-async function fetchJson(url, errorLabel, timeoutMs = 10000) {
+async function fetchJson(url, errorLabel, signal, timeoutMs = 10000) {
   const controller = new AbortController();
+  signal?.addEventListener("abort", () => controller.abort(), { once: true });
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
@@ -19,7 +20,7 @@ async function fetchJson(url, errorLabel, timeoutMs = 10000) {
     }
     return await res.json();
   } catch (err) {
-    if (err.name === "AbortError") {
+    if (err.name === "AbortError" && !signal?.aborted) {
       throw new Error(`${errorLabel} request timed out after ${timeoutMs}ms`, {
         cause: err,
       });
@@ -30,10 +31,10 @@ async function fetchJson(url, errorLabel, timeoutMs = 10000) {
   }
 }
 
-export async function fetchFixtures(dateStr) {
+export async function fetchFixtures(dateStr, signal) {
   const dateParam = dateStr.replace(/-/g, "");
   const endpoint = `${SERVERLESS_FIXTURES_WORKER_URL.replace(/\/$/, "")}?date=${dateParam}`;
-  return fetchJson(endpoint, `Fixtures for ${dateStr}`);
+  return fetchJson(endpoint, `Fixtures for ${dateStr}`, signal);
 }
 
 export async function fetchMatchDetails(matchId) {
