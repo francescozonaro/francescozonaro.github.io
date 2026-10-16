@@ -6,7 +6,7 @@ import { transformFotmobMatch } from "../utils/matchUtils";
 const POLLING_INTERVAL = 60000;
 
 export function useMatchesForDate(dateStr) {
-  const [matches, setMatches] = useState([]);
+  const [loaded, setLoaded] = useState({ dateStr: null, matches: [] });
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [refreshNonce, setRefreshNonce] = useState(0);
 
@@ -27,7 +27,7 @@ export function useMatchesForDate(dateStr) {
               parsedMatches.push(transformFotmobMatch(match, league));
             });
           });
-          setMatches(parsedMatches);
+          setLoaded({ dateStr, matches: parsedMatches });
           setLastUpdated(new Date());
         })
         .catch((err) => {
@@ -52,7 +52,8 @@ export function useMatchesForDate(dateStr) {
   }, [dateStr, refreshNonce]);
 
   return {
-    matches,
+    // Hide matches loaded for another date if this date's fetch failed.
+    matches: loaded.dateStr === dateStr ? loaded.matches : [],
     lastUpdated,
     refetch,
   };

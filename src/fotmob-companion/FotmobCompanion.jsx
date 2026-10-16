@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   HiMagnifyingGlass,
   HiChevronLeft,
@@ -23,9 +23,9 @@ export default function FotmobCompanion() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { matches } = useMatchesForDate(selectedDate);
-  const matchDetailsMap = useMatchDetails(matches, selectedDate);
 
-  const favoriteMatches = matches.filter(isFavoriteMatch);
+  const favoriteMatches = useMemo(() => matches.filter(isFavoriteMatch), [matches]);
+  const matchDetailsMap = useMatchDetails(favoriteMatches, selectedDate);
   let filteredMatches = favoriteMatches;
 
   if (searchQuery.trim() !== "") {

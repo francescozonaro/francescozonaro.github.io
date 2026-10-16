@@ -73,7 +73,11 @@ export default function BettingNotebook() {
   );
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(picks));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(picks));
+    } catch {
+      // storage unavailable (private mode, quota): slip still works in memory
+    }
   }, [picks]);
 
   function addPick(match) {
@@ -157,24 +161,22 @@ export default function BettingNotebook() {
     );
   }
 
-  const groupedLeagues = useMemo(() => {
-    const groups = {};
-    filteredMatches.forEach((m) => {
-      if (!groups[m.leagueName]) {
-        groups[m.leagueName] = {
-          name: m.leagueName,
-          leagueId: m.leagueId,
-          matches: [],
-        };
-      }
-      groups[m.leagueName].matches.push(m);
-    });
-    return Object.values(groups).sort(
-      (a, b) =>
-        LEAGUE_ORDER.indexOf(a.leagueId) - LEAGUE_ORDER.indexOf(b.leagueId) ||
-        a.name.localeCompare(b.name),
-    );
-  }, [filteredMatches]);
+  const groups = {};
+  filteredMatches.forEach((m) => {
+    if (!groups[m.leagueName]) {
+      groups[m.leagueName] = {
+        name: m.leagueName,
+        leagueId: m.leagueId,
+        matches: [],
+      };
+    }
+    groups[m.leagueName].matches.push(m);
+  });
+  const groupedLeagues = Object.values(groups).sort(
+    (a, b) =>
+      LEAGUE_ORDER.indexOf(a.leagueId) - LEAGUE_ORDER.indexOf(b.leagueId) ||
+      a.name.localeCompare(b.name),
+  );
 
   function toggleCollapseGroup(name) {
     setCollapsedGroups((prev) => ({ ...prev, [name]: !prev[name] }));
