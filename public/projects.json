@@ -2,7 +2,7 @@
   "projects": [
     {
       "title": "Betting Notebook",
-      "description": "Match picker betting utility built around FotMob data.",
+      "description": "Betting utility for selecting and tracking matches, built on FotMob data.",
       "links": [
         {
           "type": "link",
@@ -12,7 +12,7 @@
     },
     {
       "title": "FotMob Companion",
-      "description": "Daily football tracker siphoning public FotMob API data, with automatic events detection.",
+      "description": "Daily football tracker powered by FotMob's public API, with automatic detection of key match events.",
       "links": [
         {
           "type": "link",
@@ -22,7 +22,7 @@
     },
     {
       "title": "StatsbombPlot",
-      "description": "Developing visualization techniques for Statsbomb event data analysis, focusing on enhancing interpretability and actionable insights.",
+      "description": "Visualisation techniques for StatsBomb event data, focused on interpretability and tactical insight.",
       "links": [
         {
           "type": "link",
@@ -38,7 +38,7 @@
   "reports": [
     {
       "title": "Web applications in resource-constrained scenarios (Medicus Mundi)",
-      "description": "Created a user-friendly web platform for efficient data entry and management, improving data accuracy, disease tracking, and healthcare delivery in resource-limited settings.",
+      "description": "Designed and built a web platform for data entry and management, improving data accuracy, disease tracking and healthcare delivery in resource-limited settings.",
       "links": [
         {
           "type": "pdf",
@@ -48,7 +48,7 @@
     },
     {
       "title": "Analyzing ML profitability in the football betting industry",
-      "description": "Evaluating the feasibility of both Recurrent Neural Networks and XGBoost-based models to achieve sustained profitability in football betting markets.",
+      "description": "Evaluation of Recurrent Neural Network and XGBoost models as a means of achieving sustained profitability in football betting markets.",
       "links": [
         {
           "type": "pdf",
@@ -58,7 +58,7 @@
     },
     {
       "title": "Exploring a GPT-based methodology for competence mapping: a case study in telecommunications",
-      "description": "Conducted in partnership with an Italian telecommunications firm, this academic project investigated the application of GPT-based models for optimizing workforce competence mapping.",
+      "description": "Academic project conducted with an Italian telecommunications company, investigating the use of GPT-based models to improve workforce competence mapping.",
       "links": [
         {
           "type": "pdf",
