@@ -13,40 +13,37 @@ function StatsbombShowcase() {
   return (
     <div className="StatsbombShowcase">
       <PageHeader className="mt-8">
-        <strong>Plotting Statsbomb Data</strong>
+        <strong>Football Analytics with StatsBomb Data</strong>
       </PageHeader>
 
       <div className="mt-12">
         <div className="leading-6 text-justify">
-          Understanding a football team's dynamics is hardly a standardized
-          process — it involves considering factors like player quality and
-          depth, managerial philosophy, team chemistry, current form and many
-          more. The following visuals explore what can be done with Statsbomb's
-          official data, reflecting my own curiosity about its potential. The
-          code developed to generate these visuals, referencing the free data
-          provided by Statsbomb, is available in the{" "}
+          Evaluating a football team is a multi-dimensional problem: player
+          quality and depth, managerial philosophy, cohesion and current form
+          all play a part. This page presents a series of visualisations built
+          on StatsBomb's open event data, illustrating the kinds of analysis it
+          supports. The source code is available in the{" "}
           <a
             href="https://github.com/francescozonaro/statsbombplot"
             target="_blank"
             rel="noopener noreferrer"
           >
-            StatsbombPlot
+            StatsBombPlot
           </a>{" "}
           repository.
         </div>
       </div>
 
       <div className="section-wrapper">
-        <div className="visual-title">Generic events scatterplot</div>
+        <div className="visual-title">Event Scatterplot</div>
         <div className="visual-description">
-          Mapping the location of certain events on the pitch helps pinpoint
-          specific zones where the team executes particular actions, revealing
-          patterns that inform tactical decisions. It can cover a single event
-          type (e.g. Pressure, Dribble, Shot, etc.) or a group of events (e.g.
-          Defensive Actions: Block, Clearance, Interception, Ball Recovery). The
-          examples below highlight Italy's pressures and defensive actions
-          during the EURO 2020 Final against England. Note that the dotted red
-          line marks the average vertical position of each event cluster.
+          Plotting the location of events on the pitch identifies the zones in
+          which a team performs specific actions and reveals tactical patterns.
+          The analysis can cover a single event type (e.g. Pressure, Dribble,
+          Shot) or a group of events (e.g. Defensive Actions: Block, Clearance,
+          Interception, Ball Recovery). The examples show Italy's pressures and
+          defensive actions in the EURO 2020 Final against England. The dotted
+          red line marks the average vertical position of each event cluster.
         </div>
 
         <div className="visual-previews">
@@ -76,15 +73,15 @@ function StatsbombShowcase() {
       <div className="section-wrapper">
         <div className="visual-title">Shotmap</div>
         <div className="visual-description">
-          A staple of football analytics, shot maps help identify shooting
-          patterns and the spatial distribution of attempts, highlighting teams
-          strengths and weaknesses in front of goal. Each shot type (Goal, On
-          Target, Off Target) is distinguished by marker shape, with deeper
-          color indicating higher xG. The example below shows the shotmap of the
-          Euro 2020 Final. Italy's distribution reflects their need to get back
-          into the game after Luke Shaw's early goal and their willingness to
-          take more risks, while England's suggests a more cautious approach,
-          relying on high-quality chances created within the box.
+          Shot maps are a staple of football analytics: they show where a team's
+          attempts originate and how they are distributed, highlighting
+          strengths and weaknesses in front of goal. Marker shape denotes the
+          outcome (Goal, On Target, Off Target) and darker colour indicates
+          higher xG. The example covers the EURO 2020 Final. Italy's
+          distribution reflects the need to respond after Luke Shaw's early
+          goal and a greater willingness to take risks, whereas England's
+          suggests a more conservative approach built on high-quality chances
+          created inside the box.
         </div>
 
         <div className="visual-previews">
@@ -99,27 +96,26 @@ function StatsbombShowcase() {
       </div>
 
       <div className="section-wrapper">
-        <div className="visual-title">Progressive actions map</div>
+        <div className="visual-title">Progressive Actions Map</div>
         <div className="visual-description">
-          Ball progression — especially in the opponent's half — is one of the
+          Ball progression, particularly in the opponent's half, is one of the
           most valuable skills in modern football. Even when a carry or pass
-          doesn't directly create a shooting opportunity, bringing the ball
-          forward is fundamental to reach favourable positions where playmakers
-          can find that final defence-splitting pass. This plot applies the{" "}
+          does not directly create a shot, advancing the ball is essential to
+          reach positions from which playmakers can deliver the final,
+          defence-splitting pass. This plot applies the{" "}
           <a
             href="https://dataglossary.wyscout.com/progressive_pass/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            wyscout definition of Progressive Action
+            Wyscout definition of progressive actions
           </a>{" "}
-          to determine eligible actions, though other definitions can be applied
-          just as easily. The example below shows both attempted and completed
-          progressive actions by Federico Chiesa during the Euro 2020 Final.
-          Among the players with the most carried meters in the final, Chiesa's
-          progressive actions were crucial in Italy's offensive play, as they
-          often led to key attacking opportunities, breaking down England's
-          defensive structure.
+          to identify eligible actions, although other definitions can be
+          substituted easily. The example shows Federico Chiesa's attempted and
+          completed progressive actions in the EURO 2020 Final. Chiesa was among
+          the players who carried the ball the furthest, and his progressive
+          actions were central to Italy's attacking play, frequently creating
+          chances and disrupting England's defensive structure.
         </div>
 
         <div className="visual-previews">
@@ -149,20 +145,16 @@ function StatsbombShowcase() {
       <div className="section-wrapper">
         <div className="visual-title">Team Passing Network</div>
         <div className="visual-description">
-          A passing network provides insights into team dynamics, player
-          interactions, and overall playing strategies. It visualizes passing
-          patterns between players during a match, helping to understand how
-          possession is distributed and identify key playmakers. The following
-          example illustrates the passing networks during the Euro 2020 Final
-          between Italy and England. The thickness of the edges is proportional
-          to the number of passes exchanged between players and the size of the
-          nodes is proportional to the total number of passes attempted by each
-          player. Focusing on Italy's network, the plot highlights the central
-          role of Jorginho in the build-up play, as well as the significant
-          contributions of Verratti and Barella in maintaining possession.
-          Additionally, it reveals the heavy involvement of the defensive line
-          during build up, with players like Bonucci and Chiellini frequently
-          involved in passing sequences.
+          A passing network shows how players interact and how possession is
+          distributed, helping to identify a team's key playmakers and overall
+          playing style. The example presents both teams' networks from the
+          EURO 2020 Final. Edge thickness is proportional to the number of
+          passes exchanged between two players, and node size to the total
+          passes attempted by each player. Italy's network highlights
+          Jorginho's central role in build-up, with Verratti and Barella
+          contributing significantly to possession. It also shows the heavy
+          involvement of the defensive line, with Bonucci and Chiellini
+          frequently featuring in passing sequences.
         </div>
 
         <div className="visual-previews">
@@ -192,19 +184,15 @@ function StatsbombShowcase() {
       <div className="section-wrapper">
         <div className="visual-title">Goal Breakdown</div>
         <div className="visual-description">
-          The goal breakdown provides a clear understanding of which actions and
-          players were involved in the making of a goal. Alongside the image, a
-          table containing each event information is generated too. The
-          following example illustrates the breakdown of Luke Shaw's goal during
-          the Euro 2020 Final, where we can see how the goal was the result of a
-          well-executed team play, involving multiple players and a series of
-          successful actions. The sequence started with a pass from Raheem
-          Sterling, followed by a dribble and another pass from Mason Mount,
-          which allowed Luke Shaw to advance down the left flank. Shaw then
-          executed a successful dribble and pass to Harry Kane, who in turn
-          switched the play to Kieran Trippier on the right side. Trippier's
-          cross found Shaw in the box, who accompanied the play with a
-          well-timed run.
+          The goal breakdown traces the actions and players involved in the
+          build-up to a goal; a table with the details of each event
+          accompanies the image. The example is Luke Shaw's goal in the EURO
+          2020 Final, the product of a well-executed team move. The sequence
+          began with a pass from Raheem Sterling, followed by a dribble and a
+          pass from Mason Mount, which allowed Shaw to advance down the left
+          flank. Shaw then dribbled and passed to Harry Kane, who switched play
+          to Kieran Trippier on the right. Trippier's cross found Shaw, who had
+          made a well-timed run into the box.
         </div>
         <div className="visual-table">
           <table>
@@ -319,16 +307,14 @@ function StatsbombShowcase() {
       <div className="section-wrapper">
         <div className="visual-title">Shot Frame Freeze</div>
         <div className="visual-description">
-          Statsbomb provides detailed data on player positions at the moment of
-          a shot, meaning we can evaluate player choices and positioning.
-          Although there were no clear-cut missed pass opportunities in the 2021
-          Euro Final, the following example involving one of Luke Shaw's shots
-          demonstrates a decision-making moment. Shaw chose to take a low xG
-          shot rather than passing to Kalvin Phillips (N. 14), who was
-          positioned on his right with ample space. A pass to Phillips could
-          have led to a more promising scoring chance, either through a direct
-          shot or by creating a better opportunity given his advantageous
-          position.
+          StatsBomb records player positions at the moment of each shot, which
+          makes it possible to assess decision-making. The EURO 2020 Final
+          contains no clear-cut missed passing opportunities, but the example
+          below, one of Luke Shaw's shots, illustrates a decision point. Shaw
+          opted for a low-xG shot rather than passing to Kalvin Phillips (No.
+          14), who was positioned on his right with ample space. A pass to
+          Phillips could have produced a better chance, either directly or by
+          creating a more favourable situation given his position.
         </div>
 
         <div className="visual-previews">
@@ -347,25 +333,21 @@ function StatsbombShowcase() {
 
       <div className="section-wrapper">
         <div className="visual-title">
-          Goals Worth Rewatching: Low xG, High Impact
+          Low-xG Goals: Ranking Spectacular Finishes
         </div>
         <div className="visual-description">
-          In football, there are moments where analysis steps aside and the only
-          reasonable response is to sit back and enjoy the moment. The table
-          below highlights the standout strikes from EURO 2020, ranked not by
-          expected goals (xG), but by a custom metric called xBanger, a score
-          designed to capture how spectacular a goal was. The calculation starts
-          from a simple premise: the lower the xG, the more unexpected the
-          finish. For that reason, xBanger is defined as 1 minus the shot's xG
-          value. Additional weight is given to goals that required greater
-          technical execution. If the shooting technique is anything other than
-          “Normal” a small bonus is added. Shot placement is also considered:
-          using the shot's end location, the distance to the center of the goal
-          is computed and well placed finishes receive an extra boost. The final
-          value is rounded to two decimal places. The result is a ranking that
-          favors low-probability, technically demanding, and long-range goals —
-          in other words, the kind of strikes that feel special the moment they
-          hit the net.
+          This table ranks the standout goals of EURO 2020 not by expected goals
+          (xG) but by a custom metric, xBanger, designed to quantify how
+          spectacular a goal was. The metric starts from the premise that the
+          lower the xG, the more unexpected the finish, and is therefore
+          defined as 1 minus the shot's xG. Goals requiring greater technical
+          execution receive additional weight: a small bonus is added when the
+          shooting technique is anything other than “Normal”. Shot placement is
+          also considered: the distance between the shot's end location and the
+          centre of the goal is computed, and well-placed finishes receive a
+          further bonus. The final value is rounded to two decimal places. The
+          resulting ranking favours low-probability, technically demanding and
+          long-range goals.
         </div>
 
         <div className="visual-previews">
@@ -383,24 +365,22 @@ function StatsbombShowcase() {
       </div>
 
       <div className="section-wrapper">
-        <div className="visual-title">Goalkeeper Distribution Plot</div>
+        <div className="visual-title">Goalkeeper Distribution Zones</div>
         <div className="visual-description">
-          The following plot details the spatial distribution of goalkeeper
-          passes in the 2015/16 Premier League season, separating frequency and
-          directional tendencies across teams. Each panel represents the
-          proportion of goalkeeper distributions landing in specific zones,
-          highlighting structural preferences rather than just volume or
-          accuracy. A structural split is visible between short-build teams and
-          more direct sides. Clubs such as Tottenham, Liverpool, Arsenal and
-          Manchester City show higher concentrations in the first and second
-          thirds, particularly in wide defensive zones. Their goalkeepers
-          distribute shorter, often toward full-backs, maintaining positional
-          structure and facilitating controlled build-up. In contrast,
-          Leicester, West Brom, Sunderland, Watford and Crystal Palace exhibit
-          heavier usage of advanced wide and central zones. This indicates a
-          preference for bypassing the first phase entirely. Distribution is
-          less about initiating possession sequences and more about contesting
-          territory higher up the pitch.
+          This plot shows the spatial distribution of goalkeeper passes in the
+          2015/16 Premier League season. Each panel gives the proportion of a
+          team's goalkeeper distributions landing in each zone, highlighting
+          structural preferences rather than volume or accuracy. The data
+          reveals a split between short-build and more direct teams. Tottenham,
+          Liverpool, Arsenal and Manchester City show higher concentrations in
+          the first and second thirds, particularly in wide defensive zones:
+          their goalkeepers distribute shorter, often to full-backs, preserving
+          positional structure and enabling controlled build-up. In contrast,
+          Leicester, West Brom, Sunderland, Watford and Crystal Palace make
+          heavier use of advanced wide and central zones, indicating a
+          preference for bypassing the first phase of play. For these teams,
+          distribution is less about initiating possession sequences and more
+          about contesting territory higher up the pitch.
         </div>
 
         <div className="visual-previews">
@@ -420,28 +400,24 @@ function StatsbombShowcase() {
       <div className="section-wrapper">
         <div className="visual-title">Goalkeeper Passes Scatterplot</div>
         <div className="visual-description">
-          These scatterplots map goalkeeper distribution profiles in the 2015/16
-          Premier League season, focusing on three variables: Share of long
-          passes (x-axis), Completion rate (y-axis, first figure) and Long
-          passes completion rate (y-axis, second figure). As expected, a clear
-          negative relationship emerges in the first figure: as the share of
-          long passes increases, overall completion drops. Teams such as
-          Tottenham, Liverpool, Bournemouth, Everton and Swansea sit toward the
-          left side of the chart with relatively low shares of long distribution
-          and higher completion rates. On the right side are teams that relied
-          heavily on long balls from the goalkeeper. Leicester, West Brom,
-          Sunderland, Crystal Palace and Watford show high shares of long passes
-          and comparatively low completion rates. Leicester stand out most
-          clearly. They exhibit one of the highest long-pass shares in the
-          league and the lowest completion rate among the plotted teams. Yet
-          this inefficiency in raw completion did not hinder performance
-          outcomes, as Leicester won the league that season. Their approach
-          under Claudio Ranieri was not designed for sterile possession
-          retention. Long distribution often targeted Jamie Vardy or channels
-          behind the opposition, prioritising territory, second balls and
-          transition speed over pass completion. In this context, a low
-          completion percentage is not necessarily a flaw but a feature of a
-          risk-seeking vertical strategy.
+          These scatterplots show goalkeeper distribution profiles in the
+          2015/16 Premier League season across three variables: share of long
+          passes (x-axis), overall completion rate (y-axis, first figure) and
+          long-pass completion rate (y-axis, second figure). The first figure
+          shows a clear negative relationship: as the share of long passes
+          rises, overall completion falls. Tottenham, Liverpool, Bournemouth,
+          Everton and Swansea combine a low share of long distribution with
+          high completion rates, while Leicester, West Brom, Sunderland, Crystal
+          Palace and Watford rely heavily on long balls and record comparatively
+          low completion rates. Leicester are the clearest outlier, with one of
+          the league's highest long-pass shares and the lowest completion rate
+          of the teams plotted. This inefficiency in raw completion did not
+          hinder results: Leicester won the league. Under Claudio Ranieri, the
+          approach was not built on retaining possession; long distribution
+          frequently targeted Jamie Vardy or the channels behind the
+          opposition, prioritising territory, second balls and transition speed
+          over completion. In this context, a low completion rate is a feature
+          of a risk-seeking, vertical strategy rather than a flaw.
         </div>
 
         <div className="visual-previews">
