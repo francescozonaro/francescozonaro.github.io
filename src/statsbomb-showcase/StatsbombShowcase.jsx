@@ -71,31 +71,6 @@ function StatsbombShowcase() {
       </div>
 
       <div className="section-wrapper">
-        <div className="visual-title">Shotmap</div>
-        <div className="visual-description">
-          Shot maps are a staple of football analytics: they show where a team's
-          attempts originate and how they are distributed, highlighting
-          strengths and weaknesses in front of goal. Marker shape denotes the
-          outcome (Goal, On Target, Off Target) and darker colour indicates
-          higher xG. The example covers the EURO 2020 Final. Italy's
-          distribution reflects the need to respond after Luke Shaw's early
-          goal and a greater willingness to take risks, whereas England's
-          suggests a more conservative approach built on high-quality chances
-          created inside the box.
-        </div>
-
-        <div className="visual-previews">
-          <a
-            href="img/statsbomb-showcase/shotmap.png"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="img/statsbomb-showcase/shotmap.png" alt="Shotmap Image" />
-          </a>
-        </div>
-      </div>
-
-      <div className="section-wrapper">
         <div className="visual-title">Progressive Actions Map</div>
         <div className="visual-description">
           Ball progression, particularly in the opponent's half, is one of the
