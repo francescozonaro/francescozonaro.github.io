@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "./App.css";
 import ThemeToggle from "./components/ThemeToggle";
-import { CollapsibleCard } from "./components/CollapsibleCard";
-import { LinkRow } from "./components/LinkRow";
 
 function App() {
   const [data, setData] = useState({ projects: [], reports: [] });
@@ -17,51 +15,43 @@ function App() {
       );
   }, []);
 
-  const linkBtnClass = "cardComponent smallEnlarge iconButton font-semibold";
+  // Newest first; the sort is stable, so same-year entries keep their order in the JSON.
+  const entries = [...data.projects, ...data.reports].sort(
+    (a, b) => b.year - a.year,
+  );
+
+  const linkBtnClass =
+    "smallEnlarge iconButton font-semibold text-primary hover:text-secondary transition";
 
   return (
     <div className="App">
       <div className="grid gap-x-12 mt-12 grid-cols-1 gap-y-4 mb-12">
-        <div className="flex flex-col justify-center align-middle">
-          <h1 className="text-3xl font-normal">
-            <strong>Francesco</strong> Zonaro
-          </h1>
-        </div>
-        <div className="flex justify-center items-center space-x-2">
-          <a
-            href="https://github.com/francescozonaro"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={linkBtnClass}
-          >
-            <FaGithub className="h-4 w-4" />
-            <span>Github</span>
-          </a>
-          <a
-            href="https://www.linkedin.com/in/francesco-zonaro-211234248/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={linkBtnClass}
-          >
-            <FaLinkedin className="h-4 w-4" />
-            <span>Linkedin</span>
-          </a>
-          <ThemeToggle />
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h1 className="text-lg font-normal lowercase">Francesco Zonaro</h1>
+          <div className="flex items-center space-x-2">
+            <a
+              href="https://github.com/francescozonaro"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkBtnClass}
+            >
+              <span>Github</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/francesco-zonaro-211234248/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkBtnClass}
+            >
+              <span>Linkedin</span>
+            </a>
+            <ThemeToggle className="-mr-1" />
+          </div>
         </div>
 
-        <div className="mt-12 text-left min-w-0">
-          <h2 className="font-bold mt-4 text-center text-2xl">Projects</h2>
-
-          {data.projects.map((project, index) => (
-            <CardItem key={project.title || index} item={project} />
-          ))}
-        </div>
-
-        <div className="mt-12 text-left min-w-0">
-          <h2 className="font-bold mt-4 text-center text-2xl">Reports</h2>
-
-          {data.reports.map((report, index) => (
-            <CardItem key={report.title || index} item={report} />
+        <div className="mt-12 text-left border-b border-primary/20">
+          {entries.map((item) => (
+            <Entry key={item.title} item={item} />
           ))}
         </div>
       </div>
@@ -69,18 +59,27 @@ function App() {
   );
 }
 
-function CardItem({ item }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  return (
-    <CollapsibleCard
-      title={item.title}
-      isCollapsed={isCollapsed}
-      onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
-      customClasses="mt-8"
-    >
-      <LinkRow links={item.links}>{item.description}</LinkRow>
-    </CollapsibleCard>
+// Year + name; the whole row links to the entry's first link (internal route, or PDF/site in a new tab).
+function Entry({ item }) {
+  const url = item.links[0].url;
+  const cls =
+    "group flex gap-6 text-sm border-t border-primary/20 py-3 text-primary hover:text-secondary transition";
+  const body = (
+    <>
+      <span className="w-12 flex-shrink-0 text-primary/50 transition-colors group-hover:text-secondary">
+        {item.year}
+      </span>
+      <span>{item.title}</span>
+    </>
+  );
+  return url.startsWith("/#/") ? (
+    <Link to={url.slice(2)} className={cls}>
+      {body}
+    </Link>
+  ) : (
+    <a href={url} target="_blank" rel="noopener noreferrer" className={cls}>
+      {body}
+    </a>
   );
 }
 

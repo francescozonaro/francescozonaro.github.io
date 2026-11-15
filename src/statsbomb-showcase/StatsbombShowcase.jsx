@@ -1,17 +1,10 @@
 import "./StatsbombShowcase.css";
 
-import { useNavigate } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 
 function StatsbombShowcase() {
-  const navigate = useNavigate();
-
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
   return (
-    <div className="StatsbombShowcase">
+    <div className="StatsbombShowcase pb-16">
       <PageHeader className="mt-8">
         <strong>Football Analytics with StatsBomb Data</strong>
       </PageHeader>
@@ -417,22 +410,6 @@ function StatsbombShowcase() {
             />
           </a>
         </div>
-      </div>
-
-      <div className="flex justify-center space-x-8 mt-12 mb-8">
-        <button
-          className="button text-secondary w-[150px]"
-          onClick={() => navigate("/")}
-        >
-          Portfolio
-        </button>
-
-        <button
-          className="button text-secondary w-[150px] "
-          onClick={() => scrollToTop()}
-        >
-          Back to the top
-        </button>
       </div>
     </div>
   );

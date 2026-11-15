@@ -46,7 +46,7 @@ export default function ThemeToggle({ className = "" }) {
 
   return (
     <div
-      className={`relative inline-flex items-center p-1 rounded-full border border-background-dark/80 bg-background-dark/60 backdrop-blur-md shadow-inner select-none ${className}`}
+      className={`relative inline-flex items-center p-1 rounded-full select-none ${className}`}
       role="radiogroup"
       aria-label="Theme selector"
     >

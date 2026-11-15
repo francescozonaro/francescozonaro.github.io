@@ -1,12 +1,8 @@
 .StatsbombShowcase {
   position: relative;
   margin: auto;
-  width: 70%;
+  width: 75%;
   text-align: center;
-}
-
-.button {
-  @apply cardComponent smallEnlarge text-sm p-2;
 }
 
 .section-wrapper {

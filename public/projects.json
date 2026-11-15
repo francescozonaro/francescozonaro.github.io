@@ -1,6 +1,7 @@
 {
   "projects": [
     {
+      "year": 2026,
       "title": "Betting Notebook",
       "description": "Betting utility for selecting and tracking matches, built on FotMob data.",
       "links": [
@@ -11,6 +12,7 @@
       ]
     },
     {
+      "year": 2026,
       "title": "FotMob Companion",
       "description": "Daily football tracker powered by FotMob's public API, with automatic detection of key match events.",
       "links": [
@@ -21,6 +23,7 @@
       ]
     },
     {
+      "year": 2025,
       "title": "StatsbombPlot",
       "description": "Visualisation techniques for StatsBomb event data, focused on interpretability and tactical insight.",
       "links": [
@@ -37,6 +40,7 @@
   ],
   "reports": [
     {
+      "year": 2024,
       "title": "Web applications in resource-constrained scenarios (Medicus Mundi)",
       "description": "Designed and built a web platform for data entry and management, improving data accuracy, disease tracking and healthcare delivery in resource-limited settings.",
       "links": [
@@ -47,6 +51,7 @@
       ]
     },
     {
+      "year": 2024,
       "title": "Analyzing ML profitability in the football betting industry",
       "description": "Evaluation of Recurrent Neural Network and XGBoost models as a means of achieving sustained profitability in football betting markets.",
       "links": [
@@ -57,6 +62,7 @@
       ]
     },
     {
+      "year": 2023,
       "title": "Exploring a GPT-based methodology for competence mapping: a case study in telecommunications",
       "description": "Academic project conducted with an Italian telecommunications company, investigating the use of GPT-based models to improve workforce competence mapping.",
       "links": [

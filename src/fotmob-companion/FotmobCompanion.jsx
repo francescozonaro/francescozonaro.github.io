@@ -36,7 +36,7 @@ export default function FotmobCompanion() {
   }
 
   return (
-    <div className="w-11/12 xl:w-5/6 mx-auto font-sans py-6 flex flex-col">
+    <div className="w-[75%] mx-auto font-sans py-6 flex flex-col">
       <PageHeader className="mb-16">
         <span>FotMob Siphon</span>
       </PageHeader>

@@ -174,7 +174,7 @@ export default function BettingNotebook() {
   }
 
   return (
-    <div className="w-11/12 xl:w-5/6 mx-auto font-sans py-6 h-screen flex flex-col overflow-hidden">
+    <div className="w-[75%] mx-auto font-sans py-6 h-screen flex flex-col overflow-hidden">
       <PageHeader className="mb-16">
         <span>Betting Notebook</span>
       </PageHeader>
