@@ -1,23 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  HiMagnifyingGlass,
-  HiChevronLeft,
-  HiChevronRight,
-  HiXMark,
-  HiPlus,
-  HiCheck,
-} from "react-icons/hi2";
+import { HiXMark, HiPlus, HiCheck } from "react-icons/hi2";
 import PageHeader from "../components/PageHeader";
+import { SearchInput } from "../components/SearchInput";
+import { DateNavigator } from "../components/DateNavigator";
 import { CollapsibleCard } from "../components/CollapsibleCard";
 import { LinkRow } from "../components/LinkRow";
 import { usePageIcon } from "../hooks/usePageIcon";
 import { getAppIcon } from "../config/appIcons";
 import { useMatchesForDate } from "../fotmob-companion/hooks/useMatchesForDate";
-import {
-  getLocalDateString,
-  shiftDateString,
-  formatDateLabel,
-} from "../fotmob-companion/utils/date";
+import { getLocalDateString } from "../fotmob-companion/utils/date";
 
 const STORAGE_KEY = "betting-notebook-picks";
 
@@ -66,7 +57,7 @@ export default function BettingNotebook() {
   const [collapsedGroups, setCollapsedGroups] = useState({});
   const [slipCollapsed, setSlipCollapsed] = useState(false);
 
-  const { matches: allMatches } = useMatchesForDate(selectedDate);
+  const { matches: allMatches, failed } = useMatchesForDate(selectedDate);
   const matches = useMemo(
     () => allMatches.filter((m) => ALLOWED_LEAGUE_IDS.has(m.leagueId)),
     [allMatches],
@@ -189,36 +180,12 @@ export default function BettingNotebook() {
       </PageHeader>
 
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-shrink-0">
-        <div className="relative flex-1">
-          <HiMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/40" />
-          <input
-            type="text"
-            placeholder="Search teams or leagues..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="inputField w-full pl-9 pr-3 py-1.5 text-xs"
-          />
-        </div>
-
-        <div className="flex items-stretch sm:items-center gap-2">
-          <div className="flex items-center justify-center flex-shrink-0 flex-1 min-w-52 px-3 py-0.5 gap-4 rounded-md border border-background-dark bg-background-dark/80 text-primary">
-            <button
-              onClick={() => setSelectedDate(shiftDateString(selectedDate, -1))}
-              className="p-1 text-primary/70 hover:text-primary cursor-pointer"
-            >
-              <HiChevronLeft className="h-4 w-4" />
-            </button>
-            <span className="text-xs text-primary whitespace-nowrap text-center min-w-28">
-              {formatDateLabel(selectedDate)}
-            </span>
-            <button
-              onClick={() => setSelectedDate(shiftDateString(selectedDate, 1))}
-              className="p-1 text-primary/70 hover:text-primary cursor-pointer"
-            >
-              <HiChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search teams or leagues..."
+        />
+        <DateNavigator date={selectedDate} onChange={setSelectedDate} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[24rem_1fr] gap-4 mt-4 flex-1 min-h-0">
@@ -231,7 +198,9 @@ export default function BettingNotebook() {
             >
               <div className="p-8 text-center">
                 <p className="text-[11px] text-primary/50 font-medium">
-                  No matches for this date.
+                  {failed
+                    ? "Could not load matches. Check your connection or try again later."
+                    : "No matches for this date."}
                 </p>
               </div>
             </CollapsibleCard>
