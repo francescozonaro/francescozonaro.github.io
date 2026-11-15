@@ -18,19 +18,11 @@ function sanitizeScorer(raw) {
 }
 
 function formatScorer(shot) {
-  const scorer = sanitizeScorer(getPlayerName(shot));
+  const scorer = sanitizeScorer(shot.playerName);
   if (!scorer) return null;
-  if (isOwnGoalShot(shot)) return `${scorer} (OG)`;
+  if (shot.isOwnGoal) return `${scorer} (OG)`;
   if (isPenaltyShot(shot)) return `${scorer} (P)`;
   return scorer;
-}
-
-function getPlayerName(shot) {
-  return shot.playerName;
-}
-
-function isOwnGoalShot(shot) {
-  return shot.isOwnGoal;
 }
 
 function isPenaltyShot(shot) {
@@ -60,7 +52,7 @@ function getShotTelemetry(shot) {
   const { x, y } = shot;
   const distance = shotDistanceFromGoal(x, y);
   const isPenalty = isPenaltyShot(shot);
-  const isOwnGoal = isOwnGoalShot(shot);
+  const isOwnGoal = shot.isOwnGoal;
   const xg = typeof shot.expectedGoals === "number" ? shot.expectedGoals : null;
   const xgot =
     typeof shot.expectedGoalsOnTarget === "number" ? shot.expectedGoalsOnTarget : null;
@@ -85,14 +77,19 @@ function getShotTelemetry(shot) {
   };
 }
 
+// 45+3 -> 45.03, so it sorts before 46 (adding the minutes would give 48).
+function sortableMinute(min, added) {
+  return min + (added ?? 0) / 100;
+}
+
 function buildGoalEvent(shot, homeTeamId, awayTeamId) {
   const scorer = formatScorer(shot);
-  const time = shot.min + (shot.minAdded ?? 0);
+  const time = sortableMinute(shot.min, shot.minAdded);
   const timeStr = shot.minAdded
     ? `${shot.min}+${shot.minAdded}`
     : `${shot.min}`;
 
-  const isOwnGoal = isOwnGoalShot(shot);
+  const isOwnGoal = shot.isOwnGoal;
   const isHomeShot = shot.teamId === homeTeamId;
   const isHomeGoal = isOwnGoal ? !isHomeShot : isHomeShot;
   const teamId = isHomeGoal ? homeTeamId : awayTeamId;
@@ -113,13 +110,11 @@ function cleanScorerName(scorerName) {
 }
 
 export function getRedditSearchUrl(scorerName) {
-  if (!scorerName) return "#";
   const cleanName = cleanScorerName(scorerName);
   return `https://www.reddit.com/r/soccer/search/?q=${encodeURIComponent(cleanName)}&restrict_sr=1&sort=new`;
 }
 
 export function getXSearchUrl(scorerName) {
-  if (!scorerName) return "#";
   const cleanName = cleanScorerName(scorerName);
   return `https://x.com/search?q=${encodeURIComponent(cleanName)}&f=live`;
 }
@@ -161,7 +156,7 @@ function buildGoalEventFromHeader(event, homeTeamId, awayTeamId) {
     else if (isPenalty) scorer = `${scorer} (P)`;
   }
 
-  const time = (event.time ?? 0) + (event.overloadTime ?? 0);
+  const time = sortableMinute(event.time ?? 0, event.overloadTime);
   const timeStr = event.overloadTime
     ? `${event.time}+${event.overloadTime}`
     : `${event.time}`;
@@ -188,7 +183,6 @@ function buildGoalEventFromHeader(event, homeTeamId, awayTeamId) {
 export function extractGoalEvents(data) {
   const homeId = data?.general?.homeTeam?.id;
   const awayId = data?.general?.awayTeam?.id;
-  const coverageLevel = data?.general?.coverageLevel ?? null;
 
   const goalShots = findGoalShots(data);
   const goals =
@@ -198,13 +192,18 @@ export function extractGoalEvents(data) {
           buildGoalEventFromHeader(event, homeId, awayId),
         );
 
-  const sorted = goals.sort((a, b) => a.time - b.time);
+  return goals.sort((a, b) => a.time - b.time);
+}
 
-  let homeScore = 0;
-  let awayScore = 0;
-  return sorted.map((goal) => {
-    if (goal.isHomeGoal) homeScore += 1;
-    else awayScore += 1;
-    return { ...goal, homeScore, awayScore, coverageLevel };
-  });
+// FotMob sometimes hasn't posted every goal event yet, or hasn't backfilled a
+// scorer's name or shot coordinates. Data is complete once there is an event
+// per goal in the scoreline, each has a scorer and - when FotMob's
+// coverageLevel says shot telemetry should exist ("xG") - coordinates too.
+export function isDetailsComplete(goals, totalGoals, coverageLevel) {
+  return (
+    goals.length === totalGoals &&
+    goals.every((g) => g.scorer) &&
+    (coverageLevel !== "xG" ||
+      goals.every((g) => typeof g.x === "number" && typeof g.y === "number"))
+  );
 }

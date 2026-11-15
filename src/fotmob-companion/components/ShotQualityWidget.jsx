@@ -17,7 +17,7 @@ export function ShotQualityWidget({ matches = [], matchDetailsMap = {} }) {
         const opponent = g.isHomeGoal ? m.away.name : m.home.name;
 
         list.push({
-          id: `${m.id}-${g.time}-${g.scorer}`,
+          id: `${m.id}-${g.timeStr}-${g.scorer}`,
           scorer: g.scorer || "Goal",
           links: getGoalSearchLinks(g.scorer),
           team,

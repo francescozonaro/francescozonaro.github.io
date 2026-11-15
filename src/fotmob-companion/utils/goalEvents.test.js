@@ -4,6 +4,7 @@ import {
   getGoalSearchLinks,
   getRedditSearchUrl,
   getXSearchUrl,
+  isDetailsComplete,
 } from "./goalEvents";
 
 const HOME = 1;
@@ -43,21 +44,22 @@ describe("extractGoalEvents (shotmap)", () => {
     expect(goals).toHaveLength(1);
   });
 
-  it("sorts by time and keeps a running score", () => {
+  it("sorts goals by time", () => {
     const goals = extractGoalEvents(
       match([
-        goalShot({ teamId: AWAY, min: 70 }),
-        goalShot({ teamId: HOME, min: 20 }),
-        goalShot({ teamId: HOME, min: 45, minAdded: 2 }),
+        goalShot({ min: 70 }),
+        goalShot({ min: 20 }),
+        goalShot({ min: 45, minAdded: 2 }),
       ]),
     );
-    expect(goals.map((g) => [g.homeScore, g.awayScore])).toEqual([
-      [1, 0],
-      [2, 0],
-      [2, 1],
-    ]);
-    expect(goals[1].timeStr).toBe("45+2");
-    expect(goals[1].time).toBe(47);
+    expect(goals.map((g) => g.timeStr)).toEqual(["20", "45+2", "70"]);
+  });
+
+  it("puts first-half stoppage time before the second half starts", () => {
+    const goals = extractGoalEvents(
+      match([goalShot({ min: 46 }), goalShot({ min: 45, minAdded: 3 })]),
+    );
+    expect(goals.map((g) => g.timeStr)).toEqual(["45+3", "46"]);
   });
 
   it("credits an own goal to the other team and tags the scorer", () => {
@@ -154,6 +156,29 @@ describe("extractGoalEvents (header fallback)", () => {
   });
 });
 
+describe("isDetailsComplete", () => {
+  const full = { scorer: "Rossi", x: 90, y: 30 };
+
+  it("is complete with a scored, located event per goal", () => {
+    expect(isDetailsComplete([full], 1, "xG")).toBe(true);
+  });
+
+  it("is incomplete while FotMob has fewer events than goals", () => {
+    expect(isDetailsComplete([full], 2, "xG")).toBe(false);
+  });
+
+  it("is incomplete while a scorer name is missing", () => {
+    expect(isDetailsComplete([{ ...full, scorer: null }], 1, "xG")).toBe(false);
+  });
+
+  it("needs coordinates only when coverage is xG", () => {
+    const noCoords = { scorer: "Rossi", x: null, y: null };
+    expect(isDetailsComplete([noCoords], 1, "xG")).toBe(false);
+    expect(isDetailsComplete([noCoords], 1, "basic")).toBe(true);
+    expect(isDetailsComplete([noCoords], 1, undefined)).toBe(true);
+  });
+});
+
 describe("search urls", () => {
   it("strips the (OG)/(P) tag and encodes the name", () => {
     expect(getRedditSearchUrl("José Mourinho (P)")).toContain(
@@ -162,11 +187,6 @@ describe("search urls", () => {
     expect(getXSearchUrl("Rossi (OG)")).toBe(
       "https://x.com/search?q=Rossi&f=live",
     );
-  });
-
-  it("returns a harmless link when there is no scorer", () => {
-    expect(getRedditSearchUrl(null)).toBe("#");
-    expect(getXSearchUrl(null)).toBe("#");
   });
 
   it("builds reddit and x links for a scorer, and none without one", () => {

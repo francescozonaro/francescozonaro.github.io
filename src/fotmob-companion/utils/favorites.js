@@ -28,11 +28,11 @@ export const FAVORITE_LEAGUES = [
 ];
 
 function isFavoriteTeam(teamId) {
-  return FAVORITE_TEAMS.some((id) => id === teamId);
+  return FAVORITE_TEAMS.includes(teamId);
 }
 
 function isMatchInFavoriteLeagues(leagueId) {
-  return FAVORITE_LEAGUES.some((id) => id === leagueId);
+  return FAVORITE_LEAGUES.includes(leagueId);
 }
 
 export function isFavoriteMatch(match) {

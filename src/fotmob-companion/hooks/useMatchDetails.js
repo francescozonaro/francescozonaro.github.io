@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { fetchMatchDetails } from "../api/fotmobApi";
-import { extractGoalEvents } from "../utils/goalEvents";
+import { extractGoalEvents, isDetailsComplete } from "../utils/goalEvents";
 import {
   getCachedDetails,
   setCachedDetails,
@@ -46,29 +46,26 @@ export function useMatchDetails(matches, dateStr) {
           const goals = extractGoalEvents(data);
           setDetailsMap((prev) => ({ ...prev, [match.id]: goals }));
 
-          // FotMob sometimes hasn't posted every goal event onto the
-          // shotmap yet (or hasn't backfilled a scorer's name, or hasn't
-          // attached shot coordinates) - only stop retrying once we have an
-          // event for every goal in the scoreline, each has a scorer, and
-          // - for matches FotMob's own coverageLevel says should have shot
-          // telemetry - each also has coordinates, or the match is over
+          // Stop retrying once the data is complete, or the match is over
           // (nothing more will change).
-          const coverageLevel = data?.general?.coverageLevel ?? null;
-          const hasAllGoals = goals.length === totalGoals;
-          const hasAllScorers = goals.every((g) => g.scorer);
-          const hasAllCoords =
-            coverageLevel !== "xG" ||
-            goals.every((g) => typeof g.x === "number" && typeof g.y === "number");
-          const isComplete = hasAllGoals && hasAllScorers && hasAllCoords;
+          const isComplete = isDetailsComplete(
+            goals,
+            totalGoals,
+            data?.general?.coverageLevel,
+          );
           if (isComplete || match.finished) {
             lastScoreRef.current[match.id] = totalGoals;
           }
 
-          setCachedDetails(dateStr, match.id, {
-            goals,
-            totalGoals,
-            isComplete: isComplete || match.finished,
-          });
+          // Only persist complete data: a finished match that is still
+          // missing scorers/coords is retried on the next page load.
+          if (isComplete) {
+            setCachedDetails(dateStr, match.id, {
+              goals,
+              totalGoals,
+              isComplete,
+            });
+          }
         })
         .catch((err) => {
           console.error(err);
