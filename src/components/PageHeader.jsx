@@ -6,16 +6,16 @@ export default function PageHeader({ title, children, className = "" }) {
 
   return (
     <div
-      className={`flex justify-between items-center flex-shrink-0 pt-1 ${className}`}
+      className={`flex flex-wrap justify-between items-center gap-y-8 flex-shrink-0 ${className}`}
     >
       <button
-        className="text-lg font-normal lowercase text-primary hover:text-secondary transition-colors cursor-pointer"
+        className="whitespace-nowrap text-sm sm:text-lg font-normal lowercase text-primary hover:text-secondary transition-colors cursor-pointer"
         onClick={() => navigate("/")}
       >
         Francesco Zonaro
       </button>
 
-      <div className="flex items-center justify-center space-x-2 text-2xl font-bold tracking-tight">
+      <div className="order-last flex w-full items-center justify-center space-x-2 text-xl font-bold tracking-tight sm:text-2xl">
         {children || title}
       </div>
 

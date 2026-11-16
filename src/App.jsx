@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import "./App.css";
 import ThemeToggle from "./components/ThemeToggle";
 
@@ -21,29 +22,35 @@ function App() {
   );
 
   const linkBtnClass =
-    "smallEnlarge iconButton font-semibold text-primary hover:text-secondary transition";
+    "smallEnlarge iconButton !px-2 sm:!px-3 font-semibold text-primary hover:text-secondary transition";
 
   return (
     <div className="App">
-      <div className="grid gap-x-12 mt-12 grid-cols-1 gap-y-4 mb-12">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-lg font-normal lowercase">Francesco Zonaro</h1>
-          <div className="flex items-center space-x-2">
+      <div className="grid gap-x-12 mt-4 grid-cols-1 gap-y-4 mb-12">
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="whitespace-nowrap text-sm font-normal lowercase sm:text-lg">
+            Francesco Zonaro
+          </h1>
+          <div className="flex items-center sm:space-x-2">
             <a
               href="https://github.com/francescozonaro"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Github"
               className={linkBtnClass}
             >
-              <span>Github</span>
+              <FaGithub className="h-4 w-4 sm:hidden" />
+              <span className="hidden sm:inline">Github</span>
             </a>
             <a
               href="https://www.linkedin.com/in/francesco-zonaro-211234248/"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Linkedin"
               className={linkBtnClass}
             >
-              <span>Linkedin</span>
+              <FaLinkedin className="h-4 w-4 sm:hidden" />
+              <span className="hidden sm:inline">Linkedin</span>
             </a>
             <ThemeToggle className="-mr-1" />
           </div>

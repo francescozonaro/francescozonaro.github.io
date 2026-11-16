@@ -5,7 +5,7 @@ import PageHeader from "../components/PageHeader";
 function StatsbombShowcase() {
   return (
     <div className="StatsbombShowcase pb-16">
-      <PageHeader className="mt-8">
+      <PageHeader className="mt-4">
         <strong>Football Analytics with StatsBomb Data</strong>
       </PageHeader>
 

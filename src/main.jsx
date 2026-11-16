@@ -5,6 +5,7 @@ import App from "./App";
 import StatsbombShowcase from "./statsbomb-showcase/StatsbombShowcase";
 import FotmobCompanion from "./fotmob-companion/FotmobCompanion";
 import BettingNotebook from "./betting-notebook/BettingNotebook";
+import { Crab } from "./components/Crab";
 
 import { createHashRouter, RouterProvider } from "react-router-dom";
 
@@ -31,5 +32,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <Crab />
   </React.StrictMode>
 );

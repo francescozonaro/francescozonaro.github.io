@@ -39,9 +39,10 @@
     --color-primary-dark: 252 252 252;
     --color-primary-light: 198 198 198;
 
-    --color-secondary: 129 140 248;
-    --color-secondary-dark: 165 180 252;
-    --color-secondary-light: 99 102 241;
+    /* a lighter, slightly orange red than the light theme's, for contrast on dark */
+    --color-secondary: 246 115 85;
+    --color-secondary-dark: 250 152 125; /* hover: lighter on dark, not darker */
+    --color-secondary-light: 226 88 62;
   }
 
   #root {
